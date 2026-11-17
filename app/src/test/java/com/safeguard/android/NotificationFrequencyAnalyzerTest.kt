@@ -26,4 +26,29 @@ class NotificationFrequencyAnalyzerTest {
         val events = listOf("b", "a", "b", "a", "c").map { NotificationEvent(it, now) }
         assertEquals(listOf("a", "b", "c"), NotificationFrequencyAnalyzer.recentSources(events, now).map { it.packageName })
     }
+    @Test fun includesExactWindowBoundaryAndCurrentMoment() {
+        val events = listOf(
+            NotificationEvent("com.example", now - NotificationFrequencyAnalyzer.WINDOW_MILLIS),
+            NotificationEvent("com.example", now)
+        )
+        assertEquals(2, NotificationFrequencyAnalyzer.recentSources(events, now).single().count)
+    }
+
+    @Test fun ignoresBlankPackageNamesAndFutureEvents() {
+        val events = listOf(
+            NotificationEvent("", now),
+            NotificationEvent("   ", now),
+            NotificationEvent("com.example", now + 1000L),
+            NotificationEvent("com.example", now)
+        )
+        assertEquals(
+            listOf(FrequentNotificationSource("com.example", 1)),
+            NotificationFrequencyAnalyzer.recentSources(events, now)
+        )
+    }
+
+    @Test fun emptyHistoryProducesNoRiskSources() {
+        assertTrue(NotificationFrequencyAnalyzer.recentSources(emptyList(), now).isEmpty())
+    }
+
 }
