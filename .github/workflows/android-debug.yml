@@ -58,9 +58,20 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
+      - name: Check preinstalled Android SDK
         if: steps.project.outputs.ready == 'true'
-        uses: android-actions/setup-android@v3
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          if [[ ! -d "$SDK_ROOT" ]]; then
+            echo "::error::Android SDK not found at $SDK_ROOT"
+            exit 1
+          fi
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "Android SDK found: $SDK_ROOT"
+          ls -la "$SDK_ROOT" | head -40
 
       - name: Verify Gradle Wrapper
         if: steps.project.outputs.ready == 'true'
