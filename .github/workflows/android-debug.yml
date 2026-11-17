@@ -85,6 +85,11 @@ jobs:
         shell: bash
         run: bash ./gradlew --no-daemon assembleDebug
 
+      - name: Run debug unit tests
+        if: steps.project.outputs.ready == 'true'
+        shell: bash
+        run: bash ./gradlew --no-daemon testDebugUnitTest
+
       - name: Audit generated APK signature and permissions
         if: steps.project.outputs.ready == 'true'
         shell: bash
