@@ -1,0 +1,349 @@
+package com.safeguard.android
+
+import android.app.ActivityManager
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.Uri
+import android.os.BatteryManager
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.StatFs
+import android.provider.Settings
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class MainActivity : ComponentActivity() {
+    private val notificationAccess = mutableStateOf(false)
+    private val events = mutableStateOf<List<NotificationEvent>>(emptyList())
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            SafeguardScreen(
+                notificationAccess.value,
+                events.value,
+                ::refreshNotifications
+            )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshNotifications()
+    }
+
+    private fun refreshNotifications() {
+        notificationAccess.value = NotificationAccess.isEnabled(this)
+        events.value = NotificationLogStore(this).readRecent()
+    }
+}
+
+private val green = Color(0xFF087F5B)
+
+@Composable
+private fun SafeguardScreen(
+    notificationAccessEnabled: Boolean,
+    notificationEvents: List<NotificationEvent>,
+    onRefreshNotifications: () -> Unit
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var scanConsent by rememberSaveable { mutableStateOf(false) }
+    var showConsent by remember { mutableStateOf(false) }
+    var showNotificationConsent by remember { mutableStateOf(false) }
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+    var scanning by remember { mutableStateOf(false) }
+    var report by remember { mutableStateOf<ScanReport?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    fun startScan() {
+        scanning = true
+        error = null
+        scope.launch {
+            try {
+                report = withContext(Dispatchers.IO) {
+                    SecurityScanner(context.applicationContext).scan()
+                }
+            } catch (exception: Exception) {
+                error = exception.localizedMessage ?: "Scanarea nu a putut fi finalizată."
+            } finally {
+                scanning = false
+            }
+        }
+    }
+
+    MaterialTheme(
+        colorScheme = lightColorScheme(
+            primary = green,
+            secondary = Color(0xFF4B7864),
+            background = Color(0xFFF4F7F5),
+            surface = Color.White
+        )
+    ) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+                    .padding(horizontal = 18.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Text("🛡️ SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                Text("Android Security & Recovery", style = MaterialTheme.typography.bodySmall)
+                DeviceHealthCards(context)
+
+                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5EF))) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text("Scanner local – prototip 0.7.1", fontWeight = FontWeight.Bold, color = green)
+                        Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
+                        Text("Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+                Button(
+                    onClick = { if (scanConsent) startScan() else showConsent = true },
+                    enabled = !scanning,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(if (scanning) "Se scanează…" else if (report == null) "Începe scanarea" else "Scanează din nou")
+                }
+                error?.let { InfoCard("Eroare: $it") }
+                report?.let { scan ->
+                    Card {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Text("Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
+                            Text(scan.deviceModel, fontWeight = FontWeight.Bold)
+                            Text("Android ${scan.androidRelease} (API ${scan.sdkInt})")
+                            Text("Patch de securitate: ${scan.securityPatch}")
+                            Text("${scan.installedApps} aplicații vizibile · ${scan.userApps} aplicații terțe")
+                        }
+                    }
+                    Section("Accesări speciale", "Nu reprezintă automat amenințări. Verifică dacă recunoști aplicațiile.")
+                    if (scan.specialAccess.isEmpty()) InfoCard("Nu au fost găsite accesări speciale în categoriile verificate.")
+                    scan.specialAccess.forEach { item ->
+                        Card {
+                            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                Text(item.category, fontWeight = FontWeight.Bold, color = green)
+                                Text(item.appLabel)
+                                Text(item.packageName, style = MaterialTheme.typography.labelSmall)
+                                Text(item.explanation, style = MaterialTheme.typography.bodySmall)
+                                OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text("Verifică în Setări") }
+                            }
+                        }
+                    }
+                    Section("Permisiuni sensibile acordate", "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
+                    if (scan.permissionApps.isEmpty()) InfoCard("Nu au fost găsite aplicații terțe cu permisiunile verificate.")
+                    scan.permissionApps.take(40).forEach { app ->
+                        Card {
+                            Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                                Text(app.appLabel, fontWeight = FontWeight.Bold)
+                                Text(app.grantedPermissions.joinToString(" • "), style = MaterialTheme.typography.bodySmall)
+                                Text(app.packageName, style = MaterialTheme.typography.labelSmall)
+                                TextButton(onClick = { openAppDetails(context, app.packageName) }) {
+                                    Text("Detalii aplicație")
+                                }
+                            }
+                        }
+                    }
+                    if (scan.permissionApps.size > 40) Text("Sunt afișate primele 40 din ${scan.permissionApps.size} aplicații.")
+                    InfoCard("Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
+                }
+
+                Section("Inspectorul notificărilor", "Opțional: identifică sursele notificărilor nedorite.")
+                Card {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            if (notificationAccessEnabled) "Acces la notificări activ" else "Acces la notificări dezactivat",
+                            fontWeight = FontWeight.Bold,
+                            color = green
+                        )
+                        Text("Păstrează local maximum 100 de înregistrări: numai pachetul-sursă și ora. Nu citește titlul, textul sau expeditorul notificării.", style = MaterialTheme.typography.bodySmall)
+                        if (!notificationAccessEnabled) {
+                            Button(onClick = { showNotificationConsent = true }) { Text("Configurează inspectorul") }
+                        } else {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                OutlinedButton(onClick = onRefreshNotifications) { Text("Reîmprospătează") }
+                                TextButton(onClick = {
+                                    launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                                }) { Text("Gestionează accesul") }
+                            }
+                        }
+                        if (notificationEvents.isEmpty()) {
+                            Text("Nu există înregistrări locale.")
+                        } else {
+                            Text("${notificationEvents.size} înregistrări locale")
+                            TextButton(onClick = { showDeleteConfirmation = true }) { Text("Șterge istoricul") }
+                            val sources = NotificationFrequencyAnalyzer.recentSources(notificationEvents, System.currentTimeMillis())
+                            Text("Surse în ultimele 15 minute", fontWeight = FontWeight.Bold)
+                            if (sources.isEmpty()) Text("Nu există evenimente recente.")
+                            sources.take(5).forEach { source ->
+                                Text("${source.packageName}: ${source.count} notificări" +
+                                    if (source.count >= NotificationFrequencyAnalyzer.NOTICE_THRESHOLD) " · Frecvență ridicată" else "")
+                            }
+                            Text("Frecvența ridicată nu indică automat malware.", style = MaterialTheme.typography.bodySmall)
+                            notificationEvents.take(20).forEach { event ->
+                                Text("${event.packageName} · ${java.text.DateFormat.getDateTimeInstance().format(java.util.Date(event.postedAtMillis))}",
+                                    style = MaterialTheme.typography.bodySmall)
+                                TextButton(onClick = { openAppDetails(context, event.packageName) }) { Text("Detalii aplicație") }
+                            }
+                        }
+                    }
+                }
+                Text("SAFEGUARD 0.7.1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+            }
+        }
+    }
+
+    if (showConsent) {
+        AlertDialog(
+            onDismissRequest = { showConsent = false },
+            title = { Text("Acord pentru scanarea locală") },
+            text = { Text("SAFEGUARD va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
+            confirmButton = {
+                TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text("Accept și scanează") }
+            },
+            dismissButton = { TextButton(onClick = { showConsent = false }) { Text("Anulează") } }
+        )
+    }
+    if (showNotificationConsent) {
+        AlertDialog(
+            onDismissRequest = { showNotificationConsent = false },
+            title = { Text("Acces special la notificări") },
+            text = { Text("Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. SAFEGUARD folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showNotificationConsent = false
+                    launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+                }) { Text("Deschide Setări") }
+            },
+            dismissButton = { TextButton(onClick = { showNotificationConsent = false }) { Text("Renunță") } }
+        )
+    }
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text("Ștergi istoricul local?") },
+            text = { Text("Vor fi șterse toate înregistrările păstrate de SAFEGUARD.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    NotificationLogStore(context).clear()
+                    showDeleteConfirmation = false
+                    onRefreshNotifications()
+                }) { Text("Șterge") }
+            },
+            dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
+        )
+    }
+}
+
+@Composable
+private fun Section(title: String, subtitle: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text(subtitle, style = MaterialTheme.typography.bodySmall)
+    }
+}
+
+@Composable
+private fun InfoCard(message: String) {
+    Card { Text(message, Modifier.padding(14.dp)) }
+}
+
+@Composable
+private fun DeviceHealthCards(context: Context) {
+    val memory = remember {
+        runCatching {
+            val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            ActivityManager.MemoryInfo().also { manager.getMemoryInfo(it) }
+        }.getOrNull()
+    }
+    val battery = remember {
+        runCatching {
+            val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+            val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+            val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+            if (level < 0 || scale <= 0) null else level * 100 / scale
+        }.getOrNull()
+    }
+    val storage = remember {
+        runCatching {
+            val fs = StatFs(Environment.getDataDirectory().absolutePath)
+            Pair(fs.totalBytes, fs.availableBytes)
+        }.getOrNull()
+    }
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Memorie RAM", fontWeight = FontWeight.Bold, color = green)
+            if (memory != null && memory.totalMem > 0) {
+                Text("Disponibil: %.1f GB din %.1f GB".format(memory.availMem / 1073741824.0, memory.totalMem / 1073741824.0))
+                Text(if (memory.lowMemory) "Android raportează presiune asupra memoriei." else "Android nu raportează memorie critic de redusă.")
+            } else Text("Date indisponibile")
+            Text("SAFEGUARD nu oprește automat procese.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Verifică aplicațiile") }
+        }
+    }
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Baterie", fontWeight = FontWeight.Bold, color = green)
+            Text(if (battery == null) "Date indisponibile" else "Nivel baterie: $battery%")
+            Text("SAFEGUARD nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text("Setările bateriei") }
+        }
+    }
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Stocare", fontWeight = FontWeight.Bold, color = green)
+            if (storage != null && storage.first > 0L) {
+                Text("Utilizați: %.1f GB din %.1f GB".format(
+                    (storage.first - storage.second) / 1073741824.0,
+                    storage.first / 1073741824.0
+                ))
+            } else Text("Date indisponibile")
+            Text("SAFEGUARD nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
+        }
+    }
+}
+
+private fun launchSettings(context: Context, intent: Intent) {
+    runCatching { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
+        .onFailure {
+            runCatching {
+                context.startActivity(Intent(Settings.ACTION_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            }
+        }
+}
+
+private fun openAppDetails(context: Context, packageName: String) {
+    launchSettings(
+        context,
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
+    )
+}
+
+private fun openSettingsFor(context: Context, item: SpecialAccessItem) {
+    val intent = when (item.settingsTarget) {
+        SettingsTarget.APP_DETAILS -> Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${item.packageName}"))
+        SettingsTarget.ACCESSIBILITY -> Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        SettingsTarget.NOTIFICATION_LISTENERS -> Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+        SettingsTarget.DEVICE_SECURITY -> Intent(Settings.ACTION_SECURITY_SETTINGS)
+        SettingsTarget.OVERLAY -> Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${item.packageName}"))
+        SettingsTarget.UNKNOWN_APP_SOURCES -> Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:${item.packageName}"))
+        SettingsTarget.ALL_FILES_ACCESS -> Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:${item.packageName}"))
+        SettingsTarget.USAGE_ACCESS -> Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+    }
+    launchSettings(context, intent)
+}
