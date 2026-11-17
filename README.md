@@ -2,18 +2,29 @@
 
 Aplicație Android experimentală pentru informații despre RAM, baterie și stocare, inventarierea aplicațiilor și inspectarea locală a notificărilor.
 
-## Starea versiunilor
+## Starea versiunilor (verificată la 17 noiembrie 2026)
 
-- **0.7.0**: ultima versiune despre care există confirmare de testare pe Samsung Galaxy A13 (Android 14).
-- **0.7.1**: surse recuperate; adaugă explicații ⓘ în română și engleză pentru RAM, baterie și stocare. **Nu este încă verificată prin compilare și testare pe dispozitiv.**
+- **0.7.0**: ultima versiune confirmată ca funcțională pe Samsung Galaxy A13 (Android 14). Arhivarea surselor originale pe ramura `archive/safeguard-0.7.0` este încă incompletă; existența ramurii nu demonstrează că aceasta conține integral sursele originale.
+- **0.7.1**: `versionCode = 8`, `versionName = "0.7.1"`. Proiectul din `main` a generat cu succes un APK debug în [GitHub Actions, execuția #18](https://github.com/TrestianuA/SAFEGUARD-Android/actions/runs/44156277981), pentru commitul [93753a7](https://github.com/TrestianuA/SAFEGUARD-Android/commit/93753a78967c008ddbdfdf55ef34f393c1a33fd9). Execuția include verificarea semnăturii și un artifact `SAFEGUARD-apk-audit`.
+- **Proveniența codului**: fișierele prezente pe `main` nu trebuie prezentate automat ca o copie exactă a arhivei originale 0.7.1. Unele implementări au fost reconstruite/adaptate. Comparația fișier-cu-fișier cu arhiva originală rămâne de făcut.
+- **Testare pe dispozitiv**: 0.7.1 nu este confirmată ca instalată și testată pe telefon. Google Play Protect a afișat un avertisment la încercarea de instalare. Nu dezactivați Play Protect pentru a ocoli avertismentul.
 
 ## Principii
 
-- Explicații clare, fără a prezenta accesările speciale sau aplicațiile instalate drept amenințări confirmate.
-- Datele de notificări sunt tratate local și cu minimizare a informațiilor.
+- Scanarea este o revizuire locală a configurației, nu un motor antivirus; accesările speciale sau aplicațiile instalate nu reprezintă automat amenințări.
+- Datele de notificări sunt tratate local și cu minimizarea informațiilor.
 - Nicio ștergere de fișiere fără confirmare explicită.
 - Fără chei de semnare, tokenuri, parole sau date personale în depozitul public.
 
-## Stadiul depozitului
+## Construire și verificare
 
-Depozitul este în curs de inițializare. Prezența acestui README nu înseamnă că întregul cod-sursă 0.7.1 a fost încărcat. Documentația `CHANGELOG_071.md` descrie schimbările și testele necesare.
+Proiect Android cu Java 17 și Gradle Wrapper. Compilarea de test se face prin `bash ./gradlew assembleDebug`; testele unitare pot fi lansate separat prin `bash ./gradlew testDebugUnitTest`. **Un build reușit nu demonstrează automat executarea testelor unitare sau validarea pe telefon.**
+
+## Sarcini deschise
+
+1. Compararea surselor din `main` cu arhiva originală 0.7.1 și marcarea diferențelor.
+2. Completarea arhivei istorice 0.7.0 cu fișierele originale, fără suprascrieri neverificate.
+3. Verificarea certificatului instalării 0.7.0 înainte de alegerea unei strategii de semnare a actualizărilor.
+4. Rularea explicită a testelor unitare și testarea pe dispozitiv, când există condiții sigure.
+
+Designurile Canva aprobate sunt materiale de design; nu presupuneți că sunt integrate în APK până când resursele Android corespunzătoare sunt comise și verificate.
