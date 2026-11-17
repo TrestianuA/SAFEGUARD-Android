@@ -62,6 +62,13 @@ jobs:
         if: steps.project.outputs.ready == 'true'
         uses: android-actions/setup-android@v3
 
+      - name: Verify Gradle Wrapper
+        if: steps.project.outputs.ready == 'true'
+        shell: bash
+        run: |
+          test -s gradle/wrapper/gradle-wrapper.jar
+          bash ./gradlew --version
+
       - name: Build debug APK
         if: steps.project.outputs.ready == 'true'
         shell: bash
