@@ -85,6 +85,45 @@ jobs:
         shell: bash
         run: bash ./gradlew --no-daemon assembleDebug
 
+      - name: Audit generated APK signature and permissions
+        if: steps.project.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          apk="app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$apk"
+          sdk="${ANDROID_HOME:-${ANDROID_SDK_ROOT}}"
+          build_tools="$(find "$sdk/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -n 1)"
+          test -x "$build_tools/apksigner"
+          test -x "$build_tools/aapt"
+          {
+            echo "# SAFEGUARD APK audit"
+            echo
+            echo "Git commit: ${GITHUB_SHA}"
+            echo
+            echo "## SHA-256 of APK"
+            sha256sum "$apk"
+            echo
+            echo "## Signature verification and signer certificate"
+            "$build_tools/apksigner" verify --verbose --print-certs "$apk"
+            echo
+            echo "## Package metadata"
+            "$build_tools/aapt" dump badging "$apk" | grep -E "^(package:|sdkVersion:|targetSdkVersion:)" || true
+            echo
+            echo "## Declared permissions"
+            "$build_tools/aapt" dump permissions "$apk"
+          } > apk-audit.txt
+          cat apk-audit.txt
+
+      - name: Upload APK audit report
+        if: steps.project.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: SAFEGUARD-apk-audit
+          path: apk-audit.txt
+          if-no-files-found: error
+          retention-days: 14
+
       - name: Upload debug APK
         if: steps.project.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
