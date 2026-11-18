@@ -89,13 +89,13 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p app/src/main/res/drawable-nodpi
-          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg ]]; then
+          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.png ]]; then
             curl --fail --location --retry 3 --silent --show-error "$LOGO_SIMPLE_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg
           fi
-          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg ]]; then
+          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.png ]]; then
             curl --fail --location --retry 3 --silent --show-error "$LOGO_FULL_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg
           fi
-          file app/src/main/res/drawable-nodpi/safeguard_logo_*.jpg
+          file app/src/main/res/drawable-nodpi/safeguard_logo_*
 
       - name: Build debug APK
         if: steps.project.outputs.ready == 'true'
