@@ -14,6 +14,7 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -55,6 +56,9 @@ class MainActivity : ComponentActivity() {
 }
 
 private val green = Color(0xFF087F5B)
+private val navy = Color(0xFF17324D)
+private val paleBlue = Color(0xFFF0F6FC)
+private val paleGreen = Color(0xFFE9F6EE)
 
 @Composable
 private fun SafeguardScreen(
@@ -91,9 +95,10 @@ private fun SafeguardScreen(
     MaterialTheme(
         colorScheme = lightColorScheme(
             primary = green,
-            secondary = Color(0xFF4B7864),
-            background = Color(0xFFF4F7F5),
-            surface = Color.White
+            secondary = navy,
+            background = paleBlue,
+            surface = Color.White,
+            surfaceVariant = paleGreen
         )
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -102,11 +107,14 @@ private fun SafeguardScreen(
                     .padding(horizontal = 18.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                Text("🛡️ SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                Text("Android Security & Recovery", style = MaterialTheme.typography.bodySmall)
+                SafeguardHeader()
+                Text("Prezentare generală", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context)
 
-                Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5EF))) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = paleGreen)
+                ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("Scanner local – prototip 0.7.1", fontWeight = FontWeight.Bold, color = green)
                         Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
@@ -246,6 +254,24 @@ private fun SafeguardScreen(
             },
             dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
         )
+    }
+}
+
+@Composable
+private fun SafeguardHeader() {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = navy),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(22.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text("🛡️ SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
+            Text("Protecție și transparență pentru Android", style = MaterialTheme.typography.bodyMedium, color = Color(0xFFDDEAF5))
+            Text("Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelMedium, color = Color(0xFFA9E5C6))
+        }
     }
 }
 
