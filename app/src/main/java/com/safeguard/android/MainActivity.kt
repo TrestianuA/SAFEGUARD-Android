@@ -14,6 +14,7 @@ import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,6 +22,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -304,6 +307,25 @@ private fun SafeguardScreen(
 }
 
 @Composable
+private fun BrandLogo(resourceName: String, size: androidx.compose.ui.unit.Dp) {
+    val context = LocalContext.current
+    val id = remember(resourceName) {
+        @Suppress("DiscouragedApi")
+        context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+    }
+    if (id != 0) {
+        Image(
+            painter = painterResource(id),
+            contentDescription = "Logo SAFEGUARD",
+            modifier = Modifier.size(size),
+            contentScale = ContentScale.Fit
+        )
+    } else {
+        Text("🛡️", style = MaterialTheme.typography.headlineMedium)
+    }
+}
+
+@Composable
 private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -311,7 +333,7 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("🛡️", style = MaterialTheme.typography.displayMedium, color = green)
+            BrandLogo("safeguard_logo_simplu", 104.dp)
             Text(
                 when {
                     scanning -> "Scanare în desfășurare"
@@ -366,7 +388,8 @@ private fun SafeguardHeader() {
             modifier = Modifier.padding(22.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Text("🛡️ SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
+            BrandLogo("safeguard_logo_complet", 72.dp)
+            Text("SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
             Text("Protecție și transparență pentru Android", style = MaterialTheme.typography.bodyMedium, color = Color(0xFFDDEAF5))
             Text("Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelMedium, color = Color(0xFFA9E5C6))
         }
