@@ -75,6 +75,7 @@ private fun SafeguardScreen(
     var scanning by remember { mutableStateOf(false) }
     var report by remember { mutableStateOf<ScanReport?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
+    var selectedTab by rememberSaveable { mutableIntStateOf(0) }
 
     fun startScan() {
         scanning = true
@@ -101,21 +102,36 @@ private fun SafeguardScreen(
             surfaceVariant = paleGreen
         )
     ) {
-        Surface(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            bottomBar = {
+                NavigationBar(containerColor = Color.White) {
+                    listOf("Acasă", "Protecție", "Rapoarte").forEachIndexed { index, title ->
+                        NavigationBarItem(
+                            selected = selectedTab == index,
+                            onClick = { selectedTab = index },
+                            icon = { Text(listOf("⌂", "🛡", "▥")[index]) },
+                            label = { Text(title) },
+                            alwaysShowLabel = true
+                        )
+                    }
+                }
+            }
+        ) { innerPadding ->
             Column(
-                modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
+                modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState())
                     .padding(horizontal = 18.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 SafeguardHeader()
+                if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     DashboardTile("🛡️", "Scanare securitate", "Disponibilă", Modifier.weight(1f)) {
-                        if (scanConsent) startScan() else showConsent = true
+                        selectedTab = 1
                     }
                     DashboardTile("🔔", "Inspector notificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) {
-                        if (notificationAccessEnabled) onRefreshNotifications() else showNotificationConsent = true
+                        selectedTab = 2
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -131,20 +147,19 @@ private fun SafeguardScreen(
                         launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
                     }
                     DashboardTile("📊", "Rapoarte", if (report == null) "După scanare" else "Mai jos", Modifier.weight(1f)) {
-                        if (report == null) {
-                            if (scanConsent) startScan() else showConsent = true
-                        }
+                        selectedTab = 1
                     }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context)
-
+                }
+                if (selectedTab == 1) {
                 Card(
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Scanner local – prototip 0.7.1", fontWeight = FontWeight.Bold, color = green)
+                        Text("Scanner local – prototip 0.7.2", fontWeight = FontWeight.Bold, color = green)
                         Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
                         Text("Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
                     }
@@ -198,6 +213,8 @@ private fun SafeguardScreen(
                     InfoCard("Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
                 }
 
+                }
+                if (selectedTab == 2) {
                 Section("Inspectorul notificărilor", "Opțional: identifică sursele notificărilor nedorite.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -238,7 +255,8 @@ private fun SafeguardScreen(
                         }
                     }
                 }
-                Text("SAFEGUARD 0.7.1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+                }
+                Text("SAFEGUARD 0.7.2 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
