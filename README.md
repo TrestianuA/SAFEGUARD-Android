@@ -9,6 +9,15 @@ Aplicație Android experimentală pentru informații despre RAM, baterie și sto
 - **Proveniența codului**: fișierele prezente pe `main` nu trebuie prezentate automat ca o copie exactă a arhivei originale 0.7.1. Unele implementări au fost reconstruite/adaptate. Comparația fișier-cu-fișier cu arhiva originală rămâne de făcut.
 - **Testare pe dispozitiv**: 0.7.1 nu este confirmată ca instalată și testată pe telefon. Google Play Protect a afișat un avertisment la încercarea de instalare. Nu dezactivați Play Protect pentru a ocoli avertismentul.
 
+
+## Starea pregătirii 0.7.2 (18 noiembrie 2026)
+
+- Commitul [f623d9c](https://github.com/TrestianuA/SAFEGUARD-Android/commit/f623d9ccfb0eb3bec178598459d1fc37b63a30fa) configurează preferința pentru logo-urile originale comise în proiect față de previzualizările temporare. **Acest commit nu dovedește că PNG-urile originale au fost încărcate**.
+- Până la verificarea resurselor binare din APK, previzualizările Canva nu sunt echivalente cu logo-urile originale aprobate. Nu declarați integrarea grafică finalizată doar pe baza unui build verde.
+- Pentru actualizarea instalării 0.7.0, comparați amprenta SHA-256 a certificatului de semnare al APK-ului instalat/original cu cea a APK-ului nou, folosind instrumente locale de audit (de exemplu `apksigner verify --print-certs`). Nu încărcați cheia privată sau parolele în GitHub, în loguri ori în conversații.
+- Dacă certificatele diferă, **nu** încercați actualizarea peste instalarea existentă; păstrați 0.7.0 și investigați proveniența semnăturii. Nu dezinstalați versiunea funcțională pentru a forța testul.
+- Un APK debug din GitHub Actions nu garantează compatibilitatea semnăturii cu instalarea de pe telefon. Verificarea efectivă pe Samsung Galaxy A13 rămâne separată de compilarea CI.
+
 ## Principii
 
 - Scanarea este o revizuire locală a configurației, nu un motor antivirus; accesările speciale sau aplicațiile instalate nu reprezintă automat amenințări.
