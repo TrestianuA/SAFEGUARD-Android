@@ -108,7 +108,35 @@ private fun SafeguardScreen(
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
                 SafeguardHeader()
-                Text("Prezentare generală", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                DashboardOverview(report != null, scanning)
+                Text("Acces rapid", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    DashboardTile("🛡️", "Scanare securitate", "Disponibilă", Modifier.weight(1f)) {
+                        if (scanConsent) startScan() else showConsent = true
+                    }
+                    DashboardTile("🔔", "Inspector notificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) {
+                        if (notificationAccessEnabled) onRefreshNotifications() else showNotificationConsent = true
+                    }
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    DashboardTile("🔋", "Baterie", "Verifică setările", Modifier.weight(1f)) {
+                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
+                    }
+                    DashboardTile("📱", "Aplicații", "Setări Android", Modifier.weight(1f)) {
+                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                    }
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    DashboardTile("🧹", "Curățare", "Manuală, din Setări", Modifier.weight(1f)) {
+                        launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
+                    }
+                    DashboardTile("📊", "Rapoarte", if (report == null) "După scanare" else "Mai jos", Modifier.weight(1f)) {
+                        if (report == null) {
+                            if (scanConsent) startScan() else showConsent = true
+                        }
+                    }
+                }
+                Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context)
 
                 Card(
@@ -254,6 +282,58 @@ private fun SafeguardScreen(
             },
             dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
         )
+    }
+}
+
+@Composable
+private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("🛡️", style = MaterialTheme.typography.displayMedium, color = green)
+            Text(
+                when {
+                    scanning -> "Scanare în desfășurare"
+                    hasReport -> "Scanare locală finalizată"
+                    else -> "Verifică securitatea telefonului"
+                },
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = navy
+            )
+            Text(
+                if (hasReport) "Consultă mai jos rezultatele și accesările speciale."
+                else "SAFEGUARD oferă verificări locale. Nu asigură protecție antivirus în timp real.",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+private fun DashboardTile(
+    symbol: String,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(symbol, style = MaterialTheme.typography.headlineMedium)
+            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodyMedium)
+            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green)
+            TextButton(onClick = onClick, contentPadding = PaddingValues(0.dp)) {
+                Text("Deschide")
+            }
+        }
     }
 }
 
