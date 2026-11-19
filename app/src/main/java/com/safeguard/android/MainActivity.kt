@@ -627,7 +627,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
-            if (memorySnapshot != null) {
+            if (memorySnapshot != null && memorySnapshot.totalMem > 0L) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
                     if (memorySnapshot.lowMemory)
