@@ -331,16 +331,20 @@ private fun SafeguardScreen(
     }
 
     if (showHelp) {
-        AlertDialog(
-            onDismissRequest = { showHelp = false },
-            title = { Text(if (helpEnglish) "About SAFEGUARD" else "Despre SAFEGUARD") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(if (helpEnglish) "SAFEGUARD performs local checks of visible apps, sensitive permissions and selected Android special accesses. It is not an antivirus and does not provide real-time malware protection." else "SAFEGUARD verifică local aplicațiile vizibile, permisiunile sensibile și anumite accesări speciale Android. Nu este antivirus și nu oferă protecție antivirus în timp real.")
-                    Text(if (helpEnglish) "The notification inspector stores only the source package and time, locally, when you grant access. Battery and storage shortcuts open Android settings. No automatic cleaning or app blocking is provided." else "Inspectorul notificărilor păstrează local doar pachetul-sursă și ora, dacă acorzi acces. Scurtăturile pentru baterie și stocare deschid setările Android. Nu există curățare automată sau blocare a aplicațiilor.")
-                }
-            },
-            confirmButton = { TextButton(onClick = { showHelp = false }) { Text(if (helpEnglish) "Close" else "Închide") } }
+        SafeguardInfoDialog(
+            titleRo = "Despre SAFEGUARD",
+            titleEn = "About SAFEGUARD",
+            summaryRo = "SAFEGUARD oferă verificări locale și recomandări pentru setările Android.",
+            summaryEn = "SAFEGUARD offers local checks and guidance for Android settings.",
+            doesRo = "Verifică aplicațiile vizibile, permisiunile sensibile și anumite accesări speciale Android.",
+            doesEn = "Checks visible apps, sensitive permissions and selected Android special accesses.",
+            limitsRo = "Nu este antivirus, nu scanează toate fișierele și nu oferă protecție în timp real.",
+            limitsEn = "It is not an antivirus, does not scan every file and does not offer real-time protection.",
+            adviceRo = "Folosește verificările locale și consultă setările Android când ai nevoie.",
+            adviceEn = "Use the local checks and review Android settings when needed.",
+            english = helpEnglish,
+            onLanguageChange = { helpEnglish = it },
+            onDismiss = { showHelp = false }
         )
     }
 
@@ -468,6 +472,77 @@ private fun DashboardTile(
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
         }
     }
+}
+
+@Composable
+private fun SafeguardInfoDialog(
+    titleRo: String,
+    titleEn: String,
+    summaryRo: String,
+    summaryEn: String,
+    doesRo: String,
+    doesEn: String,
+    limitsRo: String,
+    limitsEn: String,
+    adviceRo: String,
+    adviceEn: String,
+    english: Boolean,
+    onLanguageChange: (Boolean) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(28.dp),
+        containerColor = Color.White,
+        title = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Security, contentDescription = null, tint = green)
+                    Spacer(Modifier.width(10.dp))
+                    Text(if (english) titleEn else titleRo, color = navy, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
+                    IconButton(onClick = onDismiss) {
+                        Text("×", color = navy, style = MaterialTheme.typography.headlineMedium)
+                    }
+                }
+                Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                    listOf(false to "RO", true to "EN").forEach { (isEnglish, label) ->
+                        val selected = english == isEnglish
+                        Surface(
+                            onClick = { onLanguageChange(isEnglish) },
+                            shape = RoundedCornerShape(20.dp),
+                            color = if (selected) green else paleBlue,
+                            modifier = Modifier.padding(horizontal = 3.dp)
+                        ) {
+                            Text(label, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp),
+                                color = if (selected) Color.White else navy, fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+        },
+        text = {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Surface(color = paleBlue, shape = RoundedCornerShape(16.dp)) {
+                    Text(if (english) summaryEn else summaryRo, modifier = Modifier.padding(14.dp), color = navy)
+                }
+                Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) doesEn else doesRo)
+                Text(if (english) "What doesn't it do?" else "Ce NU face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) limitsEn else limitsRo)
+                Text(if (english) "Recommendation" else "Recomandare", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) adviceEn else adviceRo)
+            }
+        },
+        confirmButton = {
+            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = green)) {
+                Text(if (english) "Got it" else "Am înțeles")
+            }
+        }
+    )
 }
 
 @Composable
