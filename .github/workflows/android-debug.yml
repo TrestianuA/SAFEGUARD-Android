@@ -95,6 +95,14 @@ jobs:
           if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.png ]]; then
             curl --fail --location --retry 3 --silent --show-error "$LOGO_FULL_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg
           fi
+          # PNG-urile originale au prioritate; evita resurse Android duplicate .png/.jpg.
+          for logo in safeguard_logo_simplu safeguard_logo_complet; do
+            png="app/src/main/res/drawable-nodpi/${logo}.png"
+            jpg="app/src/main/res/drawable-nodpi/${logo}.jpg"
+            if [[ -s "$png" && -f "$jpg" ]]; then
+              rm -- "$jpg"
+            fi
+          done
           file app/src/main/res/drawable-nodpi/safeguard_logo_*
 
       - name: Build debug APK
