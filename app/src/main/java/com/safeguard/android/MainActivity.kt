@@ -58,10 +58,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val green = Color(0xFF087F5B)
-private val navy = Color(0xFF17324D)
-private val paleBlue = Color(0xFFF0F6FC)
-private val paleGreen = Color(0xFFE9F6EE)
+private val green = Color(0xFF139B22)
+private val navy = Color(0xFF082B63)
+private val paleBlue = Color(0xFFF2F9FF)
+private val paleGreen = Color(0xFFE8F9E8)
 
 @Composable
 private fun SafeguardScreen(
@@ -114,8 +114,15 @@ private fun SafeguardScreen(
                         NavigationBarItem(
                             selected = selectedTab == index,
                             onClick = { selectedTab = index },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = Color.White,
+                                selectedTextColor = navy,
+                                indicatorColor = green,
+                                unselectedIconColor = navy,
+                                unselectedTextColor = navy
+                            ),
                             icon = { Text(listOf("⌂", "🛡", "▥")[index]) },
-                            label = { Text(title) },
+                            label = { Text(title, fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal) },
                             alwaysShowLabel = true
                         )
                     }
@@ -156,7 +163,7 @@ private fun SafeguardScreen(
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Scanner local – prototip 0.7.2", fontWeight = FontWeight.Bold, color = green)
+                        Text("Scanner local – prototip 0.7.3-rc1", fontWeight = FontWeight.Bold, color = green)
                         Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
                         Text("Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
                     }
@@ -253,7 +260,7 @@ private fun SafeguardScreen(
                     }
                 }
                 }
-                Text("SAFEGUARD 0.7.2 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+                Text("SAFEGUARD 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
@@ -338,14 +345,16 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFB9EFAF))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(14.dp),
+            modifier = Modifier.fillMaxWidth().padding(18.dp),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 90.dp)
+            BrandLogo("safeguard_logo_simplu", 112.dp)
             Text(
                 when {
                     scanning -> "Scanare în desfășurare"
@@ -379,7 +388,8 @@ private fun DashboardTile(
         modifier = modifier.height(126.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCEEDD7))
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFA6ECA5))
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(7.dp),
@@ -396,7 +406,7 @@ private fun DashboardTile(
 @Composable
 private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
     Card(
-        shape = RoundedCornerShape(18.dp),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
         modifier = Modifier.fillMaxWidth()
     ) {
