@@ -171,9 +171,10 @@ private fun SafeguardScreen(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
-                        launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
+                        // Cache is cleared per app; the storage overview has no universal cache-clear action.
+                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                     }
-                    DashboardTile(Icons.Filled.BatteryChargingFull, "Optimizare\nbaterie", "Sfaturi", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
                     DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
