@@ -623,9 +623,9 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 }
             }
             if (memorySnapshot != null && memorySnapshot.totalMem > 0) {
-                Text("Disponibil: %.1f GB din %.1f GB".format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
+                Text((if (helpEnglish) "Available: %.1f GB of %.1f GB" else "Disponibil: %.1f GB din %.1f GB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
-            } else Text("Date indisponibile")
+            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
