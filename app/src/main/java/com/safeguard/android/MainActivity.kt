@@ -458,7 +458,18 @@ private fun DeviceHealthCards(context: Context) {
                 Text("Disponibil: %.1f GB din %.1f GB".format(memory.availMem / 1073741824.0, memory.totalMem / 1073741824.0))
                 Text(if (memory.lowMemory) "Android raportează presiune asupra memoriei." else "Android nu raportează memorie critic de redusă.")
             } else Text("Date indisponibile")
-            Text("SAFEGUARD nu oprește automat procese.", style = MaterialTheme.typography.bodySmall)
+            Text("ⓘ RAM este memoria de lucru a telefonului. Android folosește o parte pentru aplicații și cache, iar utilizarea ridicată nu înseamnă automat o problemă.", style = MaterialTheme.typography.bodySmall)
+            if (memory != null) {
+                Text("Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
+                Text(
+                    if (memory.lowMemory)
+                        "Android semnalează presiune asupra memoriei. Verifică aplicațiile care consumă resurse și închide doar ce nu mai folosești. Dacă telefonul rămâne lent, poți încerca o repornire."
+                    else
+                        "Android nu semnalează presiune critică asupra memoriei. Nu este necesar să forțezi închiderea aplicațiilor doar pentru a mări RAM-ul disponibil.",
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Text("SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Verifică aplicațiile") }
         }
     }
@@ -479,6 +490,10 @@ private fun DeviceHealthCards(context: Context) {
                     storage.first / 1073741824.0
                 ))
             } else Text("Date indisponibile")
+            Text("ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
+            Text("Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
+            Text("SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Cache Advisor · Setări aplicații") }
             Text("SAFEGUARD nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
         }
