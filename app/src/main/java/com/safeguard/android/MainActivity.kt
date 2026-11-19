@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -394,7 +395,8 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
                 if (hasReport) "Rezultatele sunt disponibile în Protecție."
                 else "Analiză locală disponibilă • Fără protecție antivirus în timp real.",
                 style = MaterialTheme.typography.bodySmall,
-                color = navy
+                color = navy,
+                textAlign = TextAlign.Center
             )
         }
     }
@@ -417,13 +419,13 @@ private fun DashboardTile(
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFA6ECA5))
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(7.dp),
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterVertically)
         ) {
             Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
-            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
-            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
+            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
         }
     }
 }
