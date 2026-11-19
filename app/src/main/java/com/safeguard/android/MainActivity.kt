@@ -688,8 +688,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         SafeguardInfoDialog(
             titleRo = "ⓘ Animații Android",
             titleEn = "ⓘ Android animations",
-            summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere.",
-            summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow.",
+            summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere. Cum te poate ajuta: reducerea animațiilor poate face navigarea să pară mai rapidă și mai confortabilă.",
+            summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow. How it can help you: reducing animations may make navigation feel faster and more comfortable.",
             doesRo = "SAFEGUARD îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
             doesEn = "SAFEGUARD shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
             limitsRo = "SAFEGUARD nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
