@@ -79,6 +79,8 @@ private fun SafeguardScreen(
     var report by remember { mutableStateOf<ScanReport?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
+    var showHelp by remember { mutableStateOf(false) }
+    var helpEnglish by rememberSaveable { mutableStateOf(false) }
 
     fun startScan() {
         scanning = true
@@ -125,7 +127,7 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab == 0) SafeguardHeader()
+                if (selectedTab == 0) SafeguardHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
@@ -256,6 +258,20 @@ private fun SafeguardScreen(
         }
     }
 
+    if (showHelp) {
+        AlertDialog(
+            onDismissRequest = { showHelp = false },
+            title = { Text(if (helpEnglish) "About SAFEGUARD" else "Despre SAFEGUARD") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(if (helpEnglish) "SAFEGUARD performs local checks of visible apps, sensitive permissions and selected Android special accesses. It is not an antivirus and does not provide real-time malware protection." else "SAFEGUARD verifică local aplicațiile vizibile, permisiunile sensibile și anumite accesări speciale Android. Nu este antivirus și nu oferă protecție antivirus în timp real.")
+                    Text(if (helpEnglish) "The notification inspector stores only the source package and time, locally, when you grant access. Battery and storage shortcuts open Android settings. No automatic cleaning or app blocking is provided." else "Inspectorul notificărilor păstrează local doar pachetul-sursă și ora, dacă acorzi acces. Scurtăturile pentru baterie și stocare deschid setările Android. Nu există curățare automată sau blocare a aplicațiilor.")
+                }
+            },
+            confirmButton = { TextButton(onClick = { showHelp = false }) { Text(if (helpEnglish) "Close" else "Închide") } }
+        )
+    }
+
     if (showConsent) {
         AlertDialog(
             onDismissRequest = { showConsent = false },
@@ -378,7 +394,7 @@ private fun DashboardTile(
 }
 
 @Composable
-private fun SafeguardHeader() {
+private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
     Card(
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
@@ -392,8 +408,10 @@ private fun SafeguardHeader() {
             BrandLogo("safeguard_logo_simplu", 48.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                Text("Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
+                Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
             }
+            TextButton(onClick = onHelp, contentPadding = PaddingValues(2.dp)) { Text("ⓘ", color = Color.White, style = MaterialTheme.typography.titleLarge) }
+            TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
         }
     }
 }
