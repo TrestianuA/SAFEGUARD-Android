@@ -121,8 +121,8 @@ jobs:
                   raise SystemExit(f"Expected exactly one approved logo for {name}; found {len(existing)}")
               path = existing[0]
               data = path.read_bytes()
-              valid = (data.startswith(b"\\x89PNG\\r\\n\\x1a\\n") if path.suffix == ".png"
-                       else data.startswith(b"\\xff\\xd8\\xff"))
+              valid = (data.startswith(bytes.fromhex("89504e470d0a1a0a")) if path.suffix == ".png"
+                       else data.startswith(bytes.fromhex("ffd8ff")))
               if not valid:
                   raise SystemExit(f"Invalid image signature: {path}. Upload the original approved PNG/JPEG.")
               print(f"Validated approved logo file: {path} ({len(data)} bytes)")
