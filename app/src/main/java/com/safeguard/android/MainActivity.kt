@@ -598,6 +598,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     val memorySnapshot = memory
     var showRamInfo by remember { mutableStateOf(false) }
     var ramInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
+    var showAnimationInfo by remember { mutableStateOf(false) }
+    var animationInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
     val battery = remember {
         runCatching {
             val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -663,36 +665,45 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    if (helpEnglish) "Android animations" else "Animații Android",
+                    fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = { showAnimationInfo = true }) {
+                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                }
+            }
             Text(
-                if (helpEnglish) "ⓘ Android animations" else "ⓘ Animații Android",
-                fontWeight = FontWeight.Bold,
-                color = green
-            )
-            Text(
-                if (helpEnglish)
-                    "Animations are visual transitions between screens and windows. Reducing them may make navigation feel faster, but does not increase physical RAM."
-                else
-                    "Animațiile sunt tranziții vizuale între ecrane și ferestre. Reducerea lor poate face navigarea să pară mai rapidă, dar nu mărește memoria RAM fizică.",
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                if (helpEnglish)
-                    "Manual option: Android Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations (names vary by device). If unavailable, leave the setting unchanged."
-                else
-                    "Opțiune manuală: Setări Android → Accesibilitate → Îmbunătățiri pentru vizibilitate / Culori și mișcare → Elimină animațiile (denumirile diferă după telefon). Dacă opțiunea lipsește, lasă setarea neschimbată.",
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                if (helpEnglish)
-                    "SAFEGUARD does not change animation scales or enable Developer options."
-                else
-                    "SAFEGUARD nu modifică scările animațiilor și nu activează Opțiunile pentru dezvoltatori.",
+                if (helpEnglish) "Animations are visual transitions between screens. Tap ⓘ for an explanation, safe steps and advice."
+                else "Animațiile sunt efectele vizuale dintre ecrane. Apasă ⓘ pentru explicații, pași siguri și recomandări.",
                 style = MaterialTheme.typography.bodySmall
             )
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
                 Text(if (helpEnglish) "Open Accessibility settings" else "Deschide Accesibilitate")
             }
         }
+    }
+    if (showAnimationInfo) {
+        SafeguardInfoDialog(
+            titleRo = "ⓘ Animații Android",
+            titleEn = "ⓘ Android animations",
+            summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere.",
+            summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow.",
+            doesRo = "SAFEGUARD îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
+            doesEn = "SAFEGUARD shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
+            limitsRo = "SAFEGUARD nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
+            limitsEn = "SAFEGUARD does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
+            adviceRo = "Încearcă reducerea animațiilor doar dacă mișcările te deranjează sau telefonul pare lent la schimbarea ecranelor. Verifică dacă îți place rezultatul. Dacă preferi efectele inițiale, revino în aceeași pagină de Accesibilitate și dezactivează opțiunea «Elimină animațiile». Dacă nu găsești opțiunea, lasă setările neschimbate.",
+            adviceEn = "Try reducing animations if the motion bothers you or switching screens feels slow. Check whether you prefer the result. To restore the original effects, return to the same Accessibility page and turn off Remove animations. If you cannot find the option, leave the settings unchanged.",
+            english = animationInfoEnglish,
+            onLanguageChange = { animationInfoEnglish = it },
+            onDismiss = { showAnimationInfo = false },
+            onSettings = {
+                showAnimationInfo = false
+                launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            }
+        )
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
