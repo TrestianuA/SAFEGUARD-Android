@@ -369,7 +369,7 @@ private fun DashboardTile(
             verticalArrangement = Arrangement.Center
         ) {
             Text(symbol, style = MaterialTheme.typography.titleLarge)
-            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.labelMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center, lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
+            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.labelMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         }
     }
