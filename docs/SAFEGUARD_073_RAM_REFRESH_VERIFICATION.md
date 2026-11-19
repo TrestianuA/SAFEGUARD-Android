@@ -17,3 +17,12 @@ The device health RAM card now has an **Actualizează RAM** button. Each press r
 
 ## Limitations
 `availMem` is a system-wide snapshot, not per-app usage or a prediction of performance. `lowMemory` is Android's signal, not an antivirus finding. Values may remain the same across consecutive refreshes. Cache cleaning is manual only.
+
+## 2026-11-19 — Manual animation guidance (commit a79e079)
+- Reviewed the current `MainActivity.kt` and `.github/workflows/android-debug.yml` before editing.
+- Added a bilingual RO/EN information card for Android animation settings to the device health section. The card describes the effect of reduced animations, explains that it does not increase physical RAM, and links to Android Accessibility settings.
+- No change to Android system settings is performed by SAFEGUARD; no new permissions, logo changes or signing changes.
+- Static review: the existing `helpEnglish` state is passed to `DeviceHealthCards` and controls the new copy. No compilation, tests or phone verification were run.
+- Observed from the user's GitHub Actions screenshots: commit `cd1546b` failed after 14 seconds with exit code 22. This is consistent with, but does not prove, a failed `curl --fail` download in the workflow. Full job logs are needed for root-cause confirmation.
+- The workflow currently fetches logo previews from external Canva URLs if logo resources are absent; this creates a build dependency on external URLs. Do not replace approved logos with generic assets. Prefer adding verified approved assets to source control and then removing the network dependency.
+- Device test pending: verify the animation guide's accessibility path on Samsung Galaxy A13 / Android 14, and that RO/EN text changes when toggled.
