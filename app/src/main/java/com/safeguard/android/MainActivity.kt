@@ -646,8 +646,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         SafeguardInfoDialog(
             titleRo = "ⓘ Memorie RAM",
             titleEn = "ⓘ RAM Monitor",
-            summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere.",
-            summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files.",
+            summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere. Cum te poate ajuta: afli când Android semnalează că memoria RAM disponibilă este insuficientă și poți decide dacă trebuie să verifici aplicațiile.",
+            summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files. How it can help you: see when Android reports low available memory so you can decide whether to review your apps.",
             doesRo = "SAFEGUARD citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
             doesEn = "SAFEGUARD reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
             limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. SAFEGUARD nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
