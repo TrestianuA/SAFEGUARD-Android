@@ -429,14 +429,15 @@ private fun InfoCard(message: String) {
     Card { Text(message, Modifier.padding(14.dp)) }
 }
 
+private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
+    runCatching {
+        val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        ActivityManager.MemoryInfo().also { manager.getMemoryInfo(it) }
+    }.getOrNull()
+
 @Composable
 private fun DeviceHealthCards(context: Context) {
-    val memory = remember {
-        runCatching {
-            val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-            ActivityManager.MemoryInfo().also { manager.getMemoryInfo(it) }
-        }.getOrNull()
-    }
+    var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val battery = remember {
         runCatching {
             val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -469,6 +470,7 @@ private fun DeviceHealthCards(context: Context) {
                     style = MaterialTheme.typography.bodySmall
                 )
             }
+            OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text("Actualizează RAM") }
             Text("SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Verifică aplicațiile") }
         }
