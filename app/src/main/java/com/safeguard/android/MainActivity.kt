@@ -654,10 +654,10 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. SAFEGUARD does not close apps for you or forcibly free RAM.",
             adviceRo = if (memorySnapshot?.lowMemory == true)
                 "Android raportează presiune asupra memoriei. Dacă telefonul este lent, închide doar aplicațiile pe care nu le mai folosești și verifică dacă problema persistă. Poți reporni telefonul dacă încetinirea continuă."
-                else "Android nu raportează acum lipsă critică de memorie sau măsurarea nu este disponibilă. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
+                else if (memorySnapshot == null || memorySnapshot.totalMem <= 0) "Măsurarea RAM nu este disponibilă acum. Apasă «Actualizează RAM» pentru a încerca din nou. SAFEGUARD nu poate aprecia presiunea asupra memoriei fără o citire validă." else "Android nu raportează acum lipsă critică de memorie. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
             adviceEn = if (memorySnapshot?.lowMemory == true)
                 "Android reports memory pressure. If your phone is slow, close only apps you no longer need and see whether the problem continues. Restarting the phone may help if it remains slow."
-                else "Android is not currently reporting critically low memory, or a reading is unavailable. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
+                else if (memorySnapshot == null || memorySnapshot.totalMem <= 0) "RAM readings are unavailable right now. Tap Refresh RAM to try again. SAFEGUARD cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
             english = ramInfoEnglish,
             onLanguageChange = { ramInfoEnglish = it },
             onDismiss = { showRamInfo = false }
