@@ -24,6 +24,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Apps
+import androidx.compose.material.icons.filled.CleaningServices
+import androidx.compose.material.icons.filled.BatteryChargingFull
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -129,7 +139,13 @@ private fun SafeguardScreen(
                                 unselectedIconColor = navy,
                                 unselectedTextColor = navy
                             ),
-                            icon = { Text(listOf("⌂", "🛡", "▥")[index]) },
+                            icon = {
+                                Icon(
+                                    imageVector = listOf(Icons.Filled.Home, Icons.Filled.Security, Icons.Filled.Assessment)[index],
+                                    contentDescription = title,
+                                    modifier = Modifier.size(26.dp)
+                                )
+                            },
                             label = { Text(title, fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal) },
                             alwaysShowLabel = true
                         )
@@ -147,20 +163,20 @@ private fun SafeguardScreen(
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("🛡️", "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile("🔔", "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
-                    DashboardTile("📱", "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.Security, "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile(Icons.Filled.Notifications, "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile(Icons.Filled.Apps, "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("🧹", "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
                     }
-                    DashboardTile("🔋", "Optimizare\nbaterie", "Sfaturi", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.BatteryChargingFull, "Optimizare\nbaterie", "Sfaturi", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
-                    DashboardTile("📊", "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
@@ -385,7 +401,7 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
 
 @Composable
 private fun DashboardTile(
-    symbol: String,
+    symbol: ImageVector,
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
@@ -404,7 +420,7 @@ private fun DashboardTile(
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(symbol, style = MaterialTheme.typography.headlineMedium)
+            Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         }
@@ -428,7 +444,7 @@ private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngl
                 Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
             }
-            TextButton(onClick = onHelp, contentPadding = PaddingValues(2.dp)) { Text("⚙", color = Color.White, style = MaterialTheme.typography.headlineMedium) }
+            IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
         }
     }
