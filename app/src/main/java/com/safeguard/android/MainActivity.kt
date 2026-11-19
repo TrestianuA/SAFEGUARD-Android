@@ -125,31 +125,43 @@ private fun SafeguardScreen(
     ) {
         Scaffold(
             bottomBar = {
-                NavigationBar(
-                    containerColor = Color.White,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                Surface(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 5.dp),
+                    shape = RoundedCornerShape(32.dp),
+                    color = Color.White,
+                    shadowElevation = 7.dp,
+                    border = BorderStroke(1.dp, Color(0xFFC8E8F4))
                 ) {
-                    listOf("Acasă", "Protecție", "Rapoarte").forEachIndexed { index, title ->
-                        NavigationBarItem(
-                            selected = selectedTab == index,
-                            onClick = { selectedTab = index },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = Color.White,
-                                selectedTextColor = navy,
-                                indicatorColor = green,
-                                unselectedIconColor = navy,
-                                unselectedTextColor = navy
-                            ),
-                            icon = {
-                                Icon(
-                                    imageVector = listOf(Icons.Filled.Home, Icons.Filled.Security, Icons.Filled.Assessment)[index],
-                                    contentDescription = title,
-                                    modifier = Modifier.size(26.dp)
-                                )
-                            },
-                            label = { Text(title, fontWeight = if (selectedTab == index) FontWeight.Bold else FontWeight.Normal) },
-                            alwaysShowLabel = true
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(5.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        val tabs = listOf("Acasă", "Protecție", "Rapoarte")
+                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Security, Icons.Filled.Assessment)
+                        tabs.forEachIndexed { index, title ->
+                            val active = selectedTab == index
+                            Surface(
+                                onClick = { selectedTab = index },
+                                modifier = Modifier.weight(1f).height(64.dp),
+                                shape = RoundedCornerShape(28.dp),
+                                color = if (active) green else Color.Transparent,
+                                contentColor = if (active) Color.White else navy
+                            ) {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(icons[index], contentDescription = null, modifier = Modifier.size(25.dp))
+                                    Text(
+                                        title,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
+                                        maxLines = 1
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
