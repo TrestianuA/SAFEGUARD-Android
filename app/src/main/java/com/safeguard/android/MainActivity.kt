@@ -15,6 +15,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -109,7 +114,10 @@ private fun SafeguardScreen(
     ) {
         Scaffold(
             bottomBar = {
-                NavigationBar(containerColor = Color.White) {
+                NavigationBar(
+                    containerColor = Color.White,
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                ) {
                     listOf("Acasă", "Protecție", "Rapoarte").forEachIndexed { index, title ->
                         NavigationBarItem(
                             selected = selectedTab == index,
@@ -139,20 +147,20 @@ private fun SafeguardScreen(
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("🛡️", "Scanare locală", "Verifică", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile("🔔", "Notificări", if (notificationAccessEnabled) "Inspector activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
-                    DashboardTile("📱", "Aplicații", "Setări Android", Modifier.weight(1f)) {
+                    DashboardTile("🛡️", "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile("🔔", "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile("📱", "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("💾", "Stocare", "Verifică", Modifier.weight(1f)) {
+                    DashboardTile("🧹", "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
                     }
-                    DashboardTile("🔋", "Baterie", "Verifică", Modifier.weight(1f)) {
+                    DashboardTile("🔋", "Optimizare\nbaterie", "Sfaturi", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
-                    DashboardTile("📊", "Rapoarte", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile("📊", "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
@@ -358,16 +366,16 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
             Text(
                 when {
                     scanning -> "Scanare în desfășurare"
-                    hasReport -> "Scanare locală finalizată"
-                    else -> "Verifică securitatea telefonului"
+                    hasReport -> "Verificare locală finalizată"
+                    else -> "Verifică dispozitivul"
                 },
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = navy
             )
             Text(
                 if (hasReport) "Rezultatele sunt disponibile în Protecție."
-                else "Verificări locale, fără antivirus în timp real.",
+                else "Analiză locală disponibilă • Fără protecție antivirus în timp real.",
                 style = MaterialTheme.typography.bodySmall,
                 color = navy
             )
@@ -385,7 +393,7 @@ private fun DashboardTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.height(126.dp),
+        modifier = modifier.height(140.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
@@ -396,8 +404,8 @@ private fun DashboardTile(
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(symbol, style = MaterialTheme.typography.titleLarge)
-            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.labelMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            Text(symbol, style = MaterialTheme.typography.headlineMedium)
+            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         }
     }
@@ -420,7 +428,7 @@ private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngl
                 Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
             }
-            TextButton(onClick = onHelp, contentPadding = PaddingValues(2.dp)) { Text("ⓘ", color = Color.White, style = MaterialTheme.typography.titleLarge) }
+            TextButton(onClick = onHelp, contentPadding = PaddingValues(2.dp)) { Text("⚙", color = Color.White, style = MaterialTheme.typography.headlineMedium) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
         }
     }
