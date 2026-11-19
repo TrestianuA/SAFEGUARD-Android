@@ -130,18 +130,20 @@ private fun SafeguardScreen(
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("🛡️", "Scanare securitate", "Disponibilă", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile("🔒", "Protecție în timp real", "În dezvoltare", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile("📱", "Blocare aplicații", "În dezvoltare", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile("🛡️", "Scanare locală", "Verifică", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile("🔔", "Notificări", if (notificationAccessEnabled) "Inspector activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile("📱", "Aplicații", "Setări Android", Modifier.weight(1f)) {
+                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                    }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile("🧹", "Curățare telefon", "Din Setări", Modifier.weight(1f)) {
+                    DashboardTile("💾", "Stocare", "Verifică", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
                     }
-                    DashboardTile("🔋", "Optimizare baterie", "Din Setări", Modifier.weight(1f)) {
+                    DashboardTile("🔋", "Baterie", "Verifică", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
-                    DashboardTile("📊", "Rapoarte și activitate", "Inspector local", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile("📊", "Rapoarte", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context)
