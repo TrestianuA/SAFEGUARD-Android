@@ -38,7 +38,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Verify Android project files
         id: project
@@ -53,7 +53,7 @@ jobs:
 
       - name: Set up Java 17
         if: steps.project.outputs.ready == 'true'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -90,10 +90,16 @@ jobs:
           set -euo pipefail
           mkdir -p app/src/main/res/drawable-nodpi
           if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.png ]]; then
-            curl --fail --location --retry 3 --silent --show-error "$LOGO_SIMPLE_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg
+            if ! curl --fail --location --retry 3 --silent --show-error "$LOGO_SIMPLE_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg; then
+              echo "::error::Approved simple SAFEGUARD logo could not be downloaded. Add the original approved image to app/src/main/res/drawable-nodpi; do not replace it with a placeholder."
+              exit 1
+            fi
           fi
           if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.png ]]; then
-            curl --fail --location --retry 3 --silent --show-error "$LOGO_FULL_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg
+            if ! curl --fail --location --retry 3 --silent --show-error "$LOGO_FULL_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg; then
+              echo "::error::Approved full SAFEGUARD logo could not be downloaded. Add the original approved image to app/src/main/res/drawable-nodpi; do not replace it with a placeholder."
+              exit 1
+            fi
           fi
           # PNG-urile originale au prioritate; evita resurse Android duplicate .png/.jpg.
           for logo in safeguard_logo_simplu safeguard_logo_complet; do
