@@ -308,7 +308,7 @@ private fun SafeguardScreen(
         SafeguardInfoDialog(
             titleRo = "Cache Advisor",
             titleEn = "Cache Advisor",
-            summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Beneficiu: poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
+            summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Avantaj: poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
             summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. Benefit: you may reclaim phone storage by manually clearing an app's cache, if Android allows it.",
             doesRo = "SAFEGUARD îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
             doesEn = "SAFEGUARD explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
