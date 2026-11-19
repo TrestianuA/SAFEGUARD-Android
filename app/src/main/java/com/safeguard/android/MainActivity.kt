@@ -438,6 +438,7 @@ private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
 @Composable
 private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
+    val memorySnapshot = memory
     val battery = remember {
         runCatching {
             val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -455,15 +456,15 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Memorie RAM", fontWeight = FontWeight.Bold, color = green)
-            if (memory != null && memory.totalMem > 0) {
-                Text("Disponibil: %.1f GB din %.1f GB".format(memory.availMem / 1073741824.0, memory.totalMem / 1073741824.0))
-                Text(if (memory.lowMemory) "Android raportează presiune asupra memoriei." else "Android nu raportează memorie critic de redusă.")
+            if (memorySnapshot != null && memorySnapshot.totalMem > 0) {
+                Text("Disponibil: %.1f GB din %.1f GB".format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
+                Text(if (memorySnapshot.lowMemory) "Android raportează presiune asupra memoriei." else "Android nu raportează memorie critic de redusă.")
             } else Text("Date indisponibile")
             Text("ⓘ RAM este memoria de lucru a telefonului. Android folosește o parte pentru aplicații și cache, iar utilizarea ridicată nu înseamnă automat o problemă.", style = MaterialTheme.typography.bodySmall)
-            if (memory != null) {
+            if (memorySnapshot != null) {
                 Text("Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
-                    if (memory.lowMemory)
+                    if (memorySnapshot.lowMemory)
                         "Android semnalează presiune asupra memoriei. Verifică aplicațiile care consumă resurse și închide doar ce nu mai folosești. Dacă telefonul rămâne lent, poți încerca o repornire."
                     else
                         "Android nu semnalează presiune critică asupra memoriei. Nu este necesar să forțezi închiderea aplicațiilor doar pentru a mări RAM-ul disponibil.",
