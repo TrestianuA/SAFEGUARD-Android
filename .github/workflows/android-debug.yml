@@ -110,6 +110,23 @@ jobs:
             fi
           done
           file app/src/main/res/drawable-nodpi/safeguard_logo_*
+          # Validate actual image signatures, not just extensions or non-empty files.
+          python3 - <<'PY'
+          from pathlib import Path
+          root = Path("app/src/main/res/drawable-nodpi")
+          for name in ("safeguard_logo_simplu", "safeguard_logo_complet"):
+              candidates = [root / f"{name}.{ext}" for ext in ("png", "jpg")]
+              existing = [path for path in candidates if path.is_file()]
+              if len(existing) != 1:
+                  raise SystemExit(f"Expected exactly one approved logo for {name}; found {len(existing)}")
+              path = existing[0]
+              data = path.read_bytes()
+              valid = (data.startswith(b"\\x89PNG\\r\\n\\x1a\\n") if path.suffix == ".png"
+                       else data.startswith(b"\\xff\\xd8\\xff"))
+              if not valid:
+                  raise SystemExit(f"Invalid image signature: {path}. Upload the original approved PNG/JPEG.")
+              print(f"Validated approved logo file: {path} ({len(data)} bytes)")
+          PY
 
       - name: Build debug APK
         if: steps.project.outputs.ready == 'true'
