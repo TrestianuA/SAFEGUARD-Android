@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -422,9 +423,10 @@ private fun DashboardTile(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val narrowScreen = LocalConfiguration.current.screenWidthDp < 390
     Card(
         onClick = onClick,
-        modifier = modifier.height(140.dp),
+        modifier = modifier.height(if (narrowScreen) 158.dp else 140.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
