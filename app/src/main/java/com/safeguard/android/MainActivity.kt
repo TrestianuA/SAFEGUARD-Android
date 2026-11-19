@@ -596,6 +596,8 @@ private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
 private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val memorySnapshot = memory
+    var showRamInfo by remember { mutableStateOf(false) }
+    var ramInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
     val battery = remember {
         runCatching {
             val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
@@ -612,12 +614,17 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Memorie RAM", fontWeight = FontWeight.Bold, color = green)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(if (helpEnglish) "RAM Monitor" else "Memorie RAM", fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f))
+                IconButton(onClick = { showRamInfo = true }) {
+                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                }
+            }
             if (memorySnapshot != null && memorySnapshot.totalMem > 0) {
                 Text("Disponibil: %.1f GB din %.1f GB".format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
             } else Text("Date indisponibile")
-            Text(if (helpEnglish) "ⓘ RAM is the phone’s working memory. Android uses some for apps and caching; high usage does not automatically mean a problem." else "ⓘ RAM este memoria de lucru a telefonului. Android folosește o parte pentru aplicații și cache, iar utilizarea ridicată nu înseamnă automat o problemă.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
@@ -632,6 +639,27 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Text(if (helpEnglish) "SAFEGUARD does not stop processes automatically or force RAM to be freed." else "SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Review apps" else "Verifică aplicațiile") }
         }
+    }
+    if (showRamInfo) {
+        SafeguardInfoDialog(
+            titleRo = "ⓘ Memorie RAM",
+            titleEn = "ⓘ RAM Monitor",
+            summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere.",
+            summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files.",
+            doesRo = "SAFEGUARD citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
+            doesEn = "SAFEGUARD reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
+            limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. SAFEGUARD nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
+            limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. SAFEGUARD does not close apps for you or forcibly free RAM.",
+            adviceRo = if (memorySnapshot?.lowMemory == true)
+                "Android raportează presiune asupra memoriei. Dacă telefonul este lent, închide doar aplicațiile pe care nu le mai folosești și verifică dacă problema persistă. Poți reporni telefonul dacă încetinirea continuă."
+                else "Android nu raportează acum lipsă critică de memorie sau măsurarea nu este disponibilă. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
+            adviceEn = if (memorySnapshot?.lowMemory == true)
+                "Android reports memory pressure. If your phone is slow, close only apps you no longer need and see whether the problem continues. Restarting the phone may help if it remains slow."
+                else "Android is not currently reporting critically low memory, or a reading is unavailable. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
+            english = ramInfoEnglish,
+            onLanguageChange = { ramInfoEnglish = it },
+            onDismiss = { showRamInfo = false }
+        )
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
