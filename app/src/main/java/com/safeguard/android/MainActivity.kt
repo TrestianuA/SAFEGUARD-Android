@@ -460,7 +460,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 Text("Disponibil: %.1f GB din %.1f GB".format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) "Android raportează presiune asupra memoriei." else "Android nu raportează memorie critic de redusă.")
             } else Text("Date indisponibile")
-            Text("ⓘ RAM este memoria de lucru a telefonului. Android folosește o parte pentru aplicații și cache, iar utilizarea ridicată nu înseamnă automat o problemă.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "ⓘ RAM is the phone’s working memory. Android uses some for apps and caching; high usage does not automatically mean a problem." else "ⓘ RAM este memoria de lucru a telefonului. Android folosește o parte pentru aplicații și cache, iar utilizarea ridicată nu înseamnă automat o problemă.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null) {
                 Text("Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
@@ -471,8 +471,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text("Actualizează RAM") }
-            Text("SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text(if (helpEnglish) "Refresh RAM" else "Actualizează RAM") }
+            Text(if (helpEnglish) "SAFEGUARD does not stop processes automatically or force RAM to be freed." else "SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Verifică aplicațiile") }
         }
     }
@@ -526,9 +526,9 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     storage.first / 1073741824.0
                 ))
             } else Text("Date indisponibile")
-            Text("ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
-            Text("Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
-            Text("SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "SAFEGUARD does not measure each app’s cache or delete files automatically." else "SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Cache Advisor · Setări aplicații") }
             Text("SAFEGUARD nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
