@@ -122,36 +122,26 @@ private fun SafeguardScreen(
         ) { innerPadding ->
             Column(
                 modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState())
-                    .padding(horizontal = 18.dp, vertical = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp)
+                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                SafeguardHeader()
+                if (selectedTab == 0) SafeguardHeader()
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
-                Text("Acces rapid", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    DashboardTile("🛡️", "Scanare securitate", "Disponibilă", Modifier.weight(1f)) {
-                        selectedTab = 1
-                    }
-                    DashboardTile("🔔", "Inspector notificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) {
-                        selectedTab = 2
-                    }
+                Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    DashboardTile("🛡️", "Scanare securitate", "Disponibilă", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile("🔒", "Protecție în timp real", "În dezvoltare", Modifier.weight(1f)) { selectedTab = 1 }
+                    DashboardTile("📱", "Blocare aplicații", "În dezvoltare", Modifier.weight(1f)) { selectedTab = 1 }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    DashboardTile("🔋", "Baterie", "Verifică setările", Modifier.weight(1f)) {
-                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
-                    }
-                    DashboardTile("📱", "Aplicații", "Setări Android", Modifier.weight(1f)) {
-                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
-                    }
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    DashboardTile("🧹", "Curățare", "Manuală, din Setări", Modifier.weight(1f)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    DashboardTile("🧹", "Curățare telefon", "Din Setări", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS))
                     }
-                    DashboardTile("📊", "Rapoarte", if (report == null) "După scanare" else "Mai jos", Modifier.weight(1f)) {
-                        selectedTab = 1
+                    DashboardTile("🔋", "Optimizare baterie", "Din Setări", Modifier.weight(1f)) {
+                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
+                    DashboardTile("📊", "Rapoarte și activitate", "Inspector local", Modifier.weight(1f)) { selectedTab = 2 }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context)
@@ -218,7 +208,7 @@ private fun SafeguardScreen(
 
                 }
                 if (selectedTab == 2) {
-                Section("Inspectorul notificărilor", "Opțional: identifică sursele notificărilor nedorite.")
+                Section("Rapoarte și activitate", "Inspectorul notificărilor: identifică local sursele notificărilor.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
@@ -329,25 +319,30 @@ private fun BrandLogo(resourceName: String, size: androidx.compose.ui.unit.Dp) {
 private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(22.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(Modifier.padding(22.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            BrandLogo("safeguard_logo_simplu", 104.dp)
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(14.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            BrandLogo("safeguard_logo_simplu", 90.dp)
             Text(
                 when {
                     scanning -> "Scanare în desfășurare"
                     hasReport -> "Scanare locală finalizată"
                     else -> "Verifică securitatea telefonului"
                 },
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = navy
             )
             Text(
-                if (hasReport) "Consultă mai jos rezultatele și accesările speciale."
-                else "SAFEGUARD oferă verificări locale. Nu asigură protecție antivirus în timp real.",
-                style = MaterialTheme.typography.bodyMedium
+                if (hasReport) "Rezultatele sunt disponibile în Protecție."
+                else "Verificări locale, fără antivirus în timp real.",
+                style = MaterialTheme.typography.bodySmall,
+                color = navy
             )
         }
     }
@@ -362,17 +357,20 @@ private fun DashboardTile(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        onClick = onClick,
+        modifier = modifier.height(126.dp),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFCEEDD7))
     ) {
-        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(symbol, style = MaterialTheme.typography.headlineMedium)
-            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodyMedium)
-            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green)
-            TextButton(onClick = onClick, contentPadding = PaddingValues(0.dp)) {
-                Text("Deschide")
-            }
+        Column(
+            modifier = Modifier.fillMaxSize().padding(7.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(symbol, style = MaterialTheme.typography.titleLarge)
+            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.labelMedium, textAlign = androidx.compose.ui.text.style.TextAlign.Center, lineHeight = androidx.compose.ui.unit.TextUnit.Unspecified)
+            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         }
     }
 }
@@ -380,18 +378,20 @@ private fun DashboardTile(
 @Composable
 private fun SafeguardHeader() {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
-            modifier = Modifier.padding(22.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            BrandLogo("safeguard_logo_complet", 72.dp)
-            Text("SAFEGUARD", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
-            Text("Protecție și transparență pentru Android", style = MaterialTheme.typography.bodyMedium, color = Color(0xFFDDEAF5))
-            Text("Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelMedium, color = Color(0xFFA9E5C6))
+            BrandLogo("safeguard_logo_simplu", 48.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
+            }
         }
     }
 }
