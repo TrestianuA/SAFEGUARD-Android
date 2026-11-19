@@ -388,11 +388,11 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFB9EFAF))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(18.dp),
-            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 112.dp)
+            BrandLogo("safeguard_logo_simplu", 140.dp)
             Text(
                 when {
                     scanning -> "Scanare în desfășurare"
@@ -445,16 +445,17 @@ private fun DashboardTile(
 @Composable
 private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
     Card(
-        shape = RoundedCornerShape(22.dp),
+        shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 12.dp, bottomEnd = 12.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 14.dp),
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 48.dp)
+            BrandLogo("safeguard_logo_simplu", 54.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
