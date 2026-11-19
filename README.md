@@ -37,3 +37,15 @@ Proiect Android cu Java 17 și Gradle Wrapper. Compilarea de test se face prin `
 4. Rularea explicită a testelor unitare și testarea pe dispozitiv, când există condiții sigure.
 
 Designurile Canva aprobate sunt materiale de design; nu presupuneți că sunt integrate în APK până când resursele Android corespunzătoare sunt comise și verificate.
+
+## SAFEGUARD 0.7.3-rc1 — verificare interfață și Cache Advisor (19 noiembrie 2026)
+
+- Versiunea declarată în `app/build.gradle.kts` este `0.7.3-rc1` (`versionCode = 10`); nu este o versiune finală validată pe dispozitiv.
+- Ecranul Acasă folosește pictograme Compose vectoriale și păstrează logo-ul configurat; simpla compilare nu certifică fidelitatea vizuală față de macheta aprobată.
+- Cardul **Curățare manuală / Cache Advisor** deschide lista de aplicații din setările Android, de unde utilizatorul poate alege aplicația și, dacă este disponibilă, opțiunea de ștergere cache. Nu șterge fișiere și nu promite curățare automată.
+- Cardul pentru baterie este etichetat **Setări baterie / Manual**, deoarece deschide setările sistemului și nu optimizează automat consumul.
+- RAM Monitor folosește `ActivityManager.MemoryInfo` pentru memoria totală, disponibilă și indicatorul Android `lowMemory`; recomandările depind de acest indicator, nu de un prag inventat. Măsurătorile trebuie verificate pe telefon.
+- Explicațiile pentru cache, RAM și animațiile Android includ îndrumări manuale RO/EN. Denumirile meniurilor pot varia în funcție de producător.
+- Verificare statică: traseele butoanelor și textele au fost inspectate în `MainActivity.kt`; nu au fost executate aici un emulator sau teste instrumentate.
+- Verificare CI necesară după fiecare commit: în GitHub Actions verificați separat pașii `Build debug APK`, `Run debug unit tests`, `Audit generated APK signature and permissions` și artefactele. Nu presupuneți rezultat verde înainte de finalizarea execuției.
+- Testare manuală ulterioară: deschiderea celor șase carduri, RAM refresh, dialogurile ⓘ/limbă, navigarea, lizibilitatea pe ecran mic și compatibilitatea certificatului APK cu instalarea existentă. Nu dezinstalați aplicația funcțională pentru test.
