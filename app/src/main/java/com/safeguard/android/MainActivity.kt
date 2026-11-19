@@ -97,6 +97,7 @@ private fun SafeguardScreen(
     var error by remember { mutableStateOf<String?>(null) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showHelp by remember { mutableStateOf(false) }
+    var showCacheGuide by remember { mutableStateOf(false) }
     var helpEnglish by rememberSaveable { mutableStateOf(false) }
 
     fun startScan() {
@@ -185,8 +186,7 @@ private fun SafeguardScreen(
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
-                        // Cache is cleared per app; the storage overview has no universal cache-clear action.
-                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                        showCacheGuide = true
                     }
                     DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
@@ -302,6 +302,32 @@ private fun SafeguardScreen(
                 Text("SAFEGUARD 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
+    }
+
+    if (showCacheGuide) {
+        AlertDialog(
+            onDismissRequest = { showCacheGuide = false },
+            title = { Text(if (helpEnglish) "ⓘ Cache Advisor" else "ⓘ Ghid pentru cache") },
+            text = {
+                Text(
+                    if (helpEnglish)
+                        "Cache is temporary app data. To clear it manually: open Android app settings, choose an app, then Storage → Clear cache (labels vary). Avoid Clear storage / Clear data: it may erase app settings or signed-in sessions. SAFEGUARD cannot clear other apps' caches automatically."
+                    else
+                        "Cache-ul conține date temporare ale aplicațiilor. Pentru curățare manuală: deschide setările aplicațiilor Android, alege o aplicație, apoi Stocare → Șterge cache (denumirile pot varia). Evită Șterge datele / Golire stocare: poți pierde setări sau sesiuni. SAFEGUARD nu șterge automat cache-ul altor aplicații."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showCacheGuide = false
+                    launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                }) { Text(if (helpEnglish) "Open app settings" else "Deschide setările") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showCacheGuide = false }) {
+                    Text(if (helpEnglish) "Close" else "Închide")
+                }
+            }
+        )
     }
 
     if (showHelp) {
