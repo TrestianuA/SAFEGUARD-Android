@@ -39,6 +39,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Verify Android project files
         id: project
@@ -80,37 +82,11 @@ jobs:
           test -s gradle/wrapper/gradle-wrapper.jar
           bash ./gradlew --version
 
-      - name: Prepare approved logo previews for visual build
+      - name: Verify committed approved logos
         if: steps.project.outputs.ready == 'true'
         shell: bash
-        env:
-          LOGO_SIMPLE_URL: 'https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2Fec833825-04a5-4051-8d76-ff42c20041ce/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAAJLe0jPk5ZXFidcWaCKtgogLDaZ8tMWkptDB_ZhyhBHr&exp=1795040145&osig=AAAAAAAAAAAAAAAAAAAAAGpfqFnzt8LR7Rzdxm1jDrysxmxcNRtHdWNEgbek9dDD&signer=media-rpc&token=AAIAAU0AJGVjODMzODI1LTA0YTUtNDA1MS04ZDc2LWZmNDJjMjAwNDFjZQAAAAABofC67mjBVfPk1BJUmJa3e2JfwcDmub8V1cEU72srI-nRDSbXqQ&x-canva-quality=thumbnail'
-          LOGO_FULL_URL: 'https://media.canva.com/v2/image-resize/format:JPG/height:200/quality:75/uri:ifs%3A%2F%2FM%2F88357e6d-179a-4a99-9302-401d758c198d/watermark:F/width:200?csig=AAAAAAAAAAAAAAAAAAAAACyew5j9gdVY29fJ1YNBicJ4dA824M-gkDR-W5jGu4gT&exp=1795040101&osig=AAAAAAAAAAAAAAAAAAAAAEuTWcr5d_TwS4r-2bMhLkgWBHGFikIGza5rWXYSgFuF&signer=media-rpc&token=AAIAAU0AJDg4MzU3ZTZkLTE3OWEtNGE5OS05MzAyLTQwMWQ3NThjMTk4ZAAAAAABofC6QoiTDonDQOF2fkz3Lg4SOZS2bR59HAGJSuWOjpnSCSaisg&x-canva-quality=thumbnail'
         run: |
           set -euo pipefail
-          mkdir -p app/src/main/res/drawable-nodpi
-          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_simplu.png ]]; then
-            if ! curl --fail --location --retry 3 --silent --show-error "$LOGO_SIMPLE_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_simplu.jpg; then
-              echo "::error::Approved simple SAFEGUARD logo could not be downloaded. Add the original approved image to app/src/main/res/drawable-nodpi; do not replace it with a placeholder."
-              exit 1
-            fi
-          fi
-          if [[ ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg && ! -s app/src/main/res/drawable-nodpi/safeguard_logo_complet.png ]]; then
-            if ! curl --fail --location --retry 3 --silent --show-error "$LOGO_FULL_URL" -o app/src/main/res/drawable-nodpi/safeguard_logo_complet.jpg; then
-              echo "::error::Approved full SAFEGUARD logo could not be downloaded. Add the original approved image to app/src/main/res/drawable-nodpi; do not replace it with a placeholder."
-              exit 1
-            fi
-          fi
-          # PNG-urile originale au prioritate; evita resurse Android duplicate .png/.jpg.
-          for logo in safeguard_logo_simplu safeguard_logo_complet; do
-            png="app/src/main/res/drawable-nodpi/${logo}.png"
-            jpg="app/src/main/res/drawable-nodpi/${logo}.jpg"
-            if [[ -s "$png" && -f "$jpg" ]]; then
-              rm -- "$jpg"
-            fi
-          done
-          file app/src/main/res/drawable-nodpi/safeguard_logo_*
-          # Validate actual image signatures, not just extensions or non-empty files.
           python3 - <<'PY'
           from pathlib import Path
           root = Path("app/src/main/res/drawable-nodpi")
@@ -118,14 +94,14 @@ jobs:
               candidates = [root / f"{name}.{ext}" for ext in ("png", "jpg")]
               existing = [path for path in candidates if path.is_file()]
               if len(existing) != 1:
-                  raise SystemExit(f"Expected exactly one approved logo for {name}; found {len(existing)}")
+                  raise SystemExit(f"Expected exactly one committed approved logo for {name}; found {len(existing)}")
               path = existing[0]
               data = path.read_bytes()
               valid = (data.startswith(bytes.fromhex("89504e470d0a1a0a")) if path.suffix == ".png"
                        else data.startswith(bytes.fromhex("ffd8ff")))
               if not valid:
-                  raise SystemExit(f"Invalid image signature: {path}. Upload the original approved PNG/JPEG.")
-              print(f"Validated approved logo file: {path} ({len(data)} bytes)")
+                  raise SystemExit(f"Invalid image signature: {path}")
+              print(f"Validated committed logo: {path} ({len(data)} bytes)")
           PY
 
       - name: Build debug APK
