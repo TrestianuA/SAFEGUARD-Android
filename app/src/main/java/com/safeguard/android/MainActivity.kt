@@ -148,7 +148,7 @@ private fun SafeguardScreen(
                     DashboardTile("📊", "Rapoarte", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
-                DeviceHealthCards(context)
+                DeviceHealthCards(context, helpEnglish)
                 }
                 if (selectedTab == 1) {
                 Card(
@@ -436,7 +436,7 @@ private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
     }.getOrNull()
 
 @Composable
-private fun DeviceHealthCards(context: Context) {
+private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val battery = remember {
         runCatching {
@@ -473,6 +473,39 @@ private fun DeviceHealthCards(context: Context) {
             OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text("Actualizează RAM") }
             Text("SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text("Verifică aplicațiile") }
+        }
+    }
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(
+                if (helpEnglish) "ⓘ Android animations" else "ⓘ Animații Android",
+                fontWeight = FontWeight.Bold,
+                color = green
+            )
+            Text(
+                if (helpEnglish)
+                    "Animations are visual transitions between screens and windows. Reducing them may make navigation feel faster, but does not increase physical RAM."
+                else
+                    "Animațiile sunt tranziții vizuale între ecrane și ferestre. Reducerea lor poate face navigarea să pară mai rapidă, dar nu mărește memoria RAM fizică.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                if (helpEnglish)
+                    "Manual option: Android Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations (names vary by device). If unavailable, leave the setting unchanged."
+                else
+                    "Opțiune manuală: Setări Android → Accesibilitate → Îmbunătățiri pentru vizibilitate / Culori și mișcare → Elimină animațiile (denumirile diferă după telefon). Dacă opțiunea lipsește, lasă setarea neschimbată.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                if (helpEnglish)
+                    "SAFEGUARD does not change animation scales or enable Developer options."
+                else
+                    "SAFEGUARD nu modifică scările animațiilor și nu activează Opțiunile pentru dezvoltatori.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
+                Text(if (helpEnglish) "Open Accessibility settings" else "Deschide Accesibilitate")
+            }
         }
     }
     Card {
