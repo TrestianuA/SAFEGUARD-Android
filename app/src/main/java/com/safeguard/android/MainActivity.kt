@@ -305,27 +305,23 @@ private fun SafeguardScreen(
     }
 
     if (showCacheGuide) {
-        AlertDialog(
-            onDismissRequest = { showCacheGuide = false },
-            title = { Text(if (helpEnglish) "ⓘ Cache Advisor" else "ⓘ Ghid pentru cache") },
-            text = {
-                Text(
-                    if (helpEnglish)
-                        "Cache is temporary app data. To clear it manually: open Android app settings, choose an app, then Storage → Clear cache (labels vary). Avoid Clear storage / Clear data: it may erase app settings or signed-in sessions. SAFEGUARD cannot clear other apps' caches automatically."
-                    else
-                        "Cache-ul conține date temporare ale aplicațiilor. Pentru curățare manuală: deschide setările aplicațiilor Android, alege o aplicație, apoi Stocare → Șterge cache (denumirile pot varia). Evită Șterge datele / Golire stocare: poți pierde setări sau sesiuni. SAFEGUARD nu șterge automat cache-ul altor aplicații."
-                )
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    showCacheGuide = false
-                    launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
-                }) { Text(if (helpEnglish) "Open app settings" else "Deschide setările") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showCacheGuide = false }) {
-                    Text(if (helpEnglish) "Close" else "Închide")
-                }
+        SafeguardInfoDialog(
+            titleRo = "Cache Advisor",
+            titleEn = "Cache Advisor",
+            summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu.",
+            summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space.",
+            doesRo = "SAFEGUARD îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
+            doesEn = "SAFEGUARD explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
+            limitsRo = "SAFEGUARD nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
+            limitsEn = "SAFEGUARD does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
+            adviceRo = "Curăță cache-ul doar dacă o aplicație ocupă prea mult spațiu sau nu funcționează corect. Începe cu aplicația care are problema și verifică spațiul liber după aceea. Nu este necesar să ștergi cache-ul tuturor aplicațiilor în fiecare zi.",
+            adviceEn = "Clear cache only when an app uses too much storage or is not working correctly. Start with the affected app and check available storage afterward. You do not need to clear every app's cache each day.",
+            english = helpEnglish,
+            onLanguageChange = { helpEnglish = it },
+            onDismiss = { showCacheGuide = false },
+            onSettings = {
+                showCacheGuide = false
+                launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
             }
         )
     }
@@ -488,7 +484,8 @@ private fun SafeguardInfoDialog(
     adviceEn: String,
     english: Boolean,
     onLanguageChange: (Boolean) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onSettings: (() -> Unit)? = null
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -537,9 +534,16 @@ private fun SafeguardInfoDialog(
             }
         },
         confirmButton = {
-            Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = green)) {
-                Text(if (english) "Got it" else "Am înțeles")
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                if (onSettings != null) {
+                    TextButton(onClick = onSettings, modifier = Modifier.fillMaxWidth()) {
+                        Text(if (english) "Open Android app settings" else "Deschide setările aplicațiilor")
+                    }
+                }
+                Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = green)) {
+                    Text(if (english) "Got it" else "Am înțeles")
+                }
             }
         }
     )
