@@ -1,5 +1,8 @@
 package com.safeguard.android
 
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +23,7 @@ private data class GlossaryEntry(
 )
 
 private val glossaryEntries = listOf(
+    GlossaryEntry("Scara animațiilor", "Animation scales", "Controlează durata animațiilor interfeței.", "Control the duration of interface animations.", "La 0,5x interfața poate părea mai rapidă, fără accelerarea procesorului.", "At 0.5x the interface may feel faster without accelerating the processor.", "Notează valorile inițiale și testează 0,5x dacă preferi animații scurte.", "Record the original values and try 0.5x if you prefer shorter animations.", "Butonul deschide pagina pentru dezvoltatori, nu controlul exact. Restabilește valorile inițiale când dorești.", "The button opens the Developer options page, not the exact control. Restore original values when needed."),
     GlossaryEntry("Semnal slab", "Weak signal", "Semnalul mobil slab îngreunează legătura cu operatorul.", "A weak mobile signal makes it harder to communicate with your carrier.", "Telefonul poate crește puterea de transmisie și poate consuma mai multă energie.", "Your phone may increase transmit power and use more energy.", "În timpul apelurilor, poți folosi difuzorul sau căștile pentru a ține telefonul departe de cap.", "During calls, consider speakerphone or headphones to keep the phone farther from your head.", "Semnalul slab nu dovedește un pericol; aplicația nu măsoară expunerea radio.", "Weak signal does not prove danger; this app does not measure radio exposure."),
     GlossaryEntry("SAR", "SAR", "SAR descrie energia radio absorbită de țesuturi în teste standardizate, în W/kg.", "SAR describes radiofrequency energy absorbed by tissue in standardized tests, in W/kg.", "Este utilizat în evaluarea conformității dispozitivelor.", "It is used in device compliance testing.", "Consultă documentația oficială pentru modelul exact.", "Check official documentation for your exact model.", "Nu este o măsurare în timp real; FoniWise nu măsoară SAR.", "It is not a live reading; FoniWise does not measure SAR."),
     GlossaryEntry("RAM", "RAM", "RAM este memoria temporară folosită de Android și aplicații.", "RAM is temporary memory used by Android and apps.", "Android folosește RAM și pentru a deschide mai rapid aplicațiile.", "Android also uses RAM to reopen apps faster.", "Verifică întâi dacă există blocări reale înainte de a închide aplicații.", "Look for actual slowdowns before closing apps.", "RAM ocupat nu înseamnă automat telefon lent.", "Used RAM does not automatically mean a slow phone."),
@@ -39,6 +43,7 @@ private val glossaryEntries = listOf(
 
 @Composable
 internal fun FoniWiseGlossary(english: Boolean, onBack: () -> Unit, onLanguageChange: (Boolean) -> Unit) {
+    val context = LocalContext.current
     var query by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf<String?>(null) }
     val matching = remember(query, english) {
@@ -81,6 +86,21 @@ internal fun FoniWiseGlossary(english: Boolean, onBack: () -> Unit, onLanguageCh
                         GlossarySection(if (english) "Why does it matter?" else "De ce contează?", if (english) entry.whyEn else entry.whyRo)
                         GlossarySection(if (english) "What can you do?" else "Ce poți face?", if (english) entry.tipEn else entry.tipRo)
                         GlossarySection(if (english) "What doesn't it mean?" else "Ce NU înseamnă?", if (english) entry.cautionEn else entry.cautionRo)
+                        val settingsAction = when (entry.titleRo) {
+                            "Scara animațiilor" -> Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS
+                            "Cache", "Șterge date", "Permisiuni" -> Settings.ACTION_APPLICATION_SETTINGS
+                            else -> null
+                        }
+                        if (settingsAction != null) {
+                            OutlinedButton(onClick = {
+                                runCatching { context.startActivity(Intent(settingsAction)) }
+                                    .onFailure {
+                                        runCatching { context.startActivity(Intent(Settings.ACTION_SETTINGS)) }
+                                    }
+                            }) {
+                                Text(if (english) "Open Android settings" else "Deschide setările Android")
+                            }
+                        }
                     } else {
                         Text(if (english) entry.whatEn else entry.whatRo, style = MaterialTheme.typography.bodySmall)
                     }
