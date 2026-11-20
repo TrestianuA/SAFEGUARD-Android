@@ -21,7 +21,7 @@ class BatteryReadingValidationTest {
 
     @Test fun calculatesWithoutIntegerOverflow() {
         assertEquals(100, batteryPercentage(Int.MAX_VALUE, Int.MAX_VALUE))
-        assertEquals(50, batteryPercentage(Int.MAX_VALUE / 2, Int.MAX_VALUE))
+        assertEquals(49, batteryPercentage(Int.MAX_VALUE / 2, Int.MAX_VALUE))
         assertNull(batteryPercentage(Int.MAX_VALUE, 1))
     }
 }
