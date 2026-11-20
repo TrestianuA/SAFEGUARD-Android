@@ -874,10 +874,12 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Baterie", fontWeight = FontWeight.Bold, color = green)
-            Text(if (battery == null) "Date indisponibile" else "Nivel baterie: $battery%")
-            Text("FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text("Setările bateriei") }
+            Text(if (helpEnglish) "Battery" else "Baterie", fontWeight = FontWeight.Bold, color = green)
+            Text(if (battery == null) (if (helpEnglish) "Data unavailable" else "Date indisponibile") else (if (helpEnglish) "Battery level: $battery%" else "Nivel baterie: $battery%"))
+            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
+            Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not automatically change power settings." else "FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text(if (helpEnglish) "Battery settings" else "Setările bateriei") }
         }
     }
     Card {
@@ -889,12 +891,14 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     storage.first / 1073741824.0
                 ))
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
+            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
+            Text(if (helpEnglish) "Shows used and total internal storage so you can notice when space is running low. The reading does not identify which app or file uses the space." else "Arată spațiul intern utilizat și total, ca să observi când rămâne puțin spațiu liber. Măsurarea nu identifică aplicația sau fișierul care ocupă spațiul.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "FoniWise does not measure each app’s cache or delete files automatically." else "FoniWise nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Cache Advisor · App settings" else "Cache Advisor · Setări aplicații") }
             Text(if (helpEnglish) "FoniWise does not read or delete personal files." else "FoniWise nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text(if (helpEnglish) "Storage settings" else "Setările stocării") }
         }
     }
 }
