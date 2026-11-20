@@ -511,7 +511,7 @@ private fun SafeguardInfoDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(24.dp),
         containerColor = Color.White,
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -530,6 +530,7 @@ private fun SafeguardInfoDialog(
                             onClick = { onLanguageChange(isEnglish) },
                             shape = RoundedCornerShape(20.dp),
                             color = if (selected) green else Color(0xFFF0F7EE),
+                            border = BorderStroke(1.dp, if (selected) green else Color(0xFFC5E9B6)),
                             modifier = Modifier.padding(horizontal = 3.dp)
                         ) {
                             Text(label, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp),
@@ -547,11 +548,11 @@ private fun SafeguardInfoDialog(
                 Surface(color = paleGreen, shape = RoundedCornerShape(16.dp)) {
                     Text(if (english) summaryEn else summaryRo, modifier = Modifier.padding(14.dp), color = navy)
                 }
-                Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) doesEn else doesRo)
-                Text(if (english) "What doesn't it do?" else "Ce NU face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "What doesn't it do?" else "Ce NU face?", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) limitsEn else limitsRo)
-                Text(if (english) "Recommendation" else "Recomandare", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "Recommendation" else "Recomandare", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) adviceEn else adviceRo)
             }
         },
