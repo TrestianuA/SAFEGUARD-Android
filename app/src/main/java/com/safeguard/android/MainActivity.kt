@@ -19,6 +19,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
@@ -820,7 +822,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(if (helpEnglish) "RAM Monitor" else "Memorie RAM", fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f))
-                IconButton(onClick = { showRamInfo = true }) {
+                IconButton(onClick = { showRamInfo = true }, modifier = Modifier.semantics { contentDescription = if (helpEnglish) "RAM Monitor information" else "Informații despre memoria RAM" }) {
                     Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
                 }
             }
@@ -872,7 +874,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     if (helpEnglish) "Android animations" else "Animații Android",
                     fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f)
                 )
-                IconButton(onClick = { showAnimationInfo = true }) {
+                IconButton(onClick = { showAnimationInfo = true }, modifier = Modifier.semantics { contentDescription = if (helpEnglish) "Android animations information" else "Informații despre animațiile Android" }) {
                     Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
                 }
             }
