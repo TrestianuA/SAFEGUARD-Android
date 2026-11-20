@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -628,7 +629,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(if (helpEnglish) "RAM Monitor" else "Memorie RAM", fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f))
                 IconButton(onClick = { showRamInfo = true }) {
-                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                    Icon(Icons.Filled.Info, contentDescription = if (helpEnglish) "RAM explanation and recommendations" else "Explicații și recomandări despre RAM", tint = navy)
                 }
             }
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
@@ -680,7 +681,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = { showAnimationInfo = true }) {
-                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                    Icon(Icons.Filled.Info, contentDescription = if (helpEnglish) "Animation explanation and manual steps" else "Explicații și pași manuali pentru animații", tint = navy)
                 }
             }
             Text(
