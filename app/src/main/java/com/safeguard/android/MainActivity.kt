@@ -186,7 +186,7 @@ private fun SafeguardScreen(
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual\ncache clean" else "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
                         showCacheGuide = true
                     }
                     DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
@@ -194,7 +194,7 @@ private fun SafeguardScreen(
                     }
                     DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
-                Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
                 }
                 if (selectedTab == 1) {
