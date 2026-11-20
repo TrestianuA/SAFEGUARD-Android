@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.provider.Settings
+import java.text.Normalizer
+import java.util.Locale
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -759,6 +761,12 @@ private fun DashboardTile(
     }
 }
 
+private fun normalizeGuideSearch(value: String): String =
+    Normalizer.normalize(value.lowercase(Locale.ROOT), Normalizer.Form.NFD)
+        .replace(Regex("[\\u0300-\\u036f]"), "")
+        .replace("ș", "s").replace("ş", "s")
+        .replace("ț", "t").replace("ţ", "t")
+
 @Composable
 private fun DeveloperOptionsGuideDialog(
     english: Boolean,
@@ -841,8 +849,10 @@ private fun DeveloperOptionsGuideDialog(
     var selectedTopic by rememberSaveable { mutableIntStateOf(-1) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     val categoryIndices = if (selectedGroup >= 0) groups[selectedGroup].second else emptyList()
-    val searchResults = topics.indices.filter { index ->
-        topics[index].first.contains(searchQuery.trim(), ignoreCase = true)
+    val normalizedQuery = normalizeGuideSearch(searchQuery.trim())
+    val searchResults = if (normalizedQuery.isBlank()) emptyList() else topics.indices.filter { index ->
+        normalizeGuideSearch(topics[index].first).contains(normalizedQuery) ||
+            normalizeGuideSearch(topics[index].second).contains(normalizedQuery)
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -866,12 +876,12 @@ private fun DeveloperOptionsGuideDialog(
                         if (position >= 0) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                                 OutlinedButton(
-                                    onClick = { selectedTopic = navigationIndices[position - 1] },
+                                    onClick = { navigationIndices.getOrNull(position - 1)?.let { selectedTopic = it } },
                                     enabled = position > 0,
                                     modifier = Modifier.weight(1f)
                                 ) { Text(if (english) "Previous" else "Anterior") }
                                 OutlinedButton(
-                                    onClick = { selectedTopic = navigationIndices[position + 1] },
+                                    onClick = { navigationIndices.getOrNull(position + 1)?.let { selectedTopic = it } },
                                     enabled = position < navigationIndices.lastIndex,
                                     modifier = Modifier.weight(1f)
                                 ) { Text(if (english) "Next" else "Următor") }
@@ -881,11 +891,14 @@ private fun DeveloperOptionsGuideDialog(
                         OutlinedTextField(
                             value = searchQuery,
                             onValueChange = { searchQuery = it },
-                            label = { Text(if (english) "Search by option name" else "Caută după numele opțiunii") },
+                            label = { Text(if (english) "Search topics and explanations" else "Caută subiecte și explicații") },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth()
                         )
                         if (searchQuery.isNotBlank()) {
+                            TextButton(onClick = { searchQuery = ""; selectedGroup = -1 }) {
+                                Text(if (english) "Clear search" else "Șterge căutarea")
+                            }
                             Text(if (english) "Matching topics: ${searchResults.size}" else "Subiecte găsite: ${searchResults.size}",
                                 color = navy, style = MaterialTheme.typography.bodySmall)
                             searchResults.forEach { index ->
