@@ -837,11 +837,27 @@ private fun DeveloperOptionsGuideDialog(
                     Text(if (english) "Choose a topic. Some options may be absent or named differently on your phone."
                         else "Alege un subiect. Unele opțiuni pot lipsi sau pot avea alte denumiri pe telefonul tău.",
                         color = navy, style = MaterialTheme.typography.bodySmall)
-                    topics.forEachIndexed { index, topic ->
-                        OutlinedButton(
-                            onClick = { selectedTopic = index; showTopicList = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) { Text(topic.first) }
+                    val groups = if (english) listOf(
+                        "Start here" to listOf(0, 1, 27),
+                        "Screen and interface" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
+                        "Performance and memory" to listOf(4, 5, 8, 9, 25, 26),
+                        "Connections and debugging" to listOf(3, 15, 16, 17, 21, 23, 24),
+                        "Security and location" to listOf(6, 22)
+                    ) else listOf(
+                        "Începe de aici" to listOf(0, 1, 27),
+                        "Ecran și interfață" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
+                        "Performanță și memorie" to listOf(4, 5, 8, 9, 25, 26),
+                        "Conexiuni și depanare" to listOf(3, 15, 16, 17, 21, 23, 24),
+                        "Securitate și locație" to listOf(6, 22)
+                    )
+                    groups.forEach { (groupName, indices) ->
+                        Text(groupName, color = green, fontWeight = FontWeight.Bold)
+                        indices.forEach { index ->
+                            OutlinedButton(
+                                onClick = { selectedTopic = index; showTopicList = false },
+                                modifier = Modifier.fillMaxWidth()
+                            ) { Text(topics[index].first) }
+                        }
                     }
                 } else {
                     OutlinedButton(onClick = { showTopicList = true }) {
