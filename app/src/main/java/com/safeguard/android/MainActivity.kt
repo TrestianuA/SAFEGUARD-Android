@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -108,6 +109,15 @@ private fun SafeguardScreen(
     var showDeveloperGuide by remember { mutableStateOf(false) }
     val languagePreferences = remember(context) {
         context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
+    }
+    var showLaunchScreen by remember { mutableStateOf(true) }
+    LaunchedEffect(Unit) {
+        delay(900L)
+        showLaunchScreen = false
+    }
+    if (showLaunchScreen) {
+        FoniWiseLaunchScreen()
+        return
     }
     val savedLanguage = remember(languagePreferences) { languagePreferences.getString("language", null) }
     var chosenLanguage by remember { mutableStateOf(savedLanguage) }
@@ -619,6 +629,46 @@ private fun SafeguardScreen(
             },
             dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text(if (helpEnglish) "Keep" else "Păstrează") } }
         )
+    }
+}
+
+@Composable
+private fun FoniWiseLaunchScreen() {
+    // Brief branded transition after the native Android launch window.
+    // Uses the exact same approved drawable as the app icon and header.
+    Column(
+        modifier = Modifier.fillMaxSize().background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth().weight(0.16f).background(navy)
+        )
+        Surface(
+            modifier = Modifier.fillMaxWidth().weight(0.64f).padding(horizontal = 16.dp),
+            shape = RoundedCornerShape(32.dp),
+            color = Color(0xFFF0FCEB)
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(18.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                BrandLogo(172.dp)
+                Spacer(Modifier.height(20.dp))
+                Text("FoniWise", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.ExtraBold, color = navy)
+                Spacer(Modifier.height(6.dp))
+                Text("Know Your Phone", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = navy)
+            }
+        }
+        Column(
+            modifier = Modifier.fillMaxWidth().weight(0.20f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator(color = green, strokeWidth = 3.dp, modifier = Modifier.size(34.dp))
+            Spacer(Modifier.height(12.dp))
+            Text("Se încarcă… / Loading…", color = navy, style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
 
