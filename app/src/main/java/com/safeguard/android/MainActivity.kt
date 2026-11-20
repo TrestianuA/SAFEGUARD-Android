@@ -189,7 +189,7 @@ private fun SafeguardScreen(
             ) {
                 if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
-                DashboardOverview(report != null, scanning)
+                DashboardOverview(report != null, scanning, helpEnglish)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
@@ -239,7 +239,7 @@ private fun SafeguardScreen(
                             style = MaterialTheme.typography.bodySmall)
                     }
                 }
-                Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
@@ -538,7 +538,7 @@ private fun BrandLogo(size: androidx.compose.ui.unit.Dp) {
 }
 
 @Composable
-private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
+private fun DashboardOverview(hasReport: Boolean, scanning: Boolean, english: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -551,13 +551,13 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                "Bun venit în FoniWise!",
+                if (english) "Welcome to FoniWise!" else "Bun venit în FoniWise!",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = navy
             )
             Text(
-                "Înțelege-ți telefonul, descoperă instrumentele disponibile și decide ce este potrivit pentru tine.",
+                if (english) "Understand your phone, discover available tools and decide what works for you." else "Înțelege-ți telefonul, descoperă instrumentele disponibile și decide ce este potrivit pentru tine.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = navy
             )
@@ -575,16 +575,16 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
                     Column {
                         Text(
                             when {
-                                scanning -> "Verificare locală în desfășurare"
-                                hasReport -> "Verificare locală finalizată"
-                                else -> "Verificare locală disponibilă"
+                                scanning -> if (english) "Local check in progress" else "Verificare locală în desfășurare"
+                                hasReport -> if (english) "Local check completed" else "Verificare locală finalizată"
+                                else -> if (english) "Local check available" else "Verificare locală disponibilă"
                             },
                             fontWeight = FontWeight.SemiBold,
                             color = navy
                         )
                         Text(
-                            if (hasReport) "Rezultatele sunt disponibile în Protecție."
-                            else "Nu oferă protecție antivirus în timp real.",
+                            if (hasReport) (if (english) "Results are available in the security scan." else "Rezultatele sunt disponibile în scanarea de securitate.")
+                            else (if (english) "Does not provide real-time antivirus protection." else "Nu oferă protecție antivirus în timp real."),
                             style = MaterialTheme.typography.bodySmall,
                             color = navy
                         )
