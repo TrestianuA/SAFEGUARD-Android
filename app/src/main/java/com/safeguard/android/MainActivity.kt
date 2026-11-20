@@ -773,6 +773,26 @@ private fun DeveloperOptionsGuideDialog(
         "Background process limit" to "Restricting background processes can interrupt notifications, music, syncing and switching between apps. Android already manages memory. Keep the default unless you are deliberately testing an app.",
         "Graphics and GPU settings" to "Options such as Force 4x MSAA may affect battery use, heat, graphics quality or compatibility. They are not universal performance boosts. Leave defaults unchanged without a specific reason.",
         "OEM unlocking" to "This advanced option relates to bootloader unlocking on supported phones. Actually unlocking a bootloader can erase data and change security protections. Seeing the option does not mean the phone is unlocked. Do not use it as a routine optimization.",
+        "Stay awake while charging" to "Keeps the display on while the phone is charging, mainly for testing. It can increase power use and leave private content visible. Leave it off unless you need it briefly.",
+        "Running services" to "Shows services and processes currently running, which can help developers investigate resource use. A running service is not automatically suspicious. Avoid stopping unfamiliar system services.",
+        "Memory statistics" to "Shows memory use over time for apps and the system. High RAM usage alone does not mean the phone is slow: Android uses memory for caching. Investigate only alongside a real problem.",
+        "Show taps" to "Displays a visual marker wherever you touch the screen, useful for demonstrations and recordings. It does not improve touch accuracy. Turn it off after testing if distracting.",
+        "Pointer location" to "Overlays touch coordinates and gesture traces for input testing. It can clutter the screen and reveal interaction patterns in recordings. Keep it off for normal use.",
+        "Show layout bounds" to "Draws outlines around interface elements so developers can inspect layouts. It does not repair app display problems. Disable it when you finish inspecting.",
+        "Simulate color space" to "Previews how an interface may look with different color perception conditions. It changes the display preview, not the actual colors stored in photos. Restore Disabled after testing.",
+        "Force dark mode" to "May attempt to apply a dark appearance to apps that do not support it, depending on Android version. Some text or controls may become hard to read. Revert it if an app looks wrong.",
+        "Default USB configuration" to "Controls the initial USB connection mode, such as charging or file transfer, when supported. File transfer can expose phone files to a connected trusted computer after unlocking. Prefer charging by default.",
+        "Bluetooth audio codec" to "Lets compatible devices negotiate audio formats. Available codecs depend on both phone and headphones. Forcing an unsupported choice may revert or interrupt audio; Auto/default is usually best.",
+        "Bluetooth sample rate" to "Changes an audio parameter only when the selected codec and connected device support it. Higher numbers do not guarantee better sound and can affect stability. Keep the default unless troubleshooting.",
+        "Smallest width" to "Changes the display density layout measured in dp, affecting the apparent size of text and controls. Extreme values can make the interface difficult to use. Record the original number before any experiment.",
+        "Show refresh rate" to "Displays the screen refresh rate for testing smoothness. It is an indicator, not a speed boost, and may vary with content and device. Turn off the overlay after checking.",
+        "Force peak refresh rate" to "On supported devices, may keep the display at a higher refresh rate more often. This can increase battery use and may not affect every app. Prefer the regular display settings unless testing.",
+        "Bluetooth HCI snoop log" to "Records technical Bluetooth traffic for troubleshooting. Logs may contain sensitive connection information. Do not enable it routinely or share logs publicly.",
+        "Select mock location app" to "Lets a designated testing app provide simulated locations. Useful for developers, but navigation and location-based services may show misleading results. Disable the test setup afterwards.",
+        "USB debugging authorizations" to "Lets you revoke previously trusted computers for USB debugging. Useful after using a shared or untrusted computer. Revoking access does not erase your files or automatically fix other security issues.",
+        "Wireless display certification" to "Adds testing controls for wireless displays on supported phones. It does not improve Wi-Fi speed or picture quality by itself. Keep it disabled unless diagnosing casting problems.",
+        "Strict mode enabled" to "May flash the screen when an app performs certain slow operations on its main thread. This is a developer diagnostic, not a phone acceleration feature. Turn it off outside testing.",
+        "Do not keep activities" to "Destroys app screens when you leave them to test lifecycle behavior. It can cause frequent reloads or lost unsaved state. Leave it off for daily use.",
         "Safe approach" to "Change only one setting at a time, note its original value and observe the result. If unsure, leave it alone. FoniWise does not enable Developer options or change these settings automatically."
     ) else listOf(
         "Ce este acest meniu?" to "Opțiunile pentru dezvoltatori sunt controale Android avansate, destinate în principal testării și depanării. De obicei sunt ascunse. Nu trebuie activate pentru utilizarea obișnuită a telefonului.",
@@ -782,9 +802,30 @@ private fun DeveloperOptionsGuideDialog(
         "Limita proceselor în fundal" to "Restricționarea proceselor poate întrerupe notificările, muzica, sincronizarea și trecerea între aplicații. Android gestionează deja memoria. Păstrează valoarea implicită dacă nu testezi intenționat o aplicație.",
         "Setări grafice și GPU" to "Opțiuni precum Forțează 4x MSAA pot afecta consumul bateriei, temperatura, calitatea grafică sau compatibilitatea. Nu sunt soluții universale pentru performanță. Păstrează valorile implicite fără un motiv concret.",
         "Deblocare OEM" to "Această opțiune avansată privește deblocarea bootloaderului pe telefoanele compatibile. Deblocarea efectivă poate șterge date și modifica protecțiile de securitate. Prezența opțiunii nu înseamnă că telefonul este deblocat. Nu o folosi pentru optimizări obișnuite.",
+        "Ecran activ la încărcare" to "Menține ecranul aprins în timpul încărcării, mai ales pentru testare. Poate crește consumul și poate lăsa informații personale la vedere. Lasă opțiunea dezactivată dacă nu ai nevoie temporar de ea.",
+        "Servicii în execuție" to "Arată servicii și procese active, utile dezvoltatorilor pentru investigarea resurselor. Un serviciu activ nu este automat suspect. Nu opri servicii de sistem necunoscute.",
+        "Statistici de memorie" to "Prezintă utilizarea memoriei de către aplicații și sistem în timp. Mult RAM ocupat nu înseamnă automat telefon lent: Android folosește memoria și pentru cache. Investighează doar dacă există o problemă reală.",
+        "Afișare atingeri" to "Arată un marcaj acolo unde atingi ecranul, util în demonstrații și înregistrări. Nu îmbunătățește precizia ecranului tactil. Dezactivează-l după test dacă te deranjează.",
+        "Locația indicatorului" to "Suprapune coordonatele atingerilor și traseele gesturilor pentru testare. Poate aglomera ecranul și dezvălui gesturi în înregistrări. Păstreaz-o dezactivată în utilizarea obișnuită.",
+        "Afișare limite aspect" to "Desenează contururi în jurul elementelor interfeței pentru verificarea aspectului aplicațiilor. Nu repară problemele de afișare. Dezactivează opțiunea după verificare.",
+        "Simulare spațiu de culoare" to "Permite previzualizarea interfeței pentru diferite moduri de percepție a culorilor. Schimbă previzualizarea ecranului, nu culorile stocate în fotografii. Revino la Dezactivat după test.",
+        "Forțare mod întunecat" to "Poate încerca să aplice o temă întunecată aplicațiilor care nu o oferă, în funcție de versiunea Android. Unele texte sau butoane pot deveni greu de citit. Revino la setarea inițială dacă apar probleme.",
+        "Configurație USB implicită" to "Stabilește modul inițial al conexiunii USB, precum încărcare sau transfer de fișiere, când telefonul permite. Transferul poate expune fișiere unui computer de încredere conectat după deblocare. Preferă încărcarea implicită.",
+        "Codec audio Bluetooth" to "Permite alegerea formatelor audio compatibile. Codecurile disponibile depind de telefon și căști. Forțarea unei opțiuni incompatibile poate fi ignorată sau întrerupe sunetul; setarea automată este de obicei potrivită.",
+        "Rată de eșantionare Bluetooth" to "Schimbă un parametru audio numai dacă dispozitivul și codecul îl acceptă. Valori mai mari nu garantează sunet mai bun și pot afecta stabilitatea. Păstrează setarea implicită fără un motiv concret.",
+        "Lățime minimă" to "Schimbă densitatea logică a interfeței, exprimată în dp, influențând mărimea aparentă a textelor și butoanelor. Valorile extreme pot face telefonul greu de folosit. Notează cifra inițială înainte de test.",
+        "Afișare rată de reîmprospătare" to "Afișează frecvența de actualizare a ecranului pentru verificarea fluidității. Este un indicator, nu o accelerare a telefonului, și poate varia după conținut. Oprește afișajul după verificare.",
+        "Forțare rată maximă de reîmprospătare" to "Pe telefoanele compatibile poate menține mai des o rată de reîmprospătare ridicată. Poate crește consumul bateriei și nu afectează orice aplicație. Preferă setările normale ale ecranului.",
+        "Jurnalizare Bluetooth HCI" to "Înregistrează trafic Bluetooth tehnic pentru depanare. Jurnalele pot conține informații sensibile despre conexiuni. Nu activa funcția permanent și nu publica jurnalele.",
+        "Selectare aplicație pentru locații simulate" to "Permite unei aplicații de test să furnizeze locații simulate. Este utilă dezvoltatorilor, dar navigația și serviciile bazate pe locație pot afișa rezultate greșite. Dezactivează configurația după test.",
+        "Revocare autorizări depanare USB" to "Îți permite să retragi încrederea acordată anterior computerelor pentru depanare USB. Util după conectarea la un computer comun sau nesigur. Nu șterge fișiere și nu rezolvă automat alte riscuri.",
+        "Certificare afișaj wireless" to "Oferă controale de test pentru afișaje wireless pe telefoanele compatibile. Nu mărește automat viteza Wi-Fi sau calitatea imaginii. Las-o dezactivată dacă nu investighezi probleme de transmitere.",
+        "Mod strict activat" to "Poate face ecranul să clipească atunci când o aplicație execută operații lente pe firul principal. Este un instrument de diagnostic, nu o metodă de accelerare. Dezactivează-l în afara testelor.",
+        "Nu păstra activitățile" to "Închide ecranele aplicațiilor când le părăsești pentru testarea comportamentului acestora. Poate provoca reîncărcări frecvente sau pierderea datelor nesalvate. Lasă opțiunea dezactivată în utilizarea zilnică.",
         "Cum procedezi în siguranță" to "Schimbă o singură setare pe rând, notează valoarea inițială și observă rezultatul. Dacă nu ești sigur, las-o neschimbată. FoniWise nu activează Opțiunile pentru dezvoltatori și nu modifică automat aceste setări."
     )
     var selectedTopic by rememberSaveable { mutableIntStateOf(0) }
+    var showTopicList by rememberSaveable { mutableStateOf(true) }
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -792,20 +833,26 @@ private fun DeveloperOptionsGuideDialog(
         title = { Text(if (english) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", color = navy) },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text(if (english) "Choose a topic to read its full explanation:" else "Alege un subiect pentru explicația completă:",
-                    color = navy, style = MaterialTheme.typography.bodySmall)
-                topics.forEachIndexed { index, topic ->
-                    OutlinedButton(
-                        onClick = { selectedTopic = index },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = selectedTopic != index
-                    ) {
-                        Text(topic.first)
+                if (showTopicList) {
+                    Text(if (english) "Choose a topic. Some options may be absent or named differently on your phone."
+                        else "Alege un subiect. Unele opțiuni pot lipsi sau pot avea alte denumiri pe telefonul tău.",
+                        color = navy, style = MaterialTheme.typography.bodySmall)
+                    topics.forEachIndexed { index, topic ->
+                        OutlinedButton(
+                            onClick = { selectedTopic = index; showTopicList = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text(topic.first) }
                     }
+                } else {
+                    OutlinedButton(onClick = { showTopicList = true }) {
+                        Text(if (english) "All topics" else "Toate subiectele")
+                    }
+                    Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
+                    Text(topics[selectedTopic].second, color = navy)
+                    Text(if (english) "FoniWise cannot check or change this setting for you."
+                        else "FoniWise nu poate verifica sau modifica această setare în locul tău.",
+                        color = navy, style = MaterialTheme.typography.bodySmall)
                 }
-                HorizontalDivider()
-                Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
-                Text(topics[selectedTopic].second, color = navy)
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text(if (english) "Close" else "Închide") } },
