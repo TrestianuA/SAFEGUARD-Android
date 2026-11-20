@@ -53,3 +53,53 @@ Fiecare articol conține: **Ce este? / What is it?**, **De ce contează? / Why d
 ## Implementare
 
 Acesta este un document de conținut, **nu o funcție Android implementată**. Înainte de publicare, verificați terminologia și recomandările de sănătate/radiofrecvență cu surse oficiale actuale. Interfața trebuie să fie accesibilă, să permită căutarea termenilor și să păstreze comutatorul RO / EN. Nu afișați valori SAR fictive, grafice de expunere sau indicatori «sigur/periculos» fără măsurători validate.
+
+
+## Plan aprobat de extindere — „Cunoaște-ți telefonul”
+
+**Decizie utilizator:** extinderea dicționarului FoniWise cu aproximativ 30 de subiecte, organizate în șase categorii. Începem cu 12–15 termeni esențiali. Fiecare articol include explicații accesibile, recomandări practice, precizări despre limite și variante RO / EN. O rubrică „Știai că?” poate prezenta sfaturi scurte. Slogan oficial: **Know Your Phone / Cunoaște-ți telefonul**.
+
+### 1. Baterie și încărcare
+- Încălzirea telefonului la încărcare — evită acoperirea și temperaturile ridicate.
+- Încărcarea la 100% și uzura bateriei — folosește încărcarea adaptivă sau limita de încărcare dacă există.
+- Consum crescut când semnalul este slab — în zone fără acoperire, modul Avion poate economisi energie dacă nu ai nevoie de conectivitate.
+- Cicluri de încărcare, temperatură, încărcare rapidă și consum în fundal.
+
+### 2. Semnal, comunicații și unde radio
+- Semnal slab — telefonul poate mări puterea de transmisie; difuzorul sau căștile pot reduce expunerea capului în timpul apelurilor prin creșterea distanței.
+- SAR — indicator standardizat, nu măsurare în timp real.
+- 4G/5G — consumul diferă în funcție de model, acoperire și utilizare; evită afirmațiile universale.
+- NFC — comunicare la distanță mică; recomandă blocarea ecranului și verificarea metodelor de plată.
+- Wi-Fi, Bluetooth și roaming.
+
+### 3. RAM, procesor și performanță
+- RAM ocupat — nu indică automat o problemă; evită închiderea compulsivă a aplicațiilor.
+- Încălzire în jocuri — redu solicitarea și evită soarele direct.
+- Telefon lent în timp — verifică spațiul liber, actualizările și aplicațiile solicitante înainte de resetare.
+- Aplicații în fundal și „optimizare” — fără promisiuni de accelerare garantată.
+
+### 4. Stocare și fișiere
+- Cache — fișiere temporare utile; nu trebuie șters automat zilnic.
+- „Șterge cache” versus „Șterge date” — a doua acțiune poate elimina informații locale și reseta aplicația.
+- De ce se umple spațiul — verifică descărcările, videoclipurile, fișierele offline și backupurile.
+- Spațiu liber și fișiere temporare.
+
+### 5. Securitate și confidențialitate
+- Permisiuni de microfon și localizare — acordă doar accesul necesar; preferă „doar în timpul utilizării” unde este posibil.
+- Phishing — evită linkurile suspecte; accesează separat aplicația sau site-ul oficial.
+- Actualizări de securitate — instalează actualizările oficiale.
+- VPN — criptarea conexiunii către furnizor nu echivalează cu anonimitate totală.
+- Acces la cameră și alte permisiuni sensibile.
+
+### 6. Funcții Android mai puțin cunoscute
+- Economisirea bateriei, Nu deranja, Mod Avion, Backup.
+- Localizare precisă versus aproximativă.
+- Aplicații implicite, accesibilitate și partajare în apropiere.
+
+### Propunere de prezentare în aplicație
+- Secțiune: **Cunoaște-ți telefonul — Dicționar explicativ FoniWise**.
+- Căutare după termen, categorii și explicații cu recomandări.
+- Comutator **RO / EN** și o rubrică **„Știai că?”**.
+- Primul lot de 12–15 termeni să prioritizeze: semnal slab, SAR, RAM, cache, baterie, temperatură, permisiuni și actualizări.
+
+**Limitări:** acest plan este documentat, nu implementat încă în APK. Orice afirmație despre sănătate, securitate sau funcții Android trebuie verificată înainte de publicare. FoniWise trebuie să distingă informațiile educative de măsurătorile efectiv disponibile, fără valori SAR fictive, curățare automată promisă sau etichete „sigur/periculos” nejustificate.
