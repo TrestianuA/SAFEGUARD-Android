@@ -835,7 +835,7 @@ private fun SafeguardInfoDialog(
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 if (onSettings != null) {
                     TextButton(onClick = onSettings, modifier = Modifier.fillMaxWidth()) {
-                        Text(if (english) "Open Android app settings" else "Deschide setările aplicațiilor")
+                        Text(if (english) "Open Android settings" else "Deschide setările Android")
                     }
                 }
                 Button(onClick = onDismiss, modifier = Modifier.fillMaxWidth(),
