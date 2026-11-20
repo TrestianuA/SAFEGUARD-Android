@@ -472,6 +472,7 @@ private fun SafeguardScreen(
             onSettings = { step ->
                 val action = when (step) {
                     0 -> Settings.ACTION_SECURITY_SETTINGS
+                    1 -> Settings.ACTION_SYSTEM_UPDATE_SETTINGS
                     2 -> Settings.ACTION_APPLICATION_SETTINGS
                     else -> Settings.ACTION_SETTINGS
                 }
@@ -804,8 +805,8 @@ private fun SecurityStepsDialog(
                     )
                 }
                 OutlinedButton(onClick = { onSettings(step) }, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (english) (if (step == 0) "Open Security settings" else if (step == 2) "Open Apps settings" else "Open Android settings")
-                        else (if (step == 0) "Deschide setările de securitate" else if (step == 2) "Deschide setările aplicațiilor" else "Deschide setările Android"))
+                    Text(if (english) (if (step == 0) "Open Security settings" else if (step == 1) "Open system updates" else "Open Apps settings")
+                        else (if (step == 0) "Deschide setările de securitate" else if (step == 1) "Deschide actualizările de sistem" else "Deschide setările aplicațiilor"))
                 }
             }
         },
