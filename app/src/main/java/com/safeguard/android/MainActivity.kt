@@ -102,6 +102,7 @@ private fun SafeguardScreen(
     var showCacheGuide by remember { mutableStateOf(false) }
     var showPermissionsGuide by remember { mutableStateOf(false) }
     var showFraudGuide by remember { mutableStateOf(false) }
+    var showSecuritySteps by remember { mutableStateOf(false) }
     val languagePreferences = remember(context) {
         context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
     }
@@ -295,6 +296,17 @@ private fun SafeguardScreen(
                         "Pași practici pe care îi controlezi tu. FoniWise nu modifică automat setările Android.")
                     Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "Step-by-step security assistant" else "Asistent de securitate pas cu pas",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Three manual checks: screen lock, Android updates and special access. FoniWise does not claim to read inaccessible settings." else
+                                "Trei verificări manuale: blocarea ecranului, actualizările Android și accesările speciale. FoniWise nu pretinde că citește setări inaccesibile.")
+                            OutlinedButton(onClick = { showSecuritySteps = true }) {
+                                Text(if (helpEnglish) "Start the 3 steps" else "Începe cei 3 pași")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(if (helpEnglish) "How can it help you? · Manual cache cleaning" else "Cum te poate ajuta? · Curățare manuală cache",
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Checking an app's cache may help when it uses too much storage. Clearing cache differs from clearing app data." else
@@ -447,6 +459,28 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "FoniWise 0.7.3-rc1 • local analysis • no account or ads" else "FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
+    }
+
+    if (showSecuritySteps) {
+        SafeguardInfoDialog(
+            titleRo = "Asistent de securitate · 3 pași",
+            titleEn = "Security assistant · 3 steps",
+            summaryRo = "Pasul 1 din 3 — Blocarea ecranului. Deschide Setări → Securitate sau Ecran de blocare. Verifică dacă folosești un PIN, o parolă ori o metodă de blocare potrivită. Denumirile meniurilor diferă între telefoane.",
+            summaryEn = "Step 1 of 3 — Screen lock. Open Settings → Security or Lock screen. Check whether you use a PIN, password or suitable screen lock. Menu names vary between devices.",
+            doesRo = "Pasul 2 din 3 — Actualizări. Deschide Setări → Actualizare software (sau Sistem → Actualizări) și verifică manual dacă există actualizări. Versiunea și data patch-ului afișate de FoniWise nu dovedesc singure că telefonul este sigur sau nesigur.",
+            doesEn = "Step 2 of 3 — Updates. Open Settings → Software update (or System → Updates) and manually check for updates. The Android version and patch date displayed by FoniWise alone do not prove a device safe or unsafe.",
+            limitsRo = "FoniWise nu poate confirma automat toate opțiunile de blocare, toate permisiunile speciale sau sursele necunoscute pe orice telefon. Acestea sunt verificări pe care le faci tu în Android.",
+            limitsEn = "FoniWise cannot automatically confirm every screen-lock option, special permission or unknown-source setting on all phones. You review these directly in Android.",
+            adviceRo = "Pasul 3 din 3 — Accesări speciale. În Setări → Aplicații → Acces special, verifică accesul la notificări și instalarea aplicațiilor din surse necunoscute. Păstrează doar accesul pe care îl recunoști și de care ai nevoie. Nu modifica setări dacă nu înțelegi consecințele; poți reveni la ele mai târziu.",
+            adviceEn = "Step 3 of 3 — Special access. In Settings → Apps → Special app access, review notification access and permission to install unknown apps. Keep only access you recognize and need. Do not change settings if you are unsure of the consequences; you can revisit them later.",
+            english = helpEnglish,
+            onLanguageChange = { chooseLanguage(it) },
+            onDismiss = { showSecuritySteps = false },
+            onSettings = {
+                showSecuritySteps = false
+                launchSettings(context, Intent(Settings.ACTION_SETTINGS))
+            }
+        )
     }
 
     if (showFraudGuide) {
