@@ -410,33 +410,55 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFB9EFAF))
+        colors = CardDefaults.cardColors(containerColor = paleGreen),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 22.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 140.dp)
             Text(
-                when {
-                    scanning -> "Scanare în desfășurare"
-                    hasReport -> "Verificare locală finalizată"
-                    else -> "Verifică dispozitivul"
-                },
+                "Bun venit în FoniWise!",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = navy
             )
             Text(
-                if (hasReport) "Rezultatele sunt disponibile în Protecție."
-                else "Analiză locală disponibilă • Fără protecție antivirus în timp real.",
-                style = MaterialTheme.typography.bodySmall,
-                color = navy,
-                textAlign = TextAlign.Center
+                "Înțelege-ți telefonul, descoperă instrumentele disponibile și decide ce este potrivit pentru tine.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = navy
             )
+            Surface(
+                color = Color.White,
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(Icons.Filled.Security, contentDescription = null, tint = green)
+                    Column {
+                        Text(
+                            when {
+                                scanning -> "Verificare locală în desfășurare"
+                                hasReport -> "Verificare locală finalizată"
+                                else -> "Verificare locală disponibilă"
+                            },
+                            fontWeight = FontWeight.SemiBold,
+                            color = navy
+                        )
+                        Text(
+                            if (hasReport) "Rezultatele sunt disponibile în Protecție."
+                            else "Nu oferă protecție antivirus în timp real.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = navy
+                        )
+                    }
+                }
+            }
         }
     }
 }
