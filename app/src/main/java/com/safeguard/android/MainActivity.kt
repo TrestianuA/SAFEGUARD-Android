@@ -202,8 +202,8 @@ private fun SafeguardScreen(
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                         Text(if (helpEnglish) "Know Your Phone · Dictionary" else "Cunoaște-ți telefonul · Dicționar",
                             fontWeight = FontWeight.Bold, color = navy)
-                        Text(if (helpEnglish) "15 useful explanations and practical tips · RO / EN" else
-                            "15 explicații utile și recomandări practice · RO / EN",
+                        Text(if (helpEnglish) "Practical explanations and tips · RO / EN" else
+                            "Explicații utile și recomandări practice · RO / EN",
                             style = MaterialTheme.typography.bodySmall)
                     }
                 }
