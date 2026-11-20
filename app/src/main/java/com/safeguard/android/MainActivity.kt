@@ -100,6 +100,7 @@ private fun SafeguardScreen(
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
+    var showPermissionsGuide by remember { mutableStateOf(false) }
     val languagePreferences = remember(context) {
         context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
     }
@@ -308,6 +309,9 @@ private fun SafeguardScreen(
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
+                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
+                                Text(if (helpEnglish) "Understand permissions" else "Înțelege permisiunile")
+                            }
                             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
                                 Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
                             }
@@ -431,6 +435,28 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "FoniWise 0.7.3-rc1 • local analysis • no account or ads" else "FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
+    }
+
+    if (showPermissionsGuide) {
+        SafeguardInfoDialog(
+            titleRo = "Ghid pentru permisiunile aplicațiilor",
+            titleEn = "App permissions guide",
+            summaryRo = "O permisiune permite unei aplicații să folosească anumite funcții sau date. Camera face fotografii, microfonul înregistrează sunete, locația indică poziția, contactele oferă acces la agenda ta, iar notificările permit afișarea de alerte. Accesul la citirea notificărilor este separat de permisiunea de a le afișa.",
+            summaryEn = "Permissions allow an app to use features or data. Camera captures images, microphone records audio, location indicates position, contacts provide access to your address book, and notification permission allows alerts. Reading other apps' notifications requires separate special access.",
+            doesRo = "FoniWise te ajută să înțelegi ce să verifici. Deschide Setări → Aplicații → alege o aplicație → Permisiuni. Verifică dacă fiecare acces este necesar pentru funcția folosită.",
+            doesEn = "FoniWise helps explain what to review. Open Settings → Apps → choose an app → Permissions. Consider whether each access is needed for the features you use.",
+            limitsRo = "O permisiune acordată nu dovedește că aplicația este periculoasă. FoniWise nu revocă automat permisiuni și nu poate vedea toate aplicațiile sau toate utilizările unei permisiuni pe orice telefon.",
+            limitsEn = "A granted permission does not prove an app is dangerous. FoniWise does not revoke permissions automatically and cannot see every app or every use of a permission on all phones.",
+            adviceRo = "Exemplu: dacă o aplicație de lanternă cere microfonul, întreabă-te ce funcție îl justifică. Pentru cameră și microfon verifică dacă sunt necesare; pentru locație poți alege accesul doar în timpul folosirii, dacă Android oferă opțiunea; pentru contacte și notificări verifică dacă recunoști motivul. Nu dezactiva la întâmplare permisiuni necesare funcționării.",
+            adviceEn = "Example: if a flashlight app asks for microphone access, consider which feature needs it. Review camera and microphone access; for location, choose while-in-use access when Android offers it; for contacts and notifications, check whether the reason makes sense. Do not randomly disable permissions needed for an app to work.",
+            english = helpEnglish,
+            onLanguageChange = { },
+            onDismiss = { showPermissionsGuide = false },
+            onSettings = {
+                showPermissionsGuide = false
+                launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+            }
+        )
     }
 
     if (showCacheGuide) {
