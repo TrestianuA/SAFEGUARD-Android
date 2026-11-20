@@ -86,19 +86,20 @@ internal fun FoniWiseGlossary(english: Boolean, onBack: () -> Unit, onLanguageCh
                         GlossarySection(if (english) "Why does it matter?" else "De ce contează?", if (english) entry.whyEn else entry.whyRo)
                         GlossarySection(if (english) "What can you do?" else "Ce poți face?", if (english) entry.tipEn else entry.tipRo)
                         GlossarySection(if (english) "What doesn't it mean?" else "Ce NU înseamnă?", if (english) entry.cautionEn else entry.cautionRo)
-                        val settingsAction = when (entry.titleRo) {
-                            "Scara animațiilor" -> Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS
-                            "Cache", "Șterge date", "Permisiuni" -> Settings.ACTION_APPLICATION_SETTINGS
+                        val settingsDestination = when (entry.titleRo) {
+                            "Scara animațiilor" -> Pair(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS, if (english) "Developer options page" else "Pagina Opțiuni pentru dezvoltatori")
+                            "Cache", "Șterge date", "Permisiuni" -> Pair(Settings.ACTION_APPLICATION_SETTINGS, if (english) "Apps settings page" else "Pagina Setări aplicații")
                             else -> null
                         }
-                        if (settingsAction != null) {
+                        if (settingsDestination != null) {
+                            Text(settingsDestination.second, style = MaterialTheme.typography.bodySmall)
                             OutlinedButton(onClick = {
-                                runCatching { context.startActivity(Intent(settingsAction)) }
+                                runCatching { context.startActivity(Intent(settingsDestination.first)) }
                                     .onFailure {
                                         runCatching { context.startActivity(Intent(Settings.ACTION_SETTINGS)) }
                                     }
                             }) {
-                                Text(if (english) "Open Android settings" else "Deschide setările Android")
+                                Text(if (english) "Open settings page" else "Deschide pagina de setări")
                             }
                         }
                     } else {
