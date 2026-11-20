@@ -187,7 +187,7 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
+                FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning, helpEnglish)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
