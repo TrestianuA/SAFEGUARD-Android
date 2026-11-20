@@ -22,6 +22,18 @@
 - Verificați ecranele de protecție, RAM, cache, baterie și rapoarte, precum și permisiunile existente.
 - Confirmați că datele și setările existente au rămas disponibile după actualizare.
 
+
+## Test local prin Android Studio (fără pierderea datelor)
+
+1. Deschideți proiectul pe ramura de test aleasă și verificați commitul exact înainte de sincronizare. PR #18 și PR #19 sunt ramuri distincte; nu presupuneți că APK-ul uneia include toate schimbările celeilalte.
+2. În terminalul Android Studio, rulați `./gradlew :app:testDebugUnitTest :app:assembleDebug` (pe Windows, `gradlew.bat :app:testDebugUnitTest :app:assembleDebug`). Notați commitul, rezultatul fiecărei sarcini și orice eroare în raportul de test.
+3. Înainte de `Run ▶`, verificați aplicația instalată și compatibilitatea certificatului. `Run` produce de regulă un APK debug: **nu îl instalați peste aplicația existentă** dacă semnăturile diferă. Nu ștergeți aplicația și nu eliminați datele ca soluție rapidă.
+4. Dacă semnăturile nu sunt compatibile, opriți instalarea și pregătiți un APK de test semnat cu cheia existentă printr-o configurație locală sigură; nu încărcați cheia sau parolele în repository ori în conversație.
+5. După instalarea compatibilă, verificați în RO și EN: logo și nume FoniWise, butoanele ⓘ și dialogurile, Cache Advisor (numai instrucțiuni manuale), RAM Monitor (valori Android și recomandări adaptate), ghidarea manuală a animațiilor, navigarea și persistența datelor.
+6. Notați pentru fiecare probă: **trecut / eșuat / netestat**, versiunea Android, modelul telefonului, commitul și mesajele relevante din Logcat, fără date personale, identificatori de dispozitiv sau secrete.
+
+**Criteriu de oprire:** orice conflict de semnătură, solicitare neașteptată de permisiuni, pierdere de date sau blocare a aplicației oprește testul până la investigare.
+
 ## Interpretarea erorilor
 
 - `INSTALL_FAILED_UPDATE_INCOMPATIBLE` indică frecvent o semnătură incompatibilă; **nu dezinstalați** pentru a o ocoli.
