@@ -824,50 +824,58 @@ private fun DeveloperOptionsGuideDialog(
         "Nu păstra activitățile" to "Închide ecranele aplicațiilor când le părăsești pentru testarea comportamentului acestora. Poate provoca reîncărcări frecvente sau pierderea datelor nesalvate. Lasă opțiunea dezactivată în utilizarea zilnică.",
         "Cum procedezi în siguranță" to "Schimbă o singură setare pe rând, notează valoarea inițială și observă rezultatul. Dacă nu ești sigur, las-o neschimbată. FoniWise nu activează Opțiunile pentru dezvoltatori și nu modifică automat aceste setări."
     )
-    var selectedTopic by rememberSaveable { mutableIntStateOf(0) }
-    var showTopicList by rememberSaveable { mutableStateOf(true) }
+    val groups = if (english) listOf(
+        "Start here" to listOf(0, 1, 27),
+        "Screen and interface" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
+        "Performance and memory" to listOf(4, 5, 8, 9, 25, 26),
+        "Connections and debugging" to listOf(3, 15, 16, 17, 21, 23, 24),
+        "Security and location" to listOf(6, 22)
+    ) else listOf(
+        "Începe de aici" to listOf(0, 1, 27),
+        "Ecran și interfață" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
+        "Performanță și memorie" to listOf(4, 5, 8, 9, 25, 26),
+        "Conexiuni și depanare" to listOf(3, 15, 16, 17, 21, 23, 24),
+        "Securitate și locație" to listOf(6, 22)
+    )
+    var selectedGroup by rememberSaveable { mutableIntStateOf(-1) }
+    var selectedTopic by rememberSaveable { mutableIntStateOf(-1) }
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
         containerColor = Color.White,
         title = { Text(if (english) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", color = navy) },
         text = {
-            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                if (showTopicList) {
-                    Text(if (english) "Choose a topic. Some options may be absent or named differently on your phone."
-                        else "Alege un subiect. Unele opțiuni pot lipsi sau pot avea alte denumiri pe telefonul tău.",
-                        color = navy, style = MaterialTheme.typography.bodySmall)
-                    val groups = if (english) listOf(
-                        "Start here" to listOf(0, 1, 27),
-                        "Screen and interface" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
-                        "Performance and memory" to listOf(4, 5, 8, 9, 25, 26),
-                        "Connections and debugging" to listOf(3, 15, 16, 17, 21, 23, 24),
-                        "Security and location" to listOf(6, 22)
-                    ) else listOf(
-                        "Începe de aici" to listOf(0, 1, 27),
-                        "Ecran și interfață" to listOf(2, 7, 10, 11, 12, 13, 14, 18, 19, 20),
-                        "Performanță și memorie" to listOf(4, 5, 8, 9, 25, 26),
-                        "Conexiuni și depanare" to listOf(3, 15, 16, 17, 21, 23, 24),
-                        "Securitate și locație" to listOf(6, 22)
-                    )
-                    groups.forEach { (groupName, indices) ->
-                        Text(groupName, color = green, fontWeight = FontWeight.Bold)
-                        indices.forEach { index ->
-                            OutlinedButton(
-                                onClick = { selectedTopic = index; showTopicList = false },
-                                modifier = Modifier.fillMaxWidth()
-                            ) { Text(topics[index].first) }
+            key(selectedGroup, selectedTopic) {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    if (selectedTopic >= 0) {
+                        OutlinedButton(onClick = { selectedTopic = -1 }) {
+                            Text(if (english) "Back to category" else "Înapoi la categorie")
+                        }
+                        Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
+                        Text(topics[selectedTopic].second, color = navy)
+                        Text(if (english) "FoniWise cannot check or change this setting for you."
+                            else "FoniWise nu poate verifica sau modifica această setare în locul tău.",
+                            color = navy, style = MaterialTheme.typography.bodySmall)
+                    } else if (selectedGroup >= 0) {
+                        OutlinedButton(onClick = { selectedGroup = -1 }) {
+                            Text(if (english) "All categories" else "Toate categoriile")
+                        }
+                        Text(groups[selectedGroup].first, color = green, fontWeight = FontWeight.Bold)
+                        groups[selectedGroup].second.forEach { index ->
+                            OutlinedButton(onClick = { selectedTopic = index }, modifier = Modifier.fillMaxWidth()) {
+                                Text(topics[index].first)
+                            }
+                        }
+                    } else {
+                        Text(if (english) "Choose a category. Some settings may be absent or named differently on your phone."
+                            else "Alege o categorie. Unele setări pot lipsi sau pot avea alte denumiri pe telefonul tău.",
+                            color = navy, style = MaterialTheme.typography.bodySmall)
+                        groups.forEachIndexed { index, group ->
+                            OutlinedButton(onClick = { selectedGroup = index }, modifier = Modifier.fillMaxWidth()) {
+                                Text(group.first + " (" + group.second.size + ")")
+                            }
                         }
                     }
-                } else {
-                    OutlinedButton(onClick = { showTopicList = true }) {
-                        Text(if (english) "All topics" else "Toate subiectele")
-                    }
-                    Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
-                    Text(topics[selectedTopic].second, color = navy)
-                    Text(if (english) "FoniWise cannot check or change this setting for you."
-                        else "FoniWise nu poate verifica sau modifica această setare în locul tău.",
-                        color = navy, style = MaterialTheme.typography.bodySmall)
                 }
             }
         },
