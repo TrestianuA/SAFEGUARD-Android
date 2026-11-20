@@ -644,7 +644,7 @@ private fun FoniWiseLanguageWelcome(onChooseLanguage: (Boolean) -> Unit) {
                 }
             }
             Spacer(Modifier.height(28.dp))
-            Text("Alege limba / Choose your language", style = MaterialTheme.typography.titleLarge, color = navy, textAlign = TextAlign.Center)
+            Text("Alege limba / Choose your language", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy, textAlign = TextAlign.Center)
             Spacer(Modifier.height(12.dp))
             Text(if (english) "You can change your language at any time." else "Poți schimba limba oricând.", color = navy, textAlign = TextAlign.Center)
             Spacer(Modifier.height(22.dp))
@@ -664,8 +664,12 @@ private fun FoniWiseLanguageWelcome(onChooseLanguage: (Boolean) -> Unit) {
                 }
             }
             Spacer(Modifier.height(22.dp))
-            Button(onClick = { onChooseLanguage(english) }, modifier = Modifier.fillMaxWidth()) {
-                Text(if (english) "Continue" else "Continuă")
+            Button(
+                onClick = { onChooseLanguage(english) },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9EEA47), contentColor = navy)
+            ) {
+                Text(if (english) "Continue" else "Continuă", fontWeight = FontWeight.Bold)
             }
         }
     }
