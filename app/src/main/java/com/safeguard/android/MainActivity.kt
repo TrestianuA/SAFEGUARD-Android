@@ -275,7 +275,7 @@ private fun SafeguardScreen(
                     }
                 }
                 Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
-                DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) })
+                DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) }, onCacheGuide = { showCacheGuide = true })
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
@@ -1215,7 +1215,12 @@ internal fun batteryPercentage(level: Int, scale: Int): Int? =
     else (level.toLong() * 100L / scale).toInt()
 
 @Composable
-private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguageChange: (Boolean) -> Unit) {
+private fun DeviceHealthCards(
+    context: Context,
+    helpEnglish: Boolean,
+    onLanguageChange: (Boolean) -> Unit,
+    onCacheGuide: () -> Unit
+) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val memorySnapshot = memory
     var showRamInfo by remember { mutableStateOf(false) }
@@ -1366,11 +1371,9 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                 ))
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "Shows used and total internal storage so you can notice when space is running low. The reading does not identify which app or file uses the space." else "Arată spațiul intern utilizat și total, ca să observi când rămâne puțin spațiu liber. Măsurarea nu identifică aplicația sau fișierul care ocupă spațiul.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "FoniWise does not measure each app’s cache or delete files automatically." else "FoniWise nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Cache Advisor · App settings" else "Cache Advisor · Setări aplicații") }
-            Text(if (helpEnglish) "FoniWise does not read or delete personal files." else "FoniWise nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = onCacheGuide) {
+                Text(if (helpEnglish) "Understand storage and safe cache cleaning" else "Înțelege stocarea și curățarea sigură a cache-ului")
+            }
             OutlinedButton(onClick = { storage = readInternalStorage() }) { Text(if (helpEnglish) "Refresh storage" else "Actualizează stocarea") }
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text(if (helpEnglish) "Storage settings" else "Setările stocării") }
         }
