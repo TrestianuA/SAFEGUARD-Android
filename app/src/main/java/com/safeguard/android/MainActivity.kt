@@ -848,20 +848,20 @@ private fun DashboardTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 148.dp),
+        modifier = modifier.heightIn(min = 132.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = paleGreen),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top)
         ) {
-            Surface(color = Color(0xFFD5F8B9), shape = RoundedCornerShape(16.dp)) {
-                Box(Modifier.padding(9.dp), contentAlignment = Alignment.Center) {
-                    Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(29.dp))
+            Surface(color = Color(0xFFD5F8B9), shape = RoundedCornerShape(14.dp)) {
+                Box(Modifier.padding(8.dp), contentAlignment = Alignment.Center) {
+                    Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(26.dp))
                 }
             }
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
