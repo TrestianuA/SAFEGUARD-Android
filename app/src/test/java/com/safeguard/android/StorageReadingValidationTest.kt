@@ -17,4 +17,10 @@ class StorageReadingValidationTest {
         assertFalse(hasValidStorageReading(100L, -1L))
         assertFalse(hasValidStorageReading(100L, 101L))
     }
+    @Test fun handlesLongLimitsWithoutOverflow() {
+        assertTrue(hasValidStorageReading(Long.MAX_VALUE, Long.MAX_VALUE))
+        assertTrue(hasValidStorageReading(Long.MAX_VALUE, 0L))
+        assertFalse(hasValidStorageReading(Long.MAX_VALUE, Long.MIN_VALUE))
+        assertFalse(hasValidStorageReading(Long.MIN_VALUE, 0L))
+    }
 }
