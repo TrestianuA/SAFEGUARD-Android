@@ -355,17 +355,6 @@ private fun SafeguardScreen(
                             }
                         }
                     }
-                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "Animation scales" else "Scara animațiilor",
-                                fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "At 0.5x, transitions can feel faster without improving CPU performance. Record original values first." else
-                                "La 0,5x, tranzițiile pot părea mai rapide fără să crească performanța procesorului. Notează întâi valorile inițiale.")
-                            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)) }) {
-                                Text(if (helpEnglish) "Open Developer options page" else "Deschide Opțiuni pentru dezvoltatori")
-                            }
-                        }
-                    }
                 }
                 if (selectedTab == 3) {
                 Card(
@@ -795,6 +784,7 @@ private fun DeveloperOptionsGuideDialog(
         "Deblocare OEM" to "Această opțiune avansată privește deblocarea bootloaderului pe telefoanele compatibile. Deblocarea efectivă poate șterge date și modifica protecțiile de securitate. Prezența opțiunii nu înseamnă că telefonul este deblocat. Nu o folosi pentru optimizări obișnuite.",
         "Cum procedezi în siguranță" to "Schimbă o singură setare pe rând, notează valoarea inițială și observă rezultatul. Dacă nu ești sigur, las-o neschimbată. FoniWise nu activează Opțiunile pentru dezvoltatori și nu modifică automat aceste setări."
     )
+    var selectedTopic by rememberSaveable { mutableIntStateOf(0) }
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -802,10 +792,20 @@ private fun DeveloperOptionsGuideDialog(
         title = { Text(if (english) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", color = navy) },
         text = {
             Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                topics.forEach { (heading, explanation) ->
-                    Text(heading, color = green, fontWeight = FontWeight.Bold)
-                    Text(explanation, color = navy)
+                Text(if (english) "Choose a topic to read its full explanation:" else "Alege un subiect pentru explicația completă:",
+                    color = navy, style = MaterialTheme.typography.bodySmall)
+                topics.forEachIndexed { index, topic ->
+                    OutlinedButton(
+                        onClick = { selectedTopic = index },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = selectedTopic != index
+                    ) {
+                        Text(topic.first)
+                    }
                 }
+                HorizontalDivider()
+                Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
+                Text(topics[selectedTopic].second, color = navy)
             }
         },
         confirmButton = { TextButton(onClick = onDismiss) { Text(if (english) "Close" else "Închide") } },
@@ -1048,7 +1048,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val memorySnapshot = memory
     var showRamInfo by remember { mutableStateOf(false) }
-    var showAnimationInfo by remember { mutableStateOf(false) }
     fun readBatteryLevel(): Int? = runCatching {
         val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
@@ -1151,43 +1150,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
             english = helpEnglish,
             onLanguageChange = onLanguageChange,
             onDismiss = { showRamInfo = false }
-        )
-    }
-    Card {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    if (helpEnglish) "Android animations" else "Animații Android",
-                    fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f)
-                )
-                IconButton(onClick = { showAnimationInfo = true }, modifier = Modifier.semantics { contentDescription = if (helpEnglish) "Android animations information" else "Informații despre animațiile Android" }) {
-                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
-                }
-            }
-            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
-                Text(if (helpEnglish) "Open Accessibility settings" else "Deschide Accesibilitate")
-            }
-        }
-    }
-    if (showAnimationInfo) {
-        SafeguardInfoDialog(
-            titleRo = "ⓘ Animații Android",
-            titleEn = "ⓘ Android animations",
-            summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere.",
-            summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow.",
-            doesRo = "FoniWise îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
-            doesEn = "FoniWise shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
-            limitsRo = "FoniWise nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
-            limitsEn = "FoniWise does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
-            adviceRo = "Încearcă reducerea animațiilor doar dacă mișcările te deranjează sau telefonul pare lent la schimbarea ecranelor. Verifică dacă îți place rezultatul. Dacă preferi efectele inițiale, revino în aceeași pagină de Accesibilitate și dezactivează opțiunea «Elimină animațiile». Dacă nu găsești opțiunea, lasă setările neschimbate.",
-            adviceEn = "Try reducing animations if the motion bothers you or switching screens feels slow. Check whether you prefer the result. To restore the original effects, return to the same Accessibility page and turn off Remove animations. If you cannot find the option, leave the settings unchanged.",
-            english = helpEnglish,
-            onLanguageChange = onLanguageChange,
-            onDismiss = { showAnimationInfo = false },
-            onSettings = {
-                showAnimationInfo = false
-                launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
-            }
         )
     }
     Card {
