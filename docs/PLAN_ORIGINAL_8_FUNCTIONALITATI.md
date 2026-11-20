@@ -44,6 +44,8 @@ Nu declară automat un telefon „nesigur” doar pentru că patch-ul este mai v
 
 ## 7. Mod simplificat pentru începători
 
+> **Notă de decizie ulterioară (20 noiembrie 2026):** utilizatorul a decis explicit să **nu** implementăm modurile „Simplu / Detaliat”. Păstrăm formularea originală de mai jos ca istoric al planului, dar cerința actuală este **un singur set de explicații detaliate, clare și accesibile tuturor**, cu exemple practice. Vezi `STRUCTURA_OFICIAL_3_SECTIUNI_8_FUNCTIONALITATI.md`.
+
 Texte mai mari, explicații scurte, butoane vizibile și instrucțiuni de tipul „Pasul 1 din 3”.
 
 Ar putea exista două moduri: „Simplu” și „Detaliat”, fără să schimbăm identitatea vizuală SAFEGUARD (în dezvoltarea curentă: FoniWise).
