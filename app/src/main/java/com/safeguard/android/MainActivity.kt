@@ -173,7 +173,7 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab == 0) SafeguardHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
+                if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
@@ -507,7 +507,7 @@ private fun SafeguardInfoDialog(
                         Surface(
                             onClick = { onLanguageChange(isEnglish) },
                             shape = RoundedCornerShape(20.dp),
-                            color = if (selected) green else paleBlue,
+                            color = if (selected) green else Color(0xFFF0F7EE),
                             modifier = Modifier.padding(horizontal = 3.dp)
                         ) {
                             Text(label, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp),
@@ -522,7 +522,7 @@ private fun SafeguardInfoDialog(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Surface(color = paleBlue, shape = RoundedCornerShape(16.dp)) {
+                Surface(color = paleGreen, shape = RoundedCornerShape(16.dp)) {
                     Text(if (english) summaryEn else summaryRo, modifier = Modifier.padding(14.dp), color = navy)
                 }
                 Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = navy)
@@ -550,9 +550,9 @@ private fun SafeguardInfoDialog(
 }
 
 @Composable
-private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
+private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
     Card(
-        shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 12.dp, bottomEnd = 12.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -565,7 +565,7 @@ private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngl
             BrandLogo("safeguard_logo_simplu", 54.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text("FoniWise", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                Text("Know Your Phone", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
+                Text("Know Your Phone", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
             }
             IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
