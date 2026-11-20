@@ -817,6 +817,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         Pair(fs.totalBytes, fs.availableBytes)
     }.getOrNull()
     var storage by remember { mutableStateOf(readInternalStorage()) }
+    val storageSnapshot = storage
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -921,10 +922,10 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (helpEnglish) "Storage" else "Stocare", fontWeight = FontWeight.Bold, color = green)
-            if (storage != null && hasValidStorageReading(storage.first, storage.second)) {
+            if (storageSnapshot != null && hasValidStorageReading(storageSnapshot.first, storageSnapshot.second)) {
                 Text((if (helpEnglish) "Used: %.1f GB of %.1f GB" else "Utilizați: %.1f GB din %.1f GB").format(
-                    (storage.first - storage.second) / 1073741824.0,
-                    storage.first / 1073741824.0
+                    (storageSnapshot.first - storageSnapshot.second) / 1073741824.0,
+                    storageSnapshot.first / 1073741824.0
                 ))
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
