@@ -940,10 +940,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
             val patch = Build.VERSION.SECURITY_PATCH.takeIf { it.isNotBlank() }
             Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") +
                 (patch ?: if (helpEnglish) "Not reported by Android" else "Neraportat de Android"))
-            Text(if (helpEnglish)
-                "Updates can fix known issues. A patch date alone cannot determine whether a phone is secure."
-                else "Actualizările pot remedia probleme cunoscute. Data patch-ului nu stabilește singură dacă telefonul este sigur.",
-                style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_SETTINGS)) }) {
                 Text(if (helpEnglish) "Open Android settings" else "Deschide setările Android")
             }
@@ -982,7 +978,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                 Text((if (helpEnglish) "Available: %.1f GB of %.1f GB" else "Disponibil: %.1f GB din %.1f GB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
-            Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
@@ -994,7 +989,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                 )
             }
             OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text(if (helpEnglish) "Refresh RAM" else "Actualizează RAM") }
-            Text(if (helpEnglish) "FoniWise does not stop processes automatically or force RAM to be freed." else "FoniWise nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Review apps" else "Verifică aplicațiile") }
         }
     }
@@ -1030,11 +1024,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                     Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
                 }
             }
-            Text(
-                if (helpEnglish) "Animations are visual transitions between screens. Tap ⓘ for an explanation, safe steps and advice."
-                else "Animațiile sunt efectele vizuale dintre ecrane. Apasă ⓘ pentru explicații, pași siguri și recomandări.",
-                style = MaterialTheme.typography.bodySmall
-            )
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
                 Text(if (helpEnglish) "Open Accessibility settings" else "Deschide Accesibilitate")
             }
@@ -1065,9 +1054,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (helpEnglish) "Battery" else "Baterie", fontWeight = FontWeight.Bold, color = green)
             Text(if (battery == null) (if (helpEnglish) "Data unavailable" else "Date indisponibile") else (if (helpEnglish) "Battery level: $battery%" else "Nivel baterie: $battery%"))
-            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
             Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "FoniWise does not automatically change power settings." else "FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { showBatteryGuide = true }) {
                 Text(if (helpEnglish) "Battery saving guide" else "Ghid pentru economisirea bateriei")
             }
