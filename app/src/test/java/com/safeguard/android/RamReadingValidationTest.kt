@@ -20,4 +20,15 @@ class RamReadingValidationTest {
         assertTrue(hasValidRamReading(1024L, 512L))
         assertTrue(hasValidRamReading(1024L, 1024L))
     }
+    @Test fun acceptsSmallestValidTotalAndAvailableMemory() {
+        assertTrue(hasValidRamReading(1L, 0L))
+        assertTrue(hasValidRamReading(1L, 1L))
+    }
+
+    @Test fun handlesLongLimitsWithoutOverflow() {
+        assertTrue(hasValidRamReading(Long.MAX_VALUE, Long.MAX_VALUE))
+        assertTrue(hasValidRamReading(Long.MAX_VALUE, 0L))
+        assertFalse(hasValidRamReading(Long.MAX_VALUE, Long.MIN_VALUE))
+        assertFalse(hasValidRamReading(Long.MIN_VALUE, 0L))
+    }
 }
