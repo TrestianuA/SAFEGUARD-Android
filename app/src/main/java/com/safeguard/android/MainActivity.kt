@@ -1255,8 +1255,9 @@ private fun DeviceHealthCards(
             val patch = Build.VERSION.SECURITY_PATCH.takeIf { it.isNotBlank() }
             Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") +
                 (patch ?: if (helpEnglish) "Not reported by Android" else "Neraportat de Android"))
+            Text(if (helpEnglish) "These values are reported by Android; they do not by themselves confirm whether the phone is secure." else "Aceste valori sunt raportate de Android; ele nu confirmă singure dacă telefonul este sigur.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_SETTINGS)) }) {
-                Text(if (helpEnglish) "Open Android settings" else "Deschide setările Android")
+                Text(if (helpEnglish) "Check for updates in Android settings" else "Verifică actualizările în setările Android")
             }
         }
     }
