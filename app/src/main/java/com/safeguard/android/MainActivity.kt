@@ -465,24 +465,11 @@ private fun SafeguardScreen(
     }
 
     if (showSecuritySteps) {
-        SafeguardInfoDialog(
-            titleRo = "Asistent de securitate · 3 pași",
-            titleEn = "Security assistant · 3 steps",
-            summaryRo = "Pasul 1 din 3 — Blocarea ecranului. Deschide Setări → Securitate sau Ecran de blocare. Verifică dacă folosești un PIN, o parolă ori o metodă de blocare potrivită. Denumirile meniurilor diferă între telefoane.",
-            summaryEn = "Step 1 of 3 — Screen lock. Open Settings → Security or Lock screen. Check whether you use a PIN, password or suitable screen lock. Menu names vary between devices.",
-            doesRo = "Pasul 2 din 3 — Actualizări. Deschide Setări → Actualizare software (sau Sistem → Actualizări) și verifică manual dacă există actualizări. Versiunea și data patch-ului afișate de FoniWise nu dovedesc singure că telefonul este sigur sau nesigur.",
-            doesEn = "Step 2 of 3 — Updates. Open Settings → Software update (or System → Updates) and manually check for updates. The Android version and patch date displayed by FoniWise alone do not prove a device safe or unsafe.",
-            limitsRo = "FoniWise nu poate confirma automat toate opțiunile de blocare, toate permisiunile speciale sau sursele necunoscute pe orice telefon. Acestea sunt verificări pe care le faci tu în Android.",
-            limitsEn = "FoniWise cannot automatically confirm every screen-lock option, special permission or unknown-source setting on all phones. You review these directly in Android.",
-            adviceRo = "Pasul 3 din 3 — Accesări speciale. În Setări → Aplicații → Acces special, verifică accesul la notificări și instalarea aplicațiilor din surse necunoscute. Păstrează doar accesul pe care îl recunoști și de care ai nevoie. Nu modifica setări dacă nu înțelegi consecințele; poți reveni la ele mai târziu.",
-            adviceEn = "Step 3 of 3 — Special access. In Settings → Apps → Special app access, review notification access and permission to install unknown apps. Keep only access you recognize and need. Do not change settings if you are unsure of the consequences; you can revisit them later.",
+        SecurityStepsDialog(
             english = helpEnglish,
             onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showSecuritySteps = false },
-            onSettings = {
-                showSecuritySteps = false
-                launchSettings(context, Intent(Settings.ACTION_SETTINGS))
-            }
+            onSettings = { launchSettings(context, Intent(Settings.ACTION_SETTINGS)) }
         )
     }
 
@@ -755,6 +742,78 @@ private fun DashboardTile(
             Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
         }
     }
+}
+
+@Composable
+private fun SecurityStepsDialog(
+    english: Boolean,
+    onLanguageChange: (Boolean) -> Unit,
+    onDismiss: () -> Unit,
+    onSettings: () -> Unit
+) {
+    var step by rememberSaveable { mutableIntStateOf(0) }
+    val headingsRo = listOf("Blocarea ecranului", "Actualizări Android", "Accesări speciale")
+    val headingsEn = listOf("Screen lock", "Android updates", "Special access")
+    val instructionsRo = listOf(
+        "Deschide Setări → Securitate sau Ecran de blocare. Verifică dacă folosești un PIN, o parolă ori o metodă de blocare potrivită. Denumirile meniurilor diferă între telefoane.",
+        "Deschide Setări → Actualizare software (sau Sistem → Actualizări) și verifică manual dacă există actualizări. Versiunea Android și data patch-ului afișate de FoniWise nu dovedesc singure că telefonul este sigur sau nesigur.",
+        "În Setări → Aplicații → Acces special, verifică accesul la notificări și instalarea aplicațiilor din surse necunoscute. Păstrează doar accesul pe care îl recunoști și de care ai nevoie. Nu modifica setări dacă nu înțelegi consecințele."
+    )
+    val instructionsEn = listOf(
+        "Open Settings → Security or Lock screen. Check whether you use a PIN, password or suitable screen lock. Menu names vary between devices.",
+        "Open Settings → Software update (or System → Updates) and manually check for updates. The Android version and patch date shown by FoniWise alone do not prove a device safe or unsafe.",
+        "In Settings → Apps → Special app access, review notification access and permission to install unknown apps. Keep only access you recognize and need. Do not change settings if you are unsure of the consequences."
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        containerColor = Color.White,
+        title = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(if (english) "Security assistant" else "Asistent de securitate",
+                    color = navy, style = MaterialTheme.typography.titleLarge)
+                Text(if (english) "Step ${step + 1} of 3" else "Pasul ${step + 1} din 3",
+                    color = green, fontWeight = FontWeight.Bold)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(false to "RO", true to "EN").forEach { (isEnglish, label) ->
+                        OutlinedButton(onClick = { onLanguageChange(isEnglish) },
+                            enabled = english != isEnglish) { Text(label) }
+                    }
+                }
+            }
+        },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(if (english) headingsEn[step] else headingsRo[step],
+                    color = navy, fontWeight = FontWeight.Bold)
+                Text(if (english) instructionsEn[step] else instructionsRo[step])
+                Surface(color = paleGreen, shape = RoundedCornerShape(12.dp)) {
+                    Text(
+                        if (english) "These are manual checks. FoniWise cannot automatically confirm every screen-lock option, special permission or unknown-source setting on every phone."
+                        else "Acestea sunt verificări manuale. FoniWise nu poate confirma automat toate opțiunile de blocare, permisiunile speciale sau sursele necunoscute pe orice telefon.",
+                        modifier = Modifier.padding(12.dp), color = navy,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+                OutlinedButton(onClick = onSettings, modifier = Modifier.fillMaxWidth()) {
+                    Text(if (english) "Open Android settings" else "Deschide setările Android")
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { if (step < 2) step++ else onDismiss() }) {
+                Text(if (step == 2) (if (english) "Finish" else "Finalizează")
+                    else (if (english) "Next step" else "Pasul următor"))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { if (step > 0) step-- else onDismiss() }) {
+                Text(if (step > 0) (if (english) "Previous" else "Înapoi")
+                    else (if (english) "Close" else "Închide"))
+            }
+        }
+    )
 }
 
 @Composable
