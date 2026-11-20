@@ -387,35 +387,13 @@ private fun SafeguardScreen(
 }
 
 @Composable
-private fun BrandLogo(
-    resourceName: String,
-    size: androidx.compose.ui.unit.Dp,
-    fallbackResourceName: String? = null
-) {
-    val context = LocalContext.current
-    val id = remember(resourceName, fallbackResourceName) {
-        @Suppress("DiscouragedApi")
-        val approved = context.resources.getIdentifier(resourceName, "drawable", context.packageName)
-        if (approved != 0) approved else {
-            @Suppress("DiscouragedApi")
-            val fallback = fallbackResourceName?.let {
-                context.resources.getIdentifier(it, "drawable", context.packageName)
-            } ?: 0
-            fallback
-        }
-    }
-    if (id != 0) {
-        Image(
-            painter = painterResource(id),
-            contentDescription = if (resourceName == "foniwise_symbol_original_approved")
-                "Simbolul FoniWise (sau sigla temporară SAFEGUARD)"
-            else "Sigla aplicației",
-            modifier = Modifier.size(size),
-            contentScale = ContentScale.Fit
-        )
-    } else {
-        Text("FoniWise", color = green, fontWeight = FontWeight.Bold)
-    }
+private fun BrandLogo(size: androidx.compose.ui.unit.Dp) {
+    Image(
+        painter = painterResource(R.drawable.foniwise_symbol_original_approved),
+        contentDescription = "Simbolul original FoniWise",
+        modifier = Modifier.size(size),
+        contentScale = ContentScale.Fit
+    )
 }
 
 @Composable
@@ -598,7 +576,7 @@ private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngli
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            BrandLogo("foniwise_symbol_original_approved", 54.dp, fallbackResourceName = "safeguard_logo_simplu")
+            BrandLogo(54.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text("FoniWise", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
                 Text("Know Your Phone", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
