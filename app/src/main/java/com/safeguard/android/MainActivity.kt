@@ -811,6 +811,12 @@ private fun SecurityStepsDialog(
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
+                Text(
+                    if (english) "After reviewing the setting in Android, return to FoniWise and continue to the next step. Moving forward does not mean the check was completed automatically."
+                    else "După ce verifici setarea în Android, revino în FoniWise și continuă cu pasul următor. Trecerea mai departe nu înseamnă că verificarea a fost efectuată automat.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = navy
+                )
                 OutlinedButton(onClick = { onSettings(step) }, modifier = Modifier.fillMaxWidth()) {
                     Text(if (english) (if (step == 0) "Open Security settings" else if (step == 1) "Open system updates" else "Open Apps settings")
                         else (if (step == 0) "Deschide setările de securitate" else if (step == 1) "Deschide actualizările de sistem" else "Deschide setările aplicațiilor"))
