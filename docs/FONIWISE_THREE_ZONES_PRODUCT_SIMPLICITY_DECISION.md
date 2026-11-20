@@ -51,3 +51,29 @@ Cele **111 noțiuni** din planul editorial nu reprezintă obligația de a public
 Păstrăm logo-ul original aprobat, identitatea verde pastel fără valuri decorative, RO/EN, `applicationId` existent, semnarea cu cheia originală, permisiunile, datele utilizatorilor și funcțiile reale deja existente. Nu modificăm `main` sau PR #19 prin merge fără acord explicit.
 
 **Implementare:** acest document fixează direcția aprobată; modificările de UI, refactorizarea și testele sunt sarcini separate, de realizat gradual.
+
+
+## Clarificare aprobată: păstrăm funcțiile SAFEGUARD 0.7.2 și explicațiile complete
+
+Utilizatorul a confirmat explicit că **simplificarea privește navigarea, nu conținutul**. Articolele trebuie să fie suficient de detaliate pentru începători: „Ce este?”, „De ce contează?”, **„Cum te poate ajuta?”**, „Ce poți face?”, limite/avertismente și, când este cazul, revenirea la setările inițiale. Exemple concrete, limbaj accesibil, RO/EN. Recomandările rămân vizibile atât în articole, cât și în zona „Recomandări și acțiuni”, prin reutilizarea aceleiași surse de conținut; nu copiem definiții în mai multe locuri.
+
+### Inventarul aprobat pentru „Telefonul meu”
+
+Păstrăm funcționalitățile din captura SAFEGUARD 0.7.2: **Scanare securitate, Inspector notificări, Baterie, Aplicații, Curățare manuală, Rapoarte**, plus **Starea dispozitivului / RAM** și celelalte date deja disponibile. „Curățare manuală” poate avea o recomandare contextuală în zona 3, iar rapoartele pot fi accesate din zona 1; **nu eliminăm funcțiile existente** prin reorganizare. Cele trei zone sunt responsabilități logice, nu trei module noi care să fragmenteze funcționalitatea.
+
+### Regula „Cum te poate ajuta?”
+
+Sub fiecare opțiune, utilizatorul trebuie să poată afla **beneficiul concret** printr-o explicație vizibilă și inteligibilă, nu doar un status sau un buton „Deschide”. Formula editorială aprobată este **„Cum te poate ajuta?” / “How can it help you?”**. Prezentarea poate fi compactă în card, cu explicație extinsă la accesare; nu înghesuim paragrafe lungi în dashboard.
+
+Exemplu pentru **Inspector notificări**: permite examinarea notificărilor puse la dispoziție de Android, pentru observarea mesajelor importante, a aplicațiilor care trimit multe alerte sau a activităților de verificat. Necesită acces acordat explicit de utilizator. **Nu este antivirus** și nu garantează detectarea tuturor mesajelor periculoase. Păstrăm inspectorul distinct de scanarea locală de securitate și îl testăm pe dispozitiv.
+
+### Criterii de implementare
+
+1. Fiecare dintre cele șase opțiuni și cardurile relevante ale dispozitivului rămân accesibile după reorganizare.
+2. Fiecare are explicație bilingvă „Cum te poate ajuta?” și recomandări practice adecvate, cu limite clare.
+3. Articolele sunt complete, cu exemple și avertismente, nu reduse la o singură propoziție.
+4. Recomandările sunt vizibile și contextual în articole; zona 3 le reunește fără duplicare editorială.
+5. Butoanele către setările Android indică destinația reală și folosesc fallback; nu promit deschiderea fiecărui comutator.
+6. Verificăm compilarea, navigarea și funcțiile existente înainte de a considera reorganizarea finalizată.
+
+**Stare:** decizie editorială și de produs aprobată; nu afirmă că toate modificările de UI au fost deja implementate.
