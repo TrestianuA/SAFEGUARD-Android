@@ -349,8 +349,11 @@ private fun SafeguardScreen(
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
-                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
-                                Text(if (helpEnglish) "Read permissions guide" else "Citește ghidul permisiunilor")
+                            OutlinedButton(onClick = {
+                                selectedTab = 1
+                                showPermissionsGuide = true
+                            }) {
+                                Text(if (helpEnglish) "Understand app permissions" else "Înțelege permisiunile aplicațiilor")
                             }
                             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
                                 Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
@@ -401,6 +404,12 @@ private fun SafeguardScreen(
                         }
                     }
                     Section(if (helpEnglish) "Granted sensitive permissions" else "Permisiuni sensibile acordate", if (helpEnglish) "Some permissions are necessary for apps to function normally." else "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
+                    OutlinedButton(onClick = {
+                        selectedTab = 1
+                        showPermissionsGuide = true
+                    }) {
+                        Text(if (helpEnglish) "Understand what permissions mean" else "Înțelege ce înseamnă permisiunile")
+                    }
                     if (scan.permissionApps.isEmpty()) InfoCard(if (helpEnglish) "No third-party apps found with the checked permissions." else "Nu au fost găsite aplicații terțe cu permisiunile verificate.")
                     scan.permissionApps.take(40).forEach { app ->
                         Card {
