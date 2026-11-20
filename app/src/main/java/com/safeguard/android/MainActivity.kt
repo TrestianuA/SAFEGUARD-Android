@@ -378,7 +378,7 @@ private fun SafeguardScreen(
                 report?.let { scan ->
                     Card {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text(if (helpEnglish) "Device checked" else "Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
+                            Text(if (helpEnglish) "Device information" else "Informații despre dispozitiv", color = green, fontWeight = FontWeight.Bold)
                             Text(scan.deviceModel, fontWeight = FontWeight.Bold)
                             Text("Android ${scan.androidRelease} (API ${scan.sdkInt})")
                             Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") + scan.securityPatch)
@@ -418,7 +418,7 @@ private fun SafeguardScreen(
 
                 }
                 if (selectedTab == 4) {
-                Section(if (helpEnglish) "Reports and activity" else "Rapoarte și activitate", if (helpEnglish) "Notification inspector: identifies notification sources locally." else "Inspectorul notificărilor: identifică local sursele notificărilor.")
+                Section(if (helpEnglish) "Notification activity" else "Activitatea notificărilor", if (helpEnglish) "Notification inspector: identifies notification sources locally." else "Inspectorul notificărilor: identifică local sursele notificărilor.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
