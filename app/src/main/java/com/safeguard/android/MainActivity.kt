@@ -331,7 +331,7 @@ private fun SafeguardScreen(
                     }
                     Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "How can it help you? · Manual cache cleaning" else "Cum te poate ajuta? · Curățare manuală cache",
+                            Text(if (helpEnglish) "Manual cache cleaning" else "Curățare manuală cache",
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Checking an app's cache may help when it uses too much storage. Clearing cache differs from clearing app data." else
                                 "Verificarea cache-ului poate ajuta când o aplicație ocupă prea mult spațiu. Ștergerea cache-ului diferă de ștergerea datelor aplicației.")
@@ -342,7 +342,7 @@ private fun SafeguardScreen(
                     }
                     Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "How can it help you? · App permissions" else "Cum te poate ajuta? · Permisiunile aplicațiilor",
+                            Text(if (helpEnglish) "App permissions" else "Permisiunile aplicațiilor",
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
@@ -356,7 +356,7 @@ private fun SafeguardScreen(
                     }
                     Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "How can it help you? · Animation scales" else "Cum te poate ajuta? · Scara animațiilor",
+                            Text(if (helpEnglish) "Animation scales" else "Scara animațiilor",
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "At 0.5x, transitions can feel faster without improving CPU performance. Record original values first." else
                                 "La 0,5x, tranzițiile pot părea mai rapide fără să crească performanța procesorului. Notează întâi valorile inițiale.")
@@ -541,7 +541,7 @@ private fun SafeguardScreen(
         SafeguardInfoDialog(
             titleRo = "Cache Advisor",
             titleEn = "Cache Advisor",
-            summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Cum te poate ajuta: poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
+            summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
             summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. How it can help you: you may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
             doesRo = "FoniWise îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
             doesEn = "FoniWise explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
@@ -762,7 +762,6 @@ private fun DashboardTile(
             Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
-            Text(if (english) "How can it help you?" else "Cum te poate ajuta?", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = navy, textAlign = TextAlign.Center)
             Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
         }
     }
@@ -1094,7 +1093,6 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                     storageSnapshot.first / 1073741824.0
                 ))
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
-            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
             Text(if (helpEnglish) "Shows used and total internal storage so you can notice when space is running low. The reading does not identify which app or file uses the space." else "Arată spațiul intern utilizat și total, ca să observi când rămâne puțin spațiu liber. Măsurarea nu identifică aplicația sau fișierul care ocupă spațiul.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
