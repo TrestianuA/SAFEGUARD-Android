@@ -159,9 +159,9 @@ private fun SafeguardScreen(
     ) {
         Scaffold(
             bottomBar = {
-                Surface(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 5.dp),
-                    shape = RoundedCornerShape(32.dp),
+                if (selectedTab in 0..2) Surface(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+                    shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 14.dp, bottomEnd = 14.dp),
                     color = navy,
                     shadowElevation = 7.dp,
                     border = BorderStroke(1.dp, green)
@@ -207,6 +207,13 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                if (selectedTab > 2) {
+                    TextButton(onClick = { selectedTab = if (selectedTab == 5) 1 else 0 }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = null, tint = navy)
+                        Spacer(Modifier.width(8.dp))
+                        Text(if (helpEnglish) "Back" else "Înapoi", color = navy)
+                    }
+                }
                 FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning, helpEnglish)
