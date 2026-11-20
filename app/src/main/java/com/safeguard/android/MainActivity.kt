@@ -765,12 +765,12 @@ private fun SecurityStepsDialog(
     val instructionsRo = listOf(
         "Deschide Setări → Securitate sau Ecran de blocare. Verifică dacă folosești un PIN, o parolă ori o metodă de blocare potrivită. Denumirile meniurilor diferă între telefoane.",
         "Deschide Setări → Actualizare software (sau Sistem → Actualizări) și verifică manual dacă există actualizări. Versiunea Android și data patch-ului afișate de FoniWise nu dovedesc singure că telefonul este sigur sau nesigur.",
-        "În Setări → Aplicații → Acces special, verifică accesul la notificări și instalarea aplicațiilor din surse necunoscute. Păstrează doar accesul pe care îl recunoști și de care ai nevoie. Nu modifica setări dacă nu înțelegi consecințele."
+        "În Setări → Aplicații, caută meniul Acces special (pe unele telefoane este în meniul cu trei puncte). Verifică separat accesul la notificări și dreptul de a instala aplicații din surse necunoscute. Pentru fiecare aplicație, întreabă-te dacă recunoști scopul accesului și dacă mai ai nevoie de el. Nu modifica setări dacă nu înțelegi consecințele."
     )
     val instructionsEn = listOf(
         "Open Settings → Security or Lock screen. Check whether you use a PIN, password or suitable screen lock. Menu names vary between devices.",
         "Open Settings → Software update (or System → Updates) and manually check for updates. The Android version and patch date shown by FoniWise alone do not prove a device safe or unsafe.",
-        "In Settings → Apps → Special app access, review notification access and permission to install unknown apps. Keep only access you recognize and need. Do not change settings if you are unsure of the consequences."
+        "In Settings → Apps, look for Special app access (on some phones it is under the three-dot menu). Review notification access and permission to install unknown apps separately. For each app, consider whether you recognize why it needs that access and whether you still need it. Do not change settings if you are unsure of the consequences."
     )
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -801,11 +801,11 @@ private fun SecurityStepsDialog(
                         if (english) when (step) {
                             0 -> "Example: if the screen unlocks without a PIN, password or other lock, review the available screen-lock methods. FoniWise cannot read every lock setting automatically."
                             1 -> "Tip: on Samsung phones, look for Software update in Settings. Available updates depend on the manufacturer, model and region; the patch date alone is not a safety verdict."
-                            else -> "Example: a notification listener or an app allowed to install unknown apps deserves review if you do not recognize why it needs that access. FoniWise cannot verify every special access setting automatically."
+                            else -> "Example: an app you no longer use may still have notification access. First consider which feature would stop working if you removed it; do not disable permissions indiscriminately. FoniWise cannot verify every special access setting automatically."
                         } else when (step) {
                             0 -> "Exemplu: dacă ecranul se deblochează fără PIN, parolă sau altă metodă de blocare, verifică opțiunile disponibile. FoniWise nu poate citi automat toate setările de blocare."
                             1 -> "Sfat: pe telefoanele Samsung, caută Actualizare software în Setări. Actualizările disponibile depind de producător, model și regiune; data patch-ului nu este singură un verdict de siguranță."
-                            else -> "Exemplu: accesul la notificări sau dreptul de a instala aplicații din surse necunoscute merită verificat dacă nu recunoști motivul acordării. FoniWise nu poate confirma automat toate accesările speciale."
+                            else -> "Exemplu: o aplicație pe care nu o mai folosești poate avea încă acces la notificări. Verifică întâi ce funcție ar pierde dacă ai retrage accesul; nu dezactiva permisiuni la întâmplare. FoniWise nu poate confirma automat toate accesările speciale."
                         },
                         modifier = Modifier.padding(12.dp), color = navy,
                         style = MaterialTheme.typography.bodySmall
