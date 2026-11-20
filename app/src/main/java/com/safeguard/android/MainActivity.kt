@@ -75,10 +75,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val green = Color(0xFF139B22)
-private val navy = Color(0xFF082B63)
-private val paleBlue = Color(0xFFF2F9FF)
-private val paleGreen = Color(0xFFE8F9E8)
+private val green = Color(0xFF087C26)
+private val navy = Color(0xFF064D2B)
+private val paleBlue = Color(0xFFF3FBF2)
+private val paleGreen = Color(0xFFE7F8DB)
 
 @Composable
 private fun SafeguardScreen(
@@ -98,7 +98,21 @@ private fun SafeguardScreen(
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
-    var helpEnglish by rememberSaveable { mutableStateOf(false) }
+    val languagePreferences = remember(context) {
+        context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
+    }
+    val savedLanguage = remember(languagePreferences) { languagePreferences.getString("language", null) }
+    var chosenLanguage by remember { mutableStateOf(savedLanguage) }
+    var helpEnglish by rememberSaveable { mutableStateOf(savedLanguage == "en") }
+    fun chooseLanguage(english: Boolean) {
+        helpEnglish = english
+        chosenLanguage = if (english) "en" else "ro"
+        languagePreferences.edit().putString("language", chosenLanguage).apply()
+    }
+    if (chosenLanguage == null) {
+        FoniWiseLanguageWelcome(onChooseLanguage = ::chooseLanguage)
+        return
+    }
 
     fun startScan() {
         scanning = true
@@ -109,7 +123,7 @@ private fun SafeguardScreen(
                     SecurityScanner(context.applicationContext).scan()
                 }
             } catch (exception: Exception) {
-                error = exception.localizedMessage ?: "Scanarea nu a putut fi finalizată."
+                error = exception.localizedMessage
             } finally {
                 scanning = false
             }
@@ -130,24 +144,24 @@ private fun SafeguardScreen(
                 Surface(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 5.dp),
                     shape = RoundedCornerShape(32.dp),
-                    color = Color.White,
+                    color = navy,
                     shadowElevation = 7.dp,
-                    border = BorderStroke(1.dp, Color(0xFFC8E8F4))
+                    border = BorderStroke(1.dp, green)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(5.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        val tabs = listOf("Acasă", "Protecție", "Rapoarte")
-                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Security, Icons.Filled.Assessment)
+                        val tabs = if (helpEnglish) listOf("My Phone", "Learn", "Actions") else listOf("Telefonul", "Învață", "Acțiuni")
+                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Assessment, Icons.Filled.Settings)
                         tabs.forEachIndexed { index, title ->
-                            val active = selectedTab == index
+                            val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
                             Surface(
                                 onClick = { selectedTab = index },
                                 modifier = Modifier.weight(1f).height(64.dp),
                                 shape = RoundedCornerShape(28.dp),
-                                color = if (active) green else Color.Transparent,
-                                contentColor = if (active) Color.White else navy
+                                color = if (active) Color(0xFF9EEA47) else Color.Transparent,
+                                contentColor = if (active) navy else Color.White
                             ) {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
@@ -173,38 +187,151 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab == 0) SafeguardHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
+                FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
-                DashboardOverview(report != null, scanning)
-                Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.Security, "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile(Icons.Filled.Notifications, "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
-                    DashboardTile(Icons.Filled.Apps, "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
-                        launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                DashboardOverview(report != null, scanning, helpEnglish)
+                Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
+                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                    if (maxWidth < 360.dp) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
+                            if (helpEnglish) "Local check" else "Verificare locală",
+                            if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
+                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
+                            DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
+                            if (notificationAccessEnabled) (if (helpEnglish) "Active" else "Activ") else (if (helpEnglish) "Optional access" else "Acces opțional"),
+                            if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
+                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
+                            DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
+                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
+                            helpEnglish, Modifier.fillMaxWidth()) {
+                            launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
+                            }
+                            DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
+                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
+                            helpEnglish, Modifier.fillMaxWidth()) {
+                            launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                            }
+                            DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
+                            "Cache Advisor",
+                            if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
+                            helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
+                            DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Reports" else "Rapoarte",
+                            if (helpEnglish) "Local data" else "Date locale",
+                            if (helpEnglish) "Helps you review scan results and available notification activity." else "Te ajută să consulți rezultatele scanării și activitatea notificărilor disponibile.",
+                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
+                        }
+                    } else {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
+                            if (helpEnglish) "Local check" else "Verificare locală",
+                            if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
+                            helpEnglish, Modifier.weight(1f)) { selectedTab = 3 }
+                        DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
+                            if (notificationAccessEnabled) (if (helpEnglish) "Active" else "Activ") else (if (helpEnglish) "Optional access" else "Acces opțional"),
+                            if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
+                            helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
+                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
+                            helpEnglish, Modifier.weight(1f)) {
+                            launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
+                        }
+                        DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
+                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
+                            helpEnglish, Modifier.weight(1f)) {
+                            launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
+                            "Cache Advisor",
+                            if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
+                            helpEnglish, Modifier.weight(1f)) { showCacheGuide = true }
+                        DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Reports" else "Rapoarte",
+                            if (helpEnglish) "Local data" else "Date locale",
+                            if (helpEnglish) "Helps you review scan results and available notification activity." else "Te ajută să consulți rezultatele scanării și activitatea notificărilor disponibile.",
+                            helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
+                    }
                     }
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
-                        showCacheGuide = true
+                Card(
+                    onClick = { selectedTab = 5 },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = paleGreen),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(if (helpEnglish) "Know Your Phone · Dictionary" else "Cunoaște-ți telefonul · Dicționar",
+                            fontWeight = FontWeight.Bold, color = navy)
+                        Text(if (helpEnglish) "Practical explanations and tips · RO / EN" else
+                            "Explicații utile și recomandări practice · RO / EN",
+                            style = MaterialTheme.typography.bodySmall)
                     }
-                    DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
-                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
-                    }
-                    DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
-                Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
                 }
-                if (selectedTab == 1) {
+                if (selectedTab == 1 || selectedTab == 5) {
+                    FoniWiseGlossary(
+                        english = helpEnglish,
+                        onBack = { selectedTab = 0 },
+                        onLanguageChange = { chooseLanguage(it) }
+                    )
+                }
+                if (selectedTab == 2) {
+                    Text(if (helpEnglish) "Recommendations & Actions" else "Recomandări și acțiuni",
+                        style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+                    Text(if (helpEnglish) "Practical steps you control. FoniWise does not change Android settings automatically." else
+                        "Pași practici pe care îi controlezi tu. FoniWise nu modifică automat setările Android.")
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · Manual cache cleaning" else "Cum te poate ajuta? · Curățare manuală cache",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Checking an app's cache may help when it uses too much storage. Clearing cache differs from clearing app data." else
+                                "Verificarea cache-ului poate ajuta când o aplicație ocupă prea mult spațiu. Ștergerea cache-ului diferă de ștergerea datelor aplicației.")
+                            OutlinedButton(onClick = { showCacheGuide = true }) {
+                                Text(if (helpEnglish) "Read steps and warnings" else "Vezi pașii și avertismentele")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · App permissions" else "Cum te poate ajuta? · Permisiunile aplicațiilor",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
+                                "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
+                            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
+                                Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · Animation scales" else "Cum te poate ajuta? · Scara animațiilor",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "At 0.5x, transitions can feel faster without improving CPU performance. Record original values first." else
+                                "La 0,5x, tranzițiile pot părea mai rapide fără să crească performanța procesorului. Notează întâi valorile inițiale.")
+                            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)) }) {
+                                Text(if (helpEnglish) "Open Developer options page" else "Deschide Opțiuni pentru dezvoltatori")
+                            }
+                        }
+                    }
+                }
+                if (selectedTab == 3) {
                 Card(
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Scanner local – prototip 0.7.3-rc1", fontWeight = FontWeight.Bold, color = green)
-                        Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
-                        Text("Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
+                        Text(if (helpEnglish) "Local security scan" else "Scanare de securitate locală", fontWeight = FontWeight.Bold, color = green)
+                        Text(if (helpEnglish) "Checks visible apps, sensitive permissions and some special Android access settings." else "Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
+                        Text(if (helpEnglish) "This is not an antivirus. It does not read messages, photos, files or browsing history, and does not transmit data." else "Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 Button(
@@ -212,94 +339,94 @@ private fun SafeguardScreen(
                     enabled = !scanning,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (scanning) "Se scanează…" else if (report == null) "Începe scanarea" else "Scanează din nou")
+                    Text(if (scanning) (if (helpEnglish) "Scanning…" else "Se scanează…") else if (report == null) (if (helpEnglish) "Start scan" else "Începe scanarea") else (if (helpEnglish) "Scan again" else "Scanează din nou"))
                 }
-                error?.let { InfoCard("Eroare: $it") }
+                error?.let { InfoCard((if (helpEnglish) "Scan failed. Please try again." else "Scanarea nu a putut fi finalizată. Încearcă din nou.") + (if (it.isNotBlank()) " ($it)" else "")) }
                 report?.let { scan ->
                     Card {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text("Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
+                            Text(if (helpEnglish) "Device checked" else "Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
                             Text(scan.deviceModel, fontWeight = FontWeight.Bold)
                             Text("Android ${scan.androidRelease} (API ${scan.sdkInt})")
-                            Text("Patch de securitate: ${scan.securityPatch}")
-                            Text("${scan.installedApps} aplicații vizibile · ${scan.userApps} aplicații terțe")
+                            Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") + scan.securityPatch)
+                            Text(if (helpEnglish) "${scan.installedApps} visible apps · ${scan.userApps} third-party apps" else "${scan.installedApps} aplicații vizibile · ${scan.userApps} aplicații terțe")
                         }
                     }
-                    Section("Accesări speciale", "Nu reprezintă automat amenințări. Verifică dacă recunoști aplicațiile.")
-                    if (scan.specialAccess.isEmpty()) InfoCard("Nu au fost găsite accesări speciale în categoriile verificate.")
+                    Section(if (helpEnglish) "Special access" else "Accesări speciale", if (helpEnglish) "These are not automatically threats. Check whether you recognize the apps." else "Nu reprezintă automat amenințări. Verifică dacă recunoști aplicațiile.")
+                    if (scan.specialAccess.isEmpty()) InfoCard(if (helpEnglish) "No special access found in the checked categories." else "Nu au fost găsite accesări speciale în categoriile verificate.")
                     scan.specialAccess.forEach { item ->
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                Text(item.category, fontWeight = FontWeight.Bold, color = green)
+                                Text(if (helpEnglish) translateScanLabel(item.category) else item.category, fontWeight = FontWeight.Bold, color = green)
                                 Text(item.appLabel)
                                 Text(item.packageName, style = MaterialTheme.typography.labelSmall)
-                                Text(item.explanation, style = MaterialTheme.typography.bodySmall)
-                                OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text("Verifică în Setări") }
+                                Text(if (helpEnglish) translateScanLabel(item.explanation) else item.explanation, style = MaterialTheme.typography.bodySmall)
+                                OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text(if (helpEnglish) "Review in Settings" else "Verifică în Setări") }
                             }
                         }
                     }
-                    Section("Permisiuni sensibile acordate", "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
-                    if (scan.permissionApps.isEmpty()) InfoCard("Nu au fost găsite aplicații terțe cu permisiunile verificate.")
+                    Section(if (helpEnglish) "Granted sensitive permissions" else "Permisiuni sensibile acordate", if (helpEnglish) "Some permissions are necessary for apps to function normally." else "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
+                    if (scan.permissionApps.isEmpty()) InfoCard(if (helpEnglish) "No third-party apps found with the checked permissions." else "Nu au fost găsite aplicații terțe cu permisiunile verificate.")
                     scan.permissionApps.take(40).forEach { app ->
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                                 Text(app.appLabel, fontWeight = FontWeight.Bold)
-                                Text(app.grantedPermissions.joinToString(" • "), style = MaterialTheme.typography.bodySmall)
+                                Text(app.grantedPermissions.joinToString(" • ") { if (helpEnglish) translateScanLabel(it) else it }, style = MaterialTheme.typography.bodySmall)
                                 Text(app.packageName, style = MaterialTheme.typography.labelSmall)
                                 TextButton(onClick = { openAppDetails(context, app.packageName) }) {
-                                    Text("Detalii aplicație")
+                                    Text(if (helpEnglish) "App details" else "Detalii aplicație")
                                 }
                             }
                         }
                     }
-                    if (scan.permissionApps.size > 40) Text("Sunt afișate primele 40 din ${scan.permissionApps.size} aplicații.")
-                    InfoCard("Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
+                    if (scan.permissionApps.size > 40) Text(if (helpEnglish) "Showing the first 40 of ${scan.permissionApps.size} apps." else "Sunt afișate primele 40 din ${scan.permissionApps.size} aplicații.")
+                    InfoCard(if (helpEnglish) "This checks configuration, not malware. It does not analyze app code and cannot confirm that a device is malware-free." else "Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
                 }
 
                 }
-                if (selectedTab == 2) {
-                Section("Rapoarte și activitate", "Inspectorul notificărilor: identifică local sursele notificărilor.")
+                if (selectedTab == 4) {
+                Section(if (helpEnglish) "Reports and activity" else "Rapoarte și activitate", if (helpEnglish) "Notification inspector: identifies notification sources locally." else "Inspectorul notificărilor: identifică local sursele notificărilor.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            if (notificationAccessEnabled) "Acces la notificări activ" else "Acces la notificări dezactivat",
+                            if (notificationAccessEnabled) (if (helpEnglish) "Notification access enabled" else "Acces la notificări activ") else (if (helpEnglish) "Notification access disabled" else "Acces la notificări dezactivat"),
                             fontWeight = FontWeight.Bold,
                             color = green
                         )
-                        Text("Păstrează local maximum 100 de înregistrări: numai pachetul-sursă și ora. Nu citește titlul, textul sau expeditorul notificării.", style = MaterialTheme.typography.bodySmall)
+                        Text(if (helpEnglish) "Stores up to 100 local records: only the source package and time. It does not read notification titles, message text or senders." else "Păstrează local maximum 100 de înregistrări: numai pachetul-sursă și ora. Nu citește titlul, textul sau expeditorul notificării.", style = MaterialTheme.typography.bodySmall)
                         if (!notificationAccessEnabled) {
-                            Button(onClick = { showNotificationConsent = true }) { Text("Configurează inspectorul") }
+                            Button(onClick = { showNotificationConsent = true }) { Text(if (helpEnglish) "Set up inspector" else "Configurează inspectorul") }
                         } else {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                OutlinedButton(onClick = onRefreshNotifications) { Text("Reîmprospătează") }
+                                OutlinedButton(onClick = onRefreshNotifications) { Text(if (helpEnglish) "Refresh" else "Reîmprospătează") }
                                 TextButton(onClick = {
                                     launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                                }) { Text("Gestionează accesul") }
+                                }) { Text(if (helpEnglish) "Manage access" else "Gestionează accesul") }
                             }
                         }
                         if (notificationEvents.isEmpty()) {
-                            Text("Nu există înregistrări locale.")
+                            Text(if (helpEnglish) "No local records." else "Nu există înregistrări locale.")
                         } else {
-                            Text("${notificationEvents.size} înregistrări locale")
-                            TextButton(onClick = { showDeleteConfirmation = true }) { Text("Șterge istoricul") }
+                            Text(if (helpEnglish) "${notificationEvents.size} local records" else "${notificationEvents.size} înregistrări locale")
+                            TextButton(onClick = { showDeleteConfirmation = true }) { Text(if (helpEnglish) "Clear history" else "Șterge istoricul") }
                             val sources = NotificationFrequencyAnalyzer.recentSources(notificationEvents, System.currentTimeMillis())
-                            Text("Surse în ultimele 15 minute", fontWeight = FontWeight.Bold)
-                            if (sources.isEmpty()) Text("Nu există evenimente recente.")
+                            Text(if (helpEnglish) "Sources in the last 15 minutes" else "Surse în ultimele 15 minute", fontWeight = FontWeight.Bold)
+                            if (sources.isEmpty()) Text(if (helpEnglish) "No recent events." else "Nu există evenimente recente.")
                             sources.take(5).forEach { source ->
-                                Text("${source.packageName}: ${source.count} notificări" +
-                                    if (source.count >= NotificationFrequencyAnalyzer.NOTICE_THRESHOLD) " · Frecvență ridicată" else "")
+                                Text("${source.packageName}: ${source.count} " + (if (helpEnglish) "notifications" else "notificări") +
+                                    if (source.count >= NotificationFrequencyAnalyzer.NOTICE_THRESHOLD) (if (helpEnglish) " · High frequency" else " · Frecvență ridicată") else "")
                             }
-                            Text("Frecvența ridicată nu indică automat malware.", style = MaterialTheme.typography.bodySmall)
+                            Text(if (helpEnglish) "High notification frequency does not automatically indicate malware." else "Frecvența ridicată nu indică automat malware.", style = MaterialTheme.typography.bodySmall)
                             notificationEvents.take(20).forEach { event ->
                                 Text("${event.packageName} · ${java.text.DateFormat.getDateTimeInstance().format(java.util.Date(event.postedAtMillis))}",
                                     style = MaterialTheme.typography.bodySmall)
-                                TextButton(onClick = { openAppDetails(context, event.packageName) }) { Text("Detalii aplicație") }
+                                TextButton(onClick = { openAppDetails(context, event.packageName) }) { Text(if (helpEnglish) "App details" else "Detalii aplicație") }
                             }
                         }
                     }
                 }
                 }
-                Text("SAFEGUARD 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+                Text(if (helpEnglish) "FoniWise 0.7.3-rc1 • local analysis • no account or ads" else "FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
@@ -310,14 +437,14 @@ private fun SafeguardScreen(
             titleEn = "Cache Advisor",
             summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Cum te poate ajuta: poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
             summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. How it can help you: you may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
-            doesRo = "SAFEGUARD îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
-            doesEn = "SAFEGUARD explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
-            limitsRo = "SAFEGUARD nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
-            limitsEn = "SAFEGUARD does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
+            doesRo = "FoniWise îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
+            doesEn = "FoniWise explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
+            limitsRo = "FoniWise nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
+            limitsEn = "FoniWise does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
             adviceRo = "Curăță cache-ul doar dacă o aplicație ocupă prea mult spațiu sau nu funcționează corect. Începe cu aplicația care are problema și verifică spațiul liber după aceea. Nu este necesar să ștergi cache-ul tuturor aplicațiilor în fiecare zi. Aplicația poate crea din nou fișiere temporare la următoarea utilizare, deci spațiul eliberat poate fi temporar.",
             adviceEn = "Clear cache only when an app uses too much storage or is not working correctly. Start with the affected app and check available storage afterward. You do not need to clear every app's cache each day. The app may recreate temporary files the next time you use it, so freed space may be temporary.",
             english = helpEnglish,
-            onLanguageChange = { helpEnglish = it },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showCacheGuide = false },
             onSettings = {
                 showCacheGuide = false
@@ -328,10 +455,10 @@ private fun SafeguardScreen(
 
     if (showHelp) {
         SafeguardInfoDialog(
-            titleRo = "Despre SAFEGUARD",
-            titleEn = "About SAFEGUARD",
-            summaryRo = "SAFEGUARD te ajută să înțelegi anumite setări și riscuri ale telefonului. Verificările se fac pe dispozitiv, fără să fie nevoie de un cont.",
-            summaryEn = "SAFEGUARD helps you understand some phone settings and possible risks. Checks run on your device, without requiring an account.",
+            titleRo = "Despre FoniWise",
+            titleEn = "About FoniWise",
+            summaryRo = "FoniWise te ajută să înțelegi anumite setări și riscuri ale telefonului. Verificările se fac pe dispozitiv, fără să fie nevoie de un cont.",
+            summaryEn = "FoniWise helps you understand some phone settings and possible risks. Checks run on your device, without requiring an account.",
             doesRo = "Poate analiza aplicațiile pe care Android îi permite să le vadă și unele permisiuni importante. O permisiune este un drept acordat unei aplicații, de exemplu accesul la cameră sau locație. Rezultatele te ajută să decizi ce merită verificat în setările telefonului.",
             doesEn = "It can examine apps that Android allows it to see and some important permissions. A permission is access granted to an app, such as the camera or location. The results help you decide what to review in your phone settings.",
             limitsRo = "Nu este un antivirus: nu verifică fiecare fișier, nu poate garanta că telefonul este lipsit de amenințări și nu blochează automat aplicațiile. Nu oferă protecție antivirus în timp real.",
@@ -339,7 +466,7 @@ private fun SafeguardScreen(
             adviceRo = "Rulează verificarea după instalarea unei aplicații noi sau când observi un comportament neobișnuit. Dacă apare o permisiune pe care nu o înțelegi, deschide detaliile aplicației în setările Android și verifică dacă are nevoie de ea. Nu elimina permisiuni la întâmplare: unele sunt necesare funcționării aplicației.",
             adviceEn = "Run a check after installing a new app or if your phone behaves unexpectedly. If a permission seems unfamiliar, open that app’s details in Android settings and decide whether it needs the access. Do not remove permissions at random: some are needed for the app to work.",
             english = helpEnglish,
-            onLanguageChange = { helpEnglish = it },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showHelp = false }
         )
     }
@@ -347,96 +474,158 @@ private fun SafeguardScreen(
     if (showConsent) {
         AlertDialog(
             onDismissRequest = { showConsent = false },
-            title = { Text("Acord pentru scanarea locală") },
-            text = { Text("SAFEGUARD va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
+            title = { Text(if (helpEnglish) "Consent for local scan" else "Acord pentru scanarea locală") },
+            text = { Text(if (helpEnglish) "FoniWise will locally check visible apps, granted permissions and certain special access settings. Your app inventory is sensitive. This version does not transmit or save it. Continue?" else "FoniWise va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
             confirmButton = {
-                TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text("Accept și scanează") }
+                TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text(if (helpEnglish) "Accept and scan" else "Accept și scanează") }
             },
-            dismissButton = { TextButton(onClick = { showConsent = false }) { Text("Anulează") } }
+            dismissButton = { TextButton(onClick = { showConsent = false }) { Text(if (helpEnglish) "Cancel" else "Anulează") } }
         )
     }
     if (showNotificationConsent) {
         AlertDialog(
             onDismissRequest = { showNotificationConsent = false },
-            title = { Text("Acces special la notificări") },
-            text = { Text("Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. SAFEGUARD folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
+            title = { Text(if (helpEnglish) "Special notification access" else "Acces special la notificări") },
+            text = { Text(if (helpEnglish) "Android warns that notification services may access notification content. FoniWise uses only the source package and time, stored locally for up to 100 events. You enable access only through Android Settings." else "Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. FoniWise folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
             confirmButton = {
                 TextButton(onClick = {
                     showNotificationConsent = false
                     launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                }) { Text("Deschide Setări") }
+                }) { Text(if (helpEnglish) "Open Settings" else "Deschide Setări") }
             },
-            dismissButton = { TextButton(onClick = { showNotificationConsent = false }) { Text("Renunță") } }
+            dismissButton = { TextButton(onClick = { showNotificationConsent = false }) { Text(if (helpEnglish) "Not now" else "Renunță") } }
         )
     }
     if (showDeleteConfirmation) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
-            title = { Text("Ștergi istoricul local?") },
-            text = { Text("Vor fi șterse toate înregistrările păstrate de SAFEGUARD.") },
+            title = { Text(if (helpEnglish) "Delete local history?" else "Ștergi istoricul local?") },
+            text = { Text(if (helpEnglish) "All records stored by FoniWise will be deleted." else "Vor fi șterse toate înregistrările păstrate de FoniWise.") },
             confirmButton = {
                 TextButton(onClick = {
                     NotificationLogStore(context).clear()
                     showDeleteConfirmation = false
                     onRefreshNotifications()
-                }) { Text("Șterge") }
+                }) { Text(if (helpEnglish) "Delete" else "Șterge") }
             },
-            dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
+            dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text(if (helpEnglish) "Keep" else "Păstrează") } }
         )
     }
 }
 
 @Composable
-private fun BrandLogo(resourceName: String, size: androidx.compose.ui.unit.Dp) {
-    val context = LocalContext.current
-    val id = remember(resourceName) {
-        @Suppress("DiscouragedApi")
-        context.resources.getIdentifier(resourceName, "drawable", context.packageName)
-    }
-    if (id != 0) {
-        Image(
-            painter = painterResource(id),
-            contentDescription = "Logo SAFEGUARD",
-            modifier = Modifier.size(size),
-            contentScale = ContentScale.Fit
-        )
-    } else {
-        Text("🛡️", style = MaterialTheme.typography.headlineMedium)
+private fun FoniWiseLanguageWelcome(onChooseLanguage: (Boolean) -> Unit) {
+    var english by rememberSaveable { mutableStateOf(false) }
+    MaterialTheme(colorScheme = lightColorScheme(primary = green, background = paleBlue, surface = Color.White)) {
+        Column(
+            modifier = Modifier.fillMaxSize().background(paleBlue).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = green),
+                shape = RoundedCornerShape(24.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    BrandLogo(108.dp)
+                    Spacer(Modifier.height(10.dp))
+                    Text("FoniWise", color = Color.White, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    Text(if (english) "Know Your Phone" else "Cunoaște-ți telefonul", color = Color.White)
+                }
+            }
+            Spacer(Modifier.height(28.dp))
+            Text("Alege limba / Choose your language", style = MaterialTheme.typography.titleLarge, color = navy, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(12.dp))
+            Text(if (english) "You can change your language at any time." else "Poți schimba limba oricând.", color = navy, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(22.dp))
+            listOf(false to "🇷🇴 Română", true to "🇬🇧 English").forEach { (optionEnglish, label) ->
+                Surface(
+                    onClick = { english = optionEnglish },
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    color = if (english == optionEnglish) paleGreen else Color.White,
+                    border = BorderStroke(if (english == optionEnglish) 2.dp else 1.dp, green)
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = english == optionEnglish, onClick = { english = optionEnglish })
+                        Spacer(Modifier.width(10.dp))
+                        Text(label, color = navy, style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+            }
+            Spacer(Modifier.height(22.dp))
+            Button(onClick = { onChooseLanguage(english) }, modifier = Modifier.fillMaxWidth()) {
+                Text(if (english) "Continue" else "Continuă")
+            }
+        }
     }
 }
 
 @Composable
-private fun DashboardOverview(hasReport: Boolean, scanning: Boolean) {
+private fun BrandLogo(size: androidx.compose.ui.unit.Dp) {
+    Image(
+        painter = painterResource(R.drawable.foniwise_symbol_original_approved),
+        contentDescription = "Simbolul original FoniWise",
+        modifier = Modifier.size(size),
+        contentScale = ContentScale.Fit
+    )
+}
+
+@Composable
+private fun DashboardOverview(hasReport: Boolean, scanning: Boolean, english: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFB9EFAF))
+        colors = CardDefaults.cardColors(containerColor = paleGreen),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp, vertical = 22.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 140.dp)
             Text(
-                when {
-                    scanning -> "Scanare în desfășurare"
-                    hasReport -> "Verificare locală finalizată"
-                    else -> "Verifică dispozitivul"
-                },
+                if (english) "Welcome to FoniWise!" else "Bun venit în FoniWise!",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = navy
             )
             Text(
-                if (hasReport) "Rezultatele sunt disponibile în Protecție."
-                else "Analiză locală disponibilă • Fără protecție antivirus în timp real.",
-                style = MaterialTheme.typography.bodySmall,
-                color = navy,
-                textAlign = TextAlign.Center
+                if (english) "Understand your phone, discover available tools and decide what works for you." else "Înțelege-ți telefonul, descoperă instrumentele disponibile și decide ce este potrivit pentru tine.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = navy
             )
+            Surface(
+                color = Color.White,
+                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(Icons.Filled.Security, contentDescription = null, tint = green)
+                    Column {
+                        Text(
+                            when {
+                                scanning -> if (english) "Local check in progress" else "Verificare locală în desfășurare"
+                                hasReport -> if (english) "Local check completed" else "Verificare locală finalizată"
+                                else -> if (english) "Local check available" else "Verificare locală disponibilă"
+                            },
+                            fontWeight = FontWeight.SemiBold,
+                            color = navy
+                        )
+                        Text(
+                            if (hasReport) (if (english) "Results are available in the security scan." else "Rezultatele sunt disponibile în scanarea de securitate.")
+                            else (if (english) "Does not provide real-time antivirus protection." else "Nu oferă protecție antivirus în timp real."),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = navy
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -446,26 +635,29 @@ private fun DashboardTile(
     symbol: ImageVector,
     title: String,
     subtitle: String,
+    howItHelps: String,
+    english: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val narrowScreen = LocalConfiguration.current.screenWidthDp < 390
     Card(
         onClick = onClick,
-        modifier = modifier.height(if (narrowScreen) 158.dp else 140.dp),
+        modifier = modifier.heightIn(min = 218.dp),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFA6ECA5))
+        colors = CardDefaults.cardColors(containerColor = paleGreen),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.Top)
         ) {
             Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
+            Text(if (english) "How can it help you?" else "Cum te poate ajuta?", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = navy, textAlign = TextAlign.Center)
+            Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
         }
     }
 }
@@ -489,7 +681,7 @@ private fun SafeguardInfoDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        shape = RoundedCornerShape(28.dp),
+        shape = RoundedCornerShape(24.dp),
         containerColor = Color.White,
         title = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -507,7 +699,8 @@ private fun SafeguardInfoDialog(
                         Surface(
                             onClick = { onLanguageChange(isEnglish) },
                             shape = RoundedCornerShape(20.dp),
-                            color = if (selected) green else paleBlue,
+                            color = if (selected) green else Color(0xFFF0F7EE),
+                            border = BorderStroke(1.dp, if (selected) green else Color(0xFFC5E9B6)),
                             modifier = Modifier.padding(horizontal = 3.dp)
                         ) {
                             Text(label, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp),
@@ -522,14 +715,14 @@ private fun SafeguardInfoDialog(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Surface(color = paleBlue, shape = RoundedCornerShape(16.dp)) {
+                Surface(color = paleGreen, shape = RoundedCornerShape(16.dp)) {
                     Text(if (english) summaryEn else summaryRo, modifier = Modifier.padding(14.dp), color = navy)
                 }
-                Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "What does it do?" else "Ce face?", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) doesEn else doesRo)
-                Text(if (english) "What doesn't it do?" else "Ce NU face?", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "What doesn't it do?" else "Ce NU face?", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) limitsEn else limitsRo)
-                Text(if (english) "Recommendation" else "Recomandare", fontWeight = FontWeight.Bold, color = navy)
+                Text(if (english) "Recommendation" else "Recomandare", fontWeight = FontWeight.Bold, color = green)
                 Text(if (english) adviceEn else adviceRo)
             }
         },
@@ -550,9 +743,9 @@ private fun SafeguardInfoDialog(
 }
 
 @Composable
-private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
+private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
     Card(
-        shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 12.dp, bottomEnd = 12.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -562,10 +755,10 @@ private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngl
             verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            BrandLogo("safeguard_logo_simplu", 54.dp)
+            BrandLogo(54.dp)
             Column(modifier = Modifier.weight(1f)) {
-                Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
+                Text("FoniWise", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text(if (helpEnglish) "Know Your Phone" else "Cunoaște-ți telefonul", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
             }
             IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
@@ -585,6 +778,9 @@ private fun Section(title: String, subtitle: String) {
 private fun InfoCard(message: String) {
     Card { Text(message, Modifier.padding(14.dp)) }
 }
+
+internal fun hasValidStorageReading(totalBytes: Long, availableBytes: Long): Boolean =
+    totalBytes > 0L && availableBytes >= 0L && availableBytes <= totalBytes
 
 private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
     runCatching {
@@ -644,7 +840,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 )
             }
             OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text(if (helpEnglish) "Refresh RAM" else "Actualizează RAM") }
-            Text(if (helpEnglish) "SAFEGUARD does not stop processes automatically or force RAM to be freed." else "SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not stop processes automatically or force RAM to be freed." else "FoniWise nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Review apps" else "Verifică aplicațiile") }
         }
     }
@@ -654,16 +850,16 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             titleEn = "ⓘ RAM Monitor",
             summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere.",
             summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files.",
-            doesRo = "SAFEGUARD citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
-            doesEn = "SAFEGUARD reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
-            limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. SAFEGUARD nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
-            limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. SAFEGUARD does not close apps for you or forcibly free RAM.",
+            doesRo = "FoniWise citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
+            doesEn = "FoniWise reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
+            limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. FoniWise nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
+            limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. FoniWise does not close apps for you or forcibly free RAM.",
             adviceRo = if (memorySnapshot != null && hasValidRamReading(memorySnapshot) && memorySnapshot.lowMemory)
                 "Android raportează presiune asupra memoriei. Dacă telefonul este lent, închide doar aplicațiile pe care nu le mai folosești și verifică dacă problema persistă. Poți reporni telefonul dacă încetinirea continuă."
-                else if (!hasValidRamReading(memorySnapshot)) "Măsurarea RAM nu este disponibilă acum. Apasă «Actualizează RAM» pentru a încerca din nou. SAFEGUARD nu poate aprecia presiunea asupra memoriei fără o citire validă." else "Android nu raportează acum lipsă critică de memorie. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
+                else if (!hasValidRamReading(memorySnapshot)) "Măsurarea RAM nu este disponibilă acum. Apasă «Actualizează RAM» pentru a încerca din nou. FoniWise nu poate aprecia presiunea asupra memoriei fără o citire validă." else "Android nu raportează acum lipsă critică de memorie. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
             adviceEn = if (memorySnapshot != null && hasValidRamReading(memorySnapshot) && memorySnapshot.lowMemory)
                 "Android reports memory pressure. If your phone is slow, close only apps you no longer need and see whether the problem continues. Restarting the phone may help if it remains slow."
-                else if (!hasValidRamReading(memorySnapshot)) "RAM readings are unavailable right now. Tap Refresh RAM to try again. SAFEGUARD cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
+                else if (!hasValidRamReading(memorySnapshot)) "RAM readings are unavailable right now. Tap Refresh RAM to try again. FoniWise cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
             english = ramInfoEnglish,
             onLanguageChange = { ramInfoEnglish = it },
             onDismiss = { showRamInfo = false }
@@ -696,10 +892,10 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             titleEn = "ⓘ Android animations",
             summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere.",
             summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow.",
-            doesRo = "SAFEGUARD îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
-            doesEn = "SAFEGUARD shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
-            limitsRo = "SAFEGUARD nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
-            limitsEn = "SAFEGUARD does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
+            doesRo = "FoniWise îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
+            doesEn = "FoniWise shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
+            limitsRo = "FoniWise nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
+            limitsEn = "FoniWise does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
             adviceRo = "Încearcă reducerea animațiilor doar dacă mișcările te deranjează sau telefonul pare lent la schimbarea ecranelor. Verifică dacă îți place rezultatul. Dacă preferi efectele inițiale, revino în aceeași pagină de Accesibilitate și dezactivează opțiunea «Elimină animațiile». Dacă nu găsești opțiunea, lasă setările neschimbate.",
             adviceEn = "Try reducing animations if the motion bothers you or switching screens feels slow. Check whether you prefer the result. To restore the original effects, return to the same Accessibility page and turn off Remove animations. If you cannot find the option, leave the settings unchanged.",
             english = animationInfoEnglish,
@@ -713,30 +909,89 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Baterie", fontWeight = FontWeight.Bold, color = green)
-            Text(if (battery == null) "Date indisponibile" else "Nivel baterie: $battery%")
-            Text("SAFEGUARD nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text("Setările bateriei") }
+            Text(if (helpEnglish) "Battery" else "Baterie", fontWeight = FontWeight.Bold, color = green)
+            Text(if (battery == null) (if (helpEnglish) "Data unavailable" else "Date indisponibile") else (if (helpEnglish) "Battery level: $battery%" else "Nivel baterie: $battery%"))
+            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
+            Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not automatically change power settings." else "FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text(if (helpEnglish) "Battery settings" else "Setările bateriei") }
         }
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Stocare", fontWeight = FontWeight.Bold, color = green)
-            if (storage != null && storage.first > 0L) {
-                Text("Utilizați: %.1f GB din %.1f GB".format(
+            Text(if (helpEnglish) "Storage" else "Stocare", fontWeight = FontWeight.Bold, color = green)
+            if (storage != null && hasValidStorageReading(storage.first, storage.second)) {
+                Text((if (helpEnglish) "Used: %.1f GB of %.1f GB" else "Utilizați: %.1f GB din %.1f GB").format(
                     (storage.first - storage.second) / 1073741824.0,
                     storage.first / 1073741824.0
                 ))
-            } else Text("Date indisponibile")
+            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
+            Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
+            Text(if (helpEnglish) "Shows used and total internal storage so you can notice when space is running low. The reading does not identify which app or file uses the space." else "Arată spațiul intern utilizat și total, ca să observi când rămâne puțin spațiu liber. Măsurarea nu identifică aplicația sau fișierul care ocupă spațiul.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "SAFEGUARD does not measure each app’s cache or delete files automatically." else "SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not measure each app’s cache or delete files automatically." else "FoniWise nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Cache Advisor · App settings" else "Cache Advisor · Setări aplicații") }
-            Text(if (helpEnglish) "SAFEGUARD does not read or delete personal files." else "SAFEGUARD nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
+            Text(if (helpEnglish) "FoniWise does not read or delete personal files." else "FoniWise nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text(if (helpEnglish) "Storage settings" else "Setările stocării") }
         }
     }
 }
+
+
+// Display-only translation: scanner findings remain unchanged and are never rescanned on language switch.
+private val scanLabelEnglish = mapOf(
+    "Cameră" to "Camera",
+    "Microfon" to "Microphone",
+    "Locație precisă" to "Precise location",
+    "Locație aproximativă" to "Approximate location",
+    "Locație în fundal" to "Background location",
+    "Contacte" to "Contacts",
+    "Modificare contacte" to "Edit contacts",
+    "Citire SMS" to "Read SMS",
+    "Primire SMS" to "Receive SMS",
+    "Primire MMS" to "Receive MMS",
+    "Primire mesaje WAP Push" to "Receive WAP Push messages",
+    "Trimitere SMS" to "Send SMS",
+    "Citire calendar" to "Read calendar",
+    "Modificare calendar" to "Edit calendar",
+    "Istoric apeluri" to "Call history",
+    "Modificare istoric apeluri" to "Edit call history",
+    "Stare telefon" to "Phone state",
+    "Numere de telefon" to "Phone numbers",
+    "Inițiere apeluri" to "Make phone calls",
+    "Preluare apeluri" to "Answer phone calls",
+    "Senzori corporali" to "Body sensors",
+    "Senzori corporali în fundal" to "Background body sensors",
+    "Recunoașterea activității fizice" to "Physical activity recognition",
+    "Scanare dispozitive Bluetooth" to "Scan Bluetooth devices",
+    "Conectare dispozitive Bluetooth" to "Connect Bluetooth devices",
+    "Detectabilitate Bluetooth" to "Bluetooth discoverability",
+    "Dispozitive Wi-Fi din apropiere" to "Nearby Wi-Fi devices",
+    "Citire stocare partajată (vechi)" to "Read shared storage (legacy)",
+    "Modificare stocare partajată (vechi)" to "Modify shared storage (legacy)",
+    "Fotografii" to "Photos",
+    "Videoclipuri" to "Videos",
+    "Fișiere audio" to "Audio files",
+    "Fotografii/video selectate" to "Selected photos/videos",
+    "Trimitere notificări (nu citire)" to "Post notifications (not read them)",
+    "Serviciu Accessibility activ" to "Active accessibility service",
+    "Acces la notificări activ" to "Notification access enabled",
+    "Administrator dispozitiv activ" to "Active device administrator",
+    "Afișare peste alte aplicații" to "Display over other apps",
+    "Permisiune de solicitare instalare APK" to "Permission to request APK installation",
+    "Acces la toate fișierele" to "All-files access",
+    "Acces la datele de utilizare" to "Usage access",
+    "Un serviciu Accessibility poate observa sau interacționa cu interfața. Unele servicii legitime au nevoie de acest acces." to "An accessibility service can observe or interact with the interface. Some legitimate services need this access.",
+    "Aplicația poate primi notificările afișate de sistem. Verifică dacă recunoști aplicația și motivul accesului." to "The app can receive notifications shown by Android. Check whether you recognize the app and why it has access.",
+    "Administratorii dispozitivului pot avea drepturi speciale de administrare. Nu dezactiva un profil de serviciu sau de securitate fără să știi ce controlează." to "Device administrators can have special management rights. Do not disable a work or security profile without understanding what it controls.",
+    "Permite afișarea de ferestre peste alte aplicații. Este folosit și legitim de unele aplicații; verifică dacă îl recunoști." to "Allows windows to appear over other apps. Some legitimate apps use this; check whether you recognize it.",
+    "Aplicația poate solicita instalarea altor pachete. Această setare nu înseamnă că a instalat ceva fără acord." to "The app can request installation of other packages. This does not mean it installed anything without your consent.",
+    "Aplicația poate gestiona o mare parte din fișierele partajate. Unele aplicații de fișiere sau backup au motive legitime; verifică dacă recunoști aplicația." to "The app can manage much of shared storage. File managers and backup apps may have legitimate reasons; check whether you recognize the app.",
+    "Aplicația poate vedea informații despre utilizarea altor aplicații. Accesul poate fi legitim pentru control parental, automatizare sau monitorizare acceptată." to "The app can see information about other apps' usage. This may be legitimate for parental controls, automation or monitoring you have agreed to."
+)
+
+private fun translateScanLabel(label: String): String = scanLabelEnglish[label] ?: label
 
 private fun launchSettings(context: Context, intent: Intent) {
     runCatching { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
