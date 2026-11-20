@@ -47,3 +47,9 @@ Inspecție a `app/src/main/java/com/safeguard/android/MainActivity.kt`, fără e
 5. Localizare: comută RO/EN în dialog, închide-l și redeschide-l; verifică titlurile, explicațiile și etichetele butoanelor.
 
 **Stare:** audit static efectuat; compilare, teste automate, verificare vizuală și testare pe telefon **NETESTATE** în această etapă.
+
+## Corecție RAM — 2026-11-20
+
+Audit static: citirea RAM este considerată validă numai dacă `totalMem > 0`, `availMem >= 0` și `availMem <= totalMem`. Pentru valori inconsistente, cardul afișează „Date indisponibile” / „Data unavailable”, nu afișează sfatul adaptat și dialogul ⓘ explică indisponibilitatea în RO/EN, chiar dacă `lowMemory` este adevărat.
+
+Teste de regresie **de executat**: (1) `totalMem = 0`; (2) `availMem = -1`; (3) `availMem > totalMem`; (4) citire validă cu `lowMemory = true`; (5) citire validă cu `lowMemory = false`; (6) apăsarea „Actualizează RAM” după o citire invalidă. Verifică afișarea în RO și EN. Aceste cazuri nu au fost executate pe un dispozitiv sau într-un test automat; schimbarea a fost verificată prin diff și inspecție statică, nu prin compilare Gradle.
