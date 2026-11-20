@@ -469,7 +469,14 @@ private fun SafeguardScreen(
             english = helpEnglish,
             onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showSecuritySteps = false },
-            onSettings = { launchSettings(context, Intent(Settings.ACTION_SETTINGS)) }
+            onSettings = { step ->
+                val action = when (step) {
+                    0 -> Settings.ACTION_SECURITY_SETTINGS
+                    2 -> Settings.ACTION_APPLICATION_SETTINGS
+                    else -> Settings.ACTION_SETTINGS
+                }
+                launchSettings(context, Intent(action))
+            }
         )
     }
 
@@ -749,7 +756,7 @@ private fun SecurityStepsDialog(
     english: Boolean,
     onLanguageChange: (Boolean) -> Unit,
     onDismiss: () -> Unit,
-    onSettings: () -> Unit
+    onSettings: (Int) -> Unit
 ) {
     var step by rememberSaveable { mutableIntStateOf(0) }
     val headingsRo = listOf("Blocarea ecranului", "Actualizări Android", "Accesări speciale")
@@ -796,8 +803,9 @@ private fun SecurityStepsDialog(
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                OutlinedButton(onClick = onSettings, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (english) "Open Android settings" else "Deschide setările Android")
+                OutlinedButton(onClick = { onSettings(step) }, modifier = Modifier.fillMaxWidth()) {
+                    Text(if (english) (if (step == 0) "Open Security settings" else if (step == 2) "Open Apps settings" else "Open Android settings")
+                        else (if (step == 0) "Deschide setările de securitate" else if (step == 2) "Deschide setările aplicațiilor" else "Deschide setările Android"))
                 }
             }
         },
