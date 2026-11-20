@@ -283,6 +283,28 @@ private fun SafeguardScreen(
                 DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) })
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
+                    Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+                    Text(if (helpEnglish) "Clear explanations and practical examples. Choose a topic when you need it." else "Explicații clare și exemple practice. Alege subiectul care te interesează.")
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "App permissions explained" else "Permisiunile aplicațiilor, pe înțelesul tău", fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Why apps ask for camera, microphone, location or contacts, with examples." else "De ce cer aplicațiile acces la cameră, microfon, locație sau contacte, cu exemple.")
+                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
+                                Text(if (helpEnglish) "Read the guide" else "Citește ghidul")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "Fraud and phishing safety" else "Protecție antifraudă și antiphishing",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Learn warning signs in messages, links and calls. No private messages are read." else
+                                "Recunoaște semnele de alarmă din mesaje, linkuri și apeluri. Nu sunt citite mesaje personale.")
+                            OutlinedButton(onClick = { showFraudGuide = true }) {
+                                Text(if (helpEnglish) "Open safety checklist" else "Deschide lista de verificare")
+                            }
+                        }
+                    }
                     FoniWiseGlossary(
                         english = helpEnglish,
                         onBack = { selectedTab = 0 },
@@ -322,22 +344,11 @@ private fun SafeguardScreen(
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
-                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
-                                Text(if (helpEnglish) "Understand permissions" else "Înțelege permisiunile")
+                            OutlinedButton(onClick = { selectedTab = 1 }) {
+                                Text(if (helpEnglish) "Learn about permissions" else "Află despre permisiuni")
                             }
                             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
                                 Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
-                            }
-                        }
-                    }
-                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "Fraud and phishing safety" else "Protecție antifraudă și antiphishing",
-                                fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "Learn warning signs in messages, links and calls. No private messages are read." else
-                                "Recunoaște semnele de alarmă din mesaje, linkuri și apeluri. Nu sunt citite mesaje personale.")
-                            OutlinedButton(onClick = { showFraudGuide = true }) {
-                                Text(if (helpEnglish) "Open safety checklist" else "Deschide lista de verificare")
                             }
                         }
                     }
