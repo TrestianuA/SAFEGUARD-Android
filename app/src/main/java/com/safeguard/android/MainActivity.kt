@@ -843,8 +843,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 "Updates can fix known issues. A patch date alone cannot determine whether a phone is secure."
                 else "Actualizările pot remedia probleme cunoscute. Data patch-ului nu stabilește singură dacă telefonul este sigur.",
                 style = MaterialTheme.typography.bodySmall)
-            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_SYSTEM_UPDATE_SETTINGS)) }) {
-                Text(if (helpEnglish) "Check Android updates" else "Verifică actualizările Android")
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_SETTINGS)) }) {
+                Text(if (helpEnglish) "Open Android settings" else "Deschide setările Android")
             }
         }
     }
@@ -854,8 +854,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             titleEn = "ⓘ Android and security",
             summaryRo = "Versiunea Android identifică sistemul instalat. Data patch-ului indică nivelul actualizărilor de securitate raportat de dispozitiv.",
             summaryEn = "The Android version identifies the installed system. The security patch date is the security update level reported by the device.",
-            doesRo = "FoniWise afișează aceste valori oferite de Android și deschide pagina de actualizări, dacă telefonul o acceptă.",
-            doesEn = "FoniWise displays the values provided by Android and opens the update settings page when supported.",
+            doesRo = "FoniWise afișează aceste valori oferite de Android și deschide Setările Android, unde poți căuta opțiunea de actualizare.",
+            doesEn = "FoniWise displays the values provided by Android and opens Android Settings, where you can look for the software update option.",
             limitsRo = "O dată mai veche nu înseamnă automat că telefonul este nesigur. FoniWise nu poate garanta securitatea dispozitivului și nu instalează actualizări.",
             limitsEn = "An older date does not automatically mean the phone is unsafe. FoniWise cannot guarantee device security and does not install updates.",
             adviceRo = "Verifică periodic actualizările oferite de producător. Dacă nu se deschide pagina dedicată, caută «Actualizare software» în Setările Android.",
@@ -865,7 +865,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             onDismiss = { showUpdateInfo = false },
             onSettings = {
                 showUpdateInfo = false
-                launchSettings(context, Intent(Settings.ACTION_SYSTEM_UPDATE_SETTINGS))
+                launchSettings(context, Intent(Settings.ACTION_SETTINGS))
             }
         )
     }
