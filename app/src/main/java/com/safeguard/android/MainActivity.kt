@@ -908,9 +908,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val memorySnapshot = memory
     var showRamInfo by remember { mutableStateOf(false) }
-    var ramInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
     var showAnimationInfo by remember { mutableStateOf(false) }
-    var animationInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
     fun readBatteryLevel(): Int? = runCatching {
         val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
@@ -1016,8 +1014,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
             adviceEn = if (memorySnapshot != null && hasValidRamReading(memorySnapshot) && memorySnapshot.lowMemory)
                 "Android reports memory pressure. If your phone is slow, close only apps you no longer need and see whether the problem continues. Restarting the phone may help if it remains slow."
                 else if (!hasValidRamReading(memorySnapshot)) "RAM readings are unavailable right now. Tap Refresh RAM to try again. FoniWise cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
-            english = ramInfoEnglish,
-            onLanguageChange = { ramInfoEnglish = it },
+            english = helpEnglish,
+            onLanguageChange = onLanguageChange,
             onDismiss = { showRamInfo = false }
         )
     }
@@ -1054,8 +1052,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
             limitsEn = "FoniWise does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
             adviceRo = "Încearcă reducerea animațiilor doar dacă mișcările te deranjează sau telefonul pare lent la schimbarea ecranelor. Verifică dacă îți place rezultatul. Dacă preferi efectele inițiale, revino în aceeași pagină de Accesibilitate și dezactivează opțiunea «Elimină animațiile». Dacă nu găsești opțiunea, lasă setările neschimbate.",
             adviceEn = "Try reducing animations if the motion bothers you or switching screens feels slow. Check whether you prefer the result. To restore the original effects, return to the same Accessibility page and turn off Remove animations. If you cannot find the option, leave the settings unchanged.",
-            english = animationInfoEnglish,
-            onLanguageChange = { animationInfoEnglish = it },
+            english = helpEnglish,
+            onLanguageChange = onLanguageChange,
             onDismiss = { showAnimationInfo = false },
             onSettings = {
                 showAnimationInfo = false
