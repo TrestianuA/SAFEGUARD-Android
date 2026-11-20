@@ -848,6 +848,7 @@ private fun DeveloperOptionsGuideDialog(
     var selectedGroup by rememberSaveable { mutableIntStateOf(-1) }
     var selectedTopic by rememberSaveable { mutableIntStateOf(-1) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showSettingsInstructions by rememberSaveable { mutableStateOf(false) }
     val categoryIndices = if (selectedGroup >= 0) groups[selectedGroup].second else emptyList()
     val normalizedQuery = normalizeGuideSearch(searchQuery.trim())
     val searchResults = if (normalizedQuery.isBlank()) emptyList() else topics.indices.filter { index ->
@@ -871,15 +872,22 @@ private fun DeveloperOptionsGuideDialog(
                         Text(if (english) "FoniWise cannot check or change this setting for you."
                             else "FoniWise nu poate verifica sau modifica această setare în locul tău.",
                             color = navy, style = MaterialTheme.typography.bodySmall)
-                        HorizontalDivider()
-                        Text(if (english) "If you want to check it on your phone:"
-                            else "Dacă vrei să verifici opțiunea pe telefon:",
-                            color = green, fontWeight = FontWeight.Bold)
+                        TextButton(onClick = { showSettingsInstructions = !showSettingsInstructions }) {
+                            Text(if (english)
+                                (if (showSettingsInstructions) "Hide Android settings steps" else "How to check this on my phone")
+                                else (if (showSettingsInstructions) "Ascunde pașii pentru setările Android" else "Cum verific pe telefon"))
+                        }
+                        if (showSettingsInstructions) {
+                            HorizontalDivider()
+                            Text(if (english) "If you want to check it on your phone:"
+                                else "Dacă vrei să verifici opțiunea pe telefon:",
+                                color = green, fontWeight = FontWeight.Bold)
                         Text(if (english)
                             "1. Read the explanation and note any original value before changing anything.\n2. Use Open Android settings below. If your phone does not open Developer options directly, look for the menu in Settings; names vary by model.\n3. Return to FoniWise with Back or Recent apps. This explanation should still be here. Compare what you saw; FoniWise cannot confirm that a change was made."
                             else
                             "1. Citește explicația și notează valoarea inițială înainte să modifici ceva.\n2. Folosește Deschide setările Android de mai jos. Dacă telefonul nu deschide direct Opțiunile pentru dezvoltatori, caută meniul în Setări; denumirile diferă după model.\n3. Revino în FoniWise folosind Înapoi sau Aplicații recente. Explicația ar trebui să rămână aici. Compară ce ai observat; FoniWise nu poate confirma că ai schimbat o setare.",
                             color = navy, style = MaterialTheme.typography.bodySmall)
+                        }
                         val navigationIndices = if (searchQuery.isNotBlank()) searchResults else categoryIndices
                         val position = navigationIndices.indexOf(selectedTopic)
                         if (position >= 0) {
