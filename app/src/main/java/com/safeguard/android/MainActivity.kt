@@ -462,7 +462,7 @@ private fun SafeguardScreen(
             adviceRo = "Dacă cineva îți cere un cod bancar sau să transferi urgent bani, închide apelul și contactează instituția prin numărul din aplicația oficială sau de pe card. Dacă ai introdus deja date sensibile, schimbă parola prin canalul oficial și contactează imediat banca atunci când sunt implicate date bancare. Nu instala aplicații de control la distanță la cererea unui apelant necunoscut.",
             adviceEn = "If someone asks for a banking code or an urgent transfer, end the call and contact the institution using the number in its official app or on your card. If you already shared sensitive information, change the password through the official channel and contact your bank immediately if banking data is involved. Never install remote-control apps at an unknown caller's request.",
             english = helpEnglish,
-            onLanguageChange = { },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showFraudGuide = false },
             onSettings = null
         )
@@ -481,7 +481,7 @@ private fun SafeguardScreen(
             adviceRo = "Exemplu: dacă o aplicație de lanternă cere microfonul, întreabă-te ce funcție îl justifică. Pentru cameră și microfon verifică dacă sunt necesare; pentru locație poți alege accesul doar în timpul folosirii, dacă Android oferă opțiunea; pentru contacte și notificări verifică dacă recunoști motivul. Nu dezactiva la întâmplare permisiuni necesare funcționării.",
             adviceEn = "Example: if a flashlight app asks for microphone access, consider which feature needs it. Review camera and microphone access; for location, choose while-in-use access when Android offers it; for contacts and notifications, check whether the reason makes sense. Do not randomly disable permissions needed for an app to work.",
             english = helpEnglish,
-            onLanguageChange = { },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showPermissionsGuide = false },
             onSettings = {
                 showPermissionsGuide = false
@@ -919,7 +919,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             adviceRo = "Verifică periodic actualizările oferite de producător. Dacă nu se deschide pagina dedicată, caută «Actualizare software» în Setările Android.",
             adviceEn = "Check periodically for updates from your manufacturer. If the dedicated page does not open, look for Software update in Android Settings.",
             english = helpEnglish,
-            onLanguageChange = { },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showUpdateInfo = false },
             onSettings = {
                 showUpdateInfo = false
@@ -1045,7 +1045,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             adviceRo = "Dacă ai nevoie de autonomie suplimentară, caută în Setări → Baterie opțiunea Economisire energie. Poate reduce activitatea în fundal și unele funcții. Activeaz-o când ai baterie puțină sau nu poți încărca telefonul; dezactiveaz-o dacă limitează funcții de care ai nevoie. Nu restricționa aplicații importante fără să înțelegi efectele.",
             adviceEn = "If you need longer battery life, look for Power saving in Settings → Battery. It may limit background activity and some features. Enable it when charge is low or charging is unavailable; turn it off if it limits features you need. Do not restrict important apps without understanding the effects.",
             english = helpEnglish,
-            onLanguageChange = { },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showBatteryGuide = false },
             onSettings = {
                 showBatteryGuide = false
