@@ -279,7 +279,7 @@ private fun SafeguardScreen(
                     }
                 }
                 Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
-                DeviceHealthCards(context, helpEnglish)
+                DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) })
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     FoniWiseGlossary(
@@ -859,7 +859,7 @@ internal fun batteryPercentage(level: Int, scale: Int): Int? =
     else (level.toLong() * 100L / scale).toInt()
 
 @Composable
-private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
+private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguageChange: (Boolean) -> Unit) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
     val memorySnapshot = memory
     var showRamInfo by remember { mutableStateOf(false) }
@@ -919,7 +919,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             adviceRo = "Verifică periodic actualizările oferite de producător. Dacă nu se deschide pagina dedicată, caută «Actualizare software» în Setările Android.",
             adviceEn = "Check periodically for updates from your manufacturer. If the dedicated page does not open, look for Software update in Android Settings.",
             english = helpEnglish,
-            onLanguageChange = { chooseLanguage(it) },
+            onLanguageChange = onLanguageChange,
             onDismiss = { showUpdateInfo = false },
             onSettings = {
                 showUpdateInfo = false
@@ -1045,7 +1045,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             adviceRo = "Dacă ai nevoie de autonomie suplimentară, caută în Setări → Baterie opțiunea Economisire energie. Poate reduce activitatea în fundal și unele funcții. Activeaz-o când ai baterie puțină sau nu poți încărca telefonul; dezactiveaz-o dacă limitează funcții de care ai nevoie. Nu restricționa aplicații importante fără să înțelegi efectele.",
             adviceEn = "If you need longer battery life, look for Power saving in Settings → Battery. It may limit background activity and some features. Enable it when charge is low or charging is unavailable; turn it off if it limits features you need. Do not restrict important apps without understanding the effects.",
             english = helpEnglish,
-            onLanguageChange = { chooseLanguage(it) },
+            onLanguageChange = onLanguageChange,
             onDismiss = { showBatteryGuide = false },
             onSettings = {
                 showBatteryGuide = false
