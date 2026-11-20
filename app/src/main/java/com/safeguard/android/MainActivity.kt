@@ -804,14 +804,14 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var ramInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
     var showAnimationInfo by remember { mutableStateOf(false) }
     var animationInfoEnglish by remember(helpEnglish) { mutableStateOf(helpEnglish) }
-    val battery = remember {
-        runCatching {
-            val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
-            val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-            val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
-            if (level < 0 || scale <= 0) null else level * 100 / scale
-        }.getOrNull()
-    }
+    fun readBatteryLevel(): Int? = runCatching {
+        val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        if (level < 0 || scale <= 0 || level > scale) null
+        else (level.toLong() * 100L / scale).toInt()
+    }.getOrNull()
+    var battery by remember { mutableStateOf(readBatteryLevel()) }
     fun readInternalStorage(): Pair<Long, Long>? = runCatching {
         val fs = StatFs(Environment.getDataDirectory().absolutePath)
         Pair(fs.totalBytes, fs.availableBytes)
@@ -916,6 +916,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
             Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "FoniWise does not automatically change power settings." else "FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { battery = readBatteryLevel() }) { Text(if (helpEnglish) "Refresh battery" else "Actualizează bateria") }
             OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text(if (helpEnglish) "Battery settings" else "Setările bateriei") }
         }
     }
