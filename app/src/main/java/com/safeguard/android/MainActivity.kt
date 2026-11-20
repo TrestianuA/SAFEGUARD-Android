@@ -812,8 +812,15 @@ private fun SecurityStepsDialog(
                     )
                 }
                 Text(
-                    if (english) "After reviewing the setting in Android, return to FoniWise and continue to the next step. Moving forward does not mean the check was completed automatically."
-                    else "După ce verifici setarea în Android, revino în FoniWise și continuă cu pasul următor. Trecerea mai departe nu înseamnă că verificarea a fost efectuată automat.",
+                    if (english) when (step) {
+                        0 -> "After checking the screen-lock options, return to FoniWise and choose Next step. This is a manual check, not an automatic confirmation."
+                        1 -> "If the update page does not open directly, find Software update in Android Settings. Return to FoniWise afterwards; the app does not install updates for you."
+                        else -> "After reviewing each special access, return here and choose Finish. Finishing this guide does not certify the phone as secure."
+                    } else when (step) {
+                        0 -> "După verificarea opțiunilor de blocare, revino în FoniWise și apasă Pasul următor. Verificarea este manuală, nu o confirmare automată."
+                        1 -> "Dacă pagina de actualizări nu se deschide direct, caută Actualizare software în Setările Android. Revino apoi în FoniWise; aplicația nu instalează actualizări în locul tău."
+                        else -> "După verificarea fiecărui acces special, revino aici și apasă Finalizează. Încheierea ghidului nu certifică telefonul ca fiind sigur."
+                    },
                     style = MaterialTheme.typography.bodySmall,
                     color = navy
                 )
