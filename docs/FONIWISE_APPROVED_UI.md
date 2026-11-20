@@ -36,3 +36,18 @@ Copiile PNG sunt păstrate în biblioteca FoniWise, în `/FoniWise/Branding/`:
 - Păstrați funcțiile existente, `applicationId`, semnarea APK, compatibilitatea actualizărilor și versiunea existentă până la o modificare verificată separat.
 - Implementați incremental, într-o ramură de test, cu build și teste CI. Verificați pe dispozitiv contrastul, fonturile, accesibilitatea și comportamentul pe ecrane mici.
 - **Acest document nu schimbă interfața Android în cod și nu certifică un APK testat.**
+
+## Explicații bilingve RO / EN — aprobat
+
+**Status:** aprobat explicit de proprietarul proiectului, 20 noiembrie 2026.
+
+**Referință vizuală:** `/FoniWise/Branding/FoniWise_UI_Explicatii_RO_EN_Aprobat.png` din biblioteca proiectului. Această imagine conține trei ecrane: pagina „Explicații”, dicționarul de termeni și dialogul de explicație pentru „Procesor (CPU)”.
+
+- Păstrăm **comutatorul RO / EN din SAFEGUARD** în interiorul ferestrei de explicație; se afișează o singură limbă la un moment dat, iar selecția este evidențiată în verde.
+- Comutarea schimbă **toate textele explicației**: titlu, descriere, „Ce face?” / „What does it do?”, „Ce NU face?” / „What doesn't it do?”, „Recomandare” / „Recommendation” și „Am înțeles” / „Got it”.
+- Dialogul are fundal alb, colțuri rotunjite, pictogramă verde, buton de închidere și un fundal al aplicației estompat.
+- Secțiunile „Explicații” și „Dicționar de termeni” respectă antetul verde închis, cardurile pastel, navigația verde și regula **fără valuri decorative**.
+- Textele din mockup sunt exemple de design; înainte de implementare trebuie verificate față de comportamentul real al funcțiilor și limitele lor.
+- Păstrăm originalul logo-ului și pictograma cu colțuri rotunjite; **nu** modificăm prin acest document codul Android, `applicationId`, semnarea sau funcțiile existente.
+
+**Notă:** imaginea este salvată în biblioteca FoniWise, nu ca fișier binar în acest PR GitHub.
