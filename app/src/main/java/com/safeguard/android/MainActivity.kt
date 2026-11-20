@@ -75,10 +75,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val green = Color(0xFF139B22)
-private val navy = Color(0xFF082B63)
-private val paleBlue = Color(0xFFF2F9FF)
-private val paleGreen = Color(0xFFE8F9E8)
+private val green = Color(0xFF087C26)
+private val navy = Color(0xFF064D2B)
+private val paleBlue = Color(0xFFF3FBF2)
+private val paleGreen = Color(0xFFE7F8DB)
 
 @Composable
 private fun SafeguardScreen(
@@ -130,9 +130,9 @@ private fun SafeguardScreen(
                 Surface(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 5.dp),
                     shape = RoundedCornerShape(32.dp),
-                    color = Color.White,
+                    color = navy,
                     shadowElevation = 7.dp,
-                    border = BorderStroke(1.dp, Color(0xFFC8E8F4))
+                    border = BorderStroke(1.dp, green)
                 ) {
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(5.dp),
@@ -146,8 +146,8 @@ private fun SafeguardScreen(
                                 onClick = { selectedTab = index },
                                 modifier = Modifier.weight(1f).height(64.dp),
                                 shape = RoundedCornerShape(28.dp),
-                                color = if (active) green else Color.Transparent,
-                                contentColor = if (active) Color.White else navy
+                                color = if (active) Color(0xFF9EEA47) else Color.Transparent,
+                                contentColor = if (active) navy else Color.White
                             ) {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
@@ -454,9 +454,9 @@ private fun DashboardTile(
         onClick = onClick,
         modifier = modifier.height(if (narrowScreen) 158.dp else 140.dp),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFA6ECA5))
+        colors = CardDefaults.cardColors(containerColor = paleGreen),
+        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 12.dp),
@@ -564,8 +564,8 @@ private fun SafeguardHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngl
         ) {
             BrandLogo("safeguard_logo_simplu", 54.dp)
             Column(modifier = Modifier.weight(1f)) {
-                Text("SAFEGUARD", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                Text(if (helpEnglish) "Local analysis • You stay in control" else "Analiză locală • Controlul rămâne la tine", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
+                Text("FoniWise", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
+                Text("Know Your Phone", style = MaterialTheme.typography.labelSmall, color = Color(0xFFA9E5C6))
             }
             IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
