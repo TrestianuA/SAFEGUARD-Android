@@ -193,8 +193,29 @@ private fun SafeguardScreen(
                     }
                     DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
+                Card(
+                    onClick = { selectedTab = 3 },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = paleGreen),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                        Text(if (helpEnglish) "Know Your Phone · Dictionary" else "Cunoaște-ți telefonul · Dicționar",
+                            fontWeight = FontWeight.Bold, color = navy)
+                        Text(if (helpEnglish) "15 useful explanations and practical tips · RO / EN" else
+                            "15 explicații utile și recomandări practice · RO / EN",
+                            style = MaterialTheme.typography.bodySmall)
+                    }
+                }
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
+                }
+                if (selectedTab == 3) {
+                    FoniWiseGlossary(
+                        english = helpEnglish,
+                        onBack = { selectedTab = 0 },
+                        onLanguageChange = { helpEnglish = it }
+                    )
                 }
                 if (selectedTab == 1) {
                 Card(
