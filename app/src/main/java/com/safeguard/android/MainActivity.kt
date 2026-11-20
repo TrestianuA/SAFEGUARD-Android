@@ -1291,10 +1291,9 @@ private fun DeviceHealthCards(
             }
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text((if (helpEnglish) "Available: %.1f GiB of %.1f GiB" else "Disponibil: %.1f GiB din %.1f GiB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
-                Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
-                Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
+                Text(if (helpEnglish) "What this reading means:" else "Ce înseamnă această măsurătoare:", fontWeight = FontWeight.SemiBold, color = green)
                 Text(
                     if (memorySnapshot.lowMemory)
                         if (helpEnglish) "Android reports memory pressure. Review resource-heavy apps and close only those you no longer need. If the phone stays slow, consider restarting it." else "Android semnalează presiune asupra memoriei. Verifică aplicațiile care consumă resurse și închide doar ce nu mai folosești. Dacă telefonul rămâne lent, poți încerca o repornire."
