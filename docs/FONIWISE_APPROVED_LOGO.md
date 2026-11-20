@@ -54,3 +54,12 @@ Acestea sunt doar simulări vizuale, **nu** resurse Android adaptive definitive.
 **Aprobat explicit de proprietarul proiectului:** pictograma FoniWise **cu colțuri rotunjite**. Fișierul de referință este `/FoniWise/Branding/FoniWise_icon_rounded_preview_neaprobat.png` (denumirea istorică a fișierului conține «neaprobat», dar varianta vizuală a fost ulterior aprobată).
 
 Varianta rotundă rămâne doar o simulare, nu alegerea principală. Logo-ul complet aprobat, cu slogan, rămâne neschimbat. Aprobarea direcției vizuale **nu înseamnă** că resursele adaptive Android au fost generate, integrate sau testate. Înainte de activare, validați lizibilitatea și decuparea pe dispozitiv și păstrați resursele SAFEGUARD existente până la verificarea noului APK.
+
+## Resurse de previzualizare pe densități Android
+
+- Script reproductibil: `tools/generate_foniwise_icon_previews.py` (necesită Python 3 și Pillow).
+- Sursă: previzualizarea cu colțuri rotunjite aprobată, 512 × 512, SHA-256 `58b6404d74aa5def2bbadd87f02ae922cfaf434240adcca6c5d4da345b365852`.
+- Exemplu: `python3 tools/generate_foniwise_icon_previews.py FoniWise_icon_rounded_preview_neaprobat.png /tmp/foniwise-icon-review`.
+- Dimensiuni generate: `mdpi` 48, `hdpi` 72, `xhdpi` 96, `xxhdpi` 144, `xxxhdpi` 192 px.
+- Test local efectuat: scriptul de generare a produs toate cele cinci PNG-uri RGBA la dimensiunile așteptate; verificare de sintaxă Python reușită.
+- **Nu** s-au testat încă compilarea Android, lizibilitatea pe dispozitiv sau integrarea în manifest. Scriptul nu schimbă automat resursele aplicației.
