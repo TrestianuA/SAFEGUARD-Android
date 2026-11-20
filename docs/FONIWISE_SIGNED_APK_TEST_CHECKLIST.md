@@ -23,6 +23,16 @@
 - Confirmați că datele și setările existente au rămas disponibile după actualizare.
 
 
+## Condiții pentru un APK comun PR #18 + PR #19
+
+- **Stare verificată la 2026-11-20:** ambele ramuri pornesc din `main`, dar sunt divergente; ambele modifică `MainActivity.kt`. Nu folosiți simpla reușită a buildului FoniWise ca dovadă că toate corecțiile din PR #18 sunt incluse.
+- Creați o **ramură temporară de integrare** pornind de la capătul verificat al PR #19; nu modificați direct `main` sau ramurile de origine.
+- Comparați explicit versiunile `MainActivity.kt` și `StorageReadingValidationTest.kt`; păstrați interfața FoniWise aprobată și integrați doar comportamentele lipsă din PR #18, fără suprascrierea integrală a ecranului.
+- Verificați în cod: validarea stocării, traducerile RO/EN, citirea `ActivityManager.MemoryInfo`, recomandările RAM, dialogurile ⓘ, curățarea **manuală** a cache-ului și instrucțiunile **manuale** pentru animații.
+- Rulați testele și compilarea pe **commitul final de integrare**; păstrați SHA-ul, URL-ul GitHub Actions, concluzia fiecărei etape și artefactul APK în raport. Un CI anterior nu validează noul commit.
+- Nu modificați `applicationId`, `versionCode`, manifestul, permisiunile, cheile de semnare sau resursele grafice aprobate fără motiv verificat și revizuire separată.
+- Testarea prin Android Studio pe telefon se face numai după verificarea compatibilității certificatului și a datelor existente.
+
 ## Test local prin Android Studio (fără pierderea datelor)
 
 1. Deschideți proiectul pe ramura de test aleasă și verificați commitul exact înainte de sincronizare. PR #18 și PR #19 sunt ramuri distincte; nu presupuneți că APK-ul uneia include toate schimbările celeilalte.
