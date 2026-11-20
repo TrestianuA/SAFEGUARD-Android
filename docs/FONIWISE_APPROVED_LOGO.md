@@ -31,3 +31,11 @@
 - După integrare, rulați `testDebugUnitTest` și `assembleDebug`, verificați auditul de semnare/permisiuni și efectuați un test vizual pe dispozitiv.
 
 **Limitare:** acest PR conține doar documentație; nu adaugă încă binarul PNG în GitHub și nu redenumește aplicația.
+
+## Previzualizare pictogramă (neaprobată)
+
+- Am pregătit local o **previzualizare pătrată de 512 × 512 px**, decupată din originalul aprobat, fără regenerare AI și fără slogan.
+- Fișierul de previzualizare este salvat separat în biblioteca proiectului: `/FoniWise/Branding/FoniWise_icon_preview_neaprobat.png`.
+- Previzualizarea **nu este pictograma Android finală**: trebuie verificată la dimensiuni mici și în măștile adaptive Android înainte de aprobare.
+- În `AndroidManifest.xml`, eticheta rămâne `SAFEGUARD`, iar pictograma rămâne `@drawable/safeguard_logo_simplu`; în `app/build.gradle.kts`, `applicationId` rămâne `com.safeguard.android` și versiunea `0.7.3-rc1`.
+- Nu se activează nicio resursă FoniWise în aplicație prin acest PR.
