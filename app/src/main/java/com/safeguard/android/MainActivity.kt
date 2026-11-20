@@ -579,7 +579,7 @@ private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngli
             BrandLogo(54.dp)
             Column(modifier = Modifier.weight(1f)) {
                 Text("FoniWise", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Color.White)
-                Text("Know Your Phone", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
+                Text(if (helpEnglish) "Know Your Phone" else "Cunoaște-ți telefonul", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
             }
             IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
             TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
