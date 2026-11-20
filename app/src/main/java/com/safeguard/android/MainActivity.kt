@@ -472,7 +472,7 @@ private fun SafeguardScreen(
             onSettings = { step ->
                 val action = when (step) {
                     0 -> Settings.ACTION_SECURITY_SETTINGS
-                    1 -> Settings.ACTION_SYSTEM_UPDATE_SETTINGS
+                    1 -> "android.settings.SYSTEM_UPDATE_SETTINGS"
                     2 -> Settings.ACTION_APPLICATION_SETTINGS
                     else -> Settings.ACTION_SETTINGS
                 }
