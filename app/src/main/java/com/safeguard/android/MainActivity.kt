@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.CleaningServices
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -185,7 +186,7 @@ private fun SafeguardScreen(
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual\ncache clean" else "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
                         showCacheGuide = true
                     }
                     DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
@@ -193,7 +194,7 @@ private fun SafeguardScreen(
                     }
                     DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
                 }
-                Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
                 }
                 if (selectedTab == 1) {
@@ -312,8 +313,8 @@ private fun SafeguardScreen(
             summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. How it can help you: you may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
             doesRo = "SAFEGUARD îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
             doesEn = "SAFEGUARD explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
-            limitsRo = "SAFEGUARD nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
-            limitsEn = "SAFEGUARD does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
+            limitsRo = "SAFEGUARD nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare. Cache-ul se poate reface când folosești din nou aplicația; nu este necesar să îl ștergi periodic.",
+            limitsEn = "SAFEGUARD does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions. The cache may be rebuilt as you use the app again; clearing it regularly is not necessary.",
             adviceRo = "Curăță cache-ul doar dacă o aplicație ocupă prea mult spațiu sau nu funcționează corect. Începe cu aplicația care are problema și verifică spațiul liber după aceea. Nu este necesar să ștergi cache-ul tuturor aplicațiilor în fiecare zi. Aplicația poate crea din nou fișiere temporare la următoarea utilizare, deci spațiul eliberat poate fi temporar.",
             adviceEn = "Clear cache only when an app uses too much storage or is not working correctly. Start with the affected app and check available storage afterward. You do not need to clear every app's cache each day. The app may recreate temporary files the next time you use it, so freed space may be temporary.",
             english = helpEnglish,
@@ -586,6 +587,9 @@ private fun InfoCard(message: String) {
     Card { Text(message, Modifier.padding(14.dp)) }
 }
 
+internal fun hasValidStorageReading(totalBytes: Long, availableBytes: Long): Boolean =
+    totalBytes > 0L && availableBytes >= 0L && availableBytes <= totalBytes
+
 private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
     runCatching {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -625,13 +629,15 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(if (helpEnglish) "RAM Monitor" else "Memorie RAM", fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f))
                 IconButton(onClick = { showRamInfo = true }) {
-                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                    Icon(Icons.Filled.Info, contentDescription = if (helpEnglish) "RAM explanation and recommendations" else "Explicații și recomandări despre RAM", tint = navy)
                 }
             }
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text((if (helpEnglish) "Available: %.1f GB of %.1f GB" else "Disponibil: %.1f GB din %.1f GB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
-            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
+            } else {
+                Text(if (helpEnglish) "RAM data unavailable. Tap Refresh RAM to try another Android reading; no memory recommendation can be made yet." else "Datele RAM nu sunt disponibile. Apasă Actualizează RAM pentru o nouă citire Android; încă nu se poate formula o recomandare despre memorie.", style = MaterialTheme.typography.bodySmall)
+            }
             Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
@@ -677,12 +683,17 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                     fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = { showAnimationInfo = true }) {
-                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                    Icon(Icons.Filled.Info, contentDescription = if (helpEnglish) "Animation explanation and manual steps" else "Explicații și pași manuali pentru animații", tint = navy)
                 }
             }
             Text(
                 if (helpEnglish) "Animations are visual transitions between screens. Tap ⓘ for an explanation, safe steps and advice."
                 else "Animațiile sunt efectele vizuale dintre ecrane. Apasă ⓘ pentru explicații, pași siguri și recomandări.",
+                style = MaterialTheme.typography.bodySmall
+            )
+            Text(
+                if (helpEnglish) "The Reduce animations option may be named differently or unavailable on your device. This button opens Accessibility settings only; SAFEGUARD does not change the setting."
+                else "Opțiunea de reducere a animațiilor poate avea alt nume sau poate lipsi pe telefonul tău. Butonul deschide doar setările de Accesibilitate; SAFEGUARD nu schimbă setarea.",
                 style = MaterialTheme.typography.bodySmall
             )
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
@@ -721,13 +732,13 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Stocare", fontWeight = FontWeight.Bold, color = green)
-            if (storage != null && storage.first > 0L) {
-                Text("Utilizați: %.1f GB din %.1f GB".format(
+            Text(if (helpEnglish) "Storage" else "Stocare", fontWeight = FontWeight.Bold, color = green)
+            if (storage != null && hasValidStorageReading(storage.first, storage.second)) {
+                Text((if (helpEnglish) "Used: %.1f GB of %.1f GB" else "Utilizați: %.1f GB din %.1f GB").format(
                     (storage.first - storage.second) / 1073741824.0,
                     storage.first / 1073741824.0
                 ))
-            } else Text("Date indisponibile")
+            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "SAFEGUARD does not measure each app’s cache or delete files automatically." else "SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
