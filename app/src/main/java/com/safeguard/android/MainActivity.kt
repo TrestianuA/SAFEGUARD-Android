@@ -336,8 +336,8 @@ private fun SafeguardScreen(
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
-                            OutlinedButton(onClick = { selectedTab = 1 }) {
-                                Text(if (helpEnglish) "Learn about permissions" else "Află despre permisiuni")
+                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
+                                Text(if (helpEnglish) "Read permissions guide" else "Citește ghidul permisiunilor")
                             }
                             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
                                 Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
