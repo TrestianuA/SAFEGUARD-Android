@@ -357,10 +357,10 @@ private fun SafeguardScreen(
                     scan.specialAccess.forEach { item ->
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                Text(item.category, fontWeight = FontWeight.Bold, color = green)
+                                Text(if (helpEnglish) translateScanLabel(item.category) else item.category, fontWeight = FontWeight.Bold, color = green)
                                 Text(item.appLabel)
                                 Text(item.packageName, style = MaterialTheme.typography.labelSmall)
-                                Text(item.explanation, style = MaterialTheme.typography.bodySmall)
+                                Text(if (helpEnglish) translateScanLabel(item.explanation) else item.explanation, style = MaterialTheme.typography.bodySmall)
                                 OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text(if (helpEnglish) "Review in Settings" else "Verifică în Setări") }
                             }
                         }
@@ -371,7 +371,7 @@ private fun SafeguardScreen(
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                                 Text(app.appLabel, fontWeight = FontWeight.Bold)
-                                Text(app.grantedPermissions.joinToString(" • "), style = MaterialTheme.typography.bodySmall)
+                                Text(app.grantedPermissions.joinToString(" • ") { if (helpEnglish) translateScanLabel(it) else it }, style = MaterialTheme.typography.bodySmall)
                                 Text(app.packageName, style = MaterialTheme.typography.labelSmall)
                                 TextButton(onClick = { openAppDetails(context, app.packageName) }) {
                                     Text(if (helpEnglish) "App details" else "Detalii aplicație")
@@ -937,6 +937,61 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         }
     }
 }
+
+
+// Display-only translation: scanner findings remain unchanged and are never rescanned on language switch.
+private val scanLabelEnglish = mapOf(
+    "Cameră" to "Camera",
+    "Microfon" to "Microphone",
+    "Locație precisă" to "Precise location",
+    "Locație aproximativă" to "Approximate location",
+    "Locație în fundal" to "Background location",
+    "Contacte" to "Contacts",
+    "Modificare contacte" to "Edit contacts",
+    "Citire SMS" to "Read SMS",
+    "Primire SMS" to "Receive SMS",
+    "Primire MMS" to "Receive MMS",
+    "Primire mesaje WAP Push" to "Receive WAP Push messages",
+    "Trimitere SMS" to "Send SMS",
+    "Citire calendar" to "Read calendar",
+    "Modificare calendar" to "Edit calendar",
+    "Istoric apeluri" to "Call history",
+    "Modificare istoric apeluri" to "Edit call history",
+    "Stare telefon" to "Phone state",
+    "Numere de telefon" to "Phone numbers",
+    "Inițiere apeluri" to "Make phone calls",
+    "Preluare apeluri" to "Answer phone calls",
+    "Senzori corporali" to "Body sensors",
+    "Senzori corporali în fundal" to "Background body sensors",
+    "Recunoașterea activității fizice" to "Physical activity recognition",
+    "Scanare dispozitive Bluetooth" to "Scan Bluetooth devices",
+    "Conectare dispozitive Bluetooth" to "Connect Bluetooth devices",
+    "Detectabilitate Bluetooth" to "Bluetooth discoverability",
+    "Dispozitive Wi-Fi din apropiere" to "Nearby Wi-Fi devices",
+    "Citire stocare partajată (vechi)" to "Read shared storage (legacy)",
+    "Modificare stocare partajată (vechi)" to "Modify shared storage (legacy)",
+    "Fotografii" to "Photos",
+    "Videoclipuri" to "Videos",
+    "Fișiere audio" to "Audio files",
+    "Fotografii/video selectate" to "Selected photos/videos",
+    "Trimitere notificări (nu citire)" to "Post notifications (not read them)",
+    "Serviciu Accessibility activ" to "Active accessibility service",
+    "Acces la notificări activ" to "Notification access enabled",
+    "Administrator dispozitiv activ" to "Active device administrator",
+    "Afișare peste alte aplicații" to "Display over other apps",
+    "Permisiune de solicitare instalare APK" to "Permission to request APK installation",
+    "Acces la toate fișierele" to "All-files access",
+    "Acces la datele de utilizare" to "Usage access",
+    "Un serviciu Accessibility poate observa sau interacționa cu interfața. Unele servicii legitime au nevoie de acest acces." to "An accessibility service can observe or interact with the interface. Some legitimate services need this access.",
+    "Aplicația poate primi notificările afișate de sistem. Verifică dacă recunoști aplicația și motivul accesului." to "The app can receive notifications shown by Android. Check whether you recognize the app and why it has access.",
+    "Administratorii dispozitivului pot avea drepturi speciale de administrare. Nu dezactiva un profil de serviciu sau de securitate fără să știi ce controlează." to "Device administrators can have special management rights. Do not disable a work or security profile without understanding what it controls.",
+    "Permite afișarea de ferestre peste alte aplicații. Este folosit și legitim de unele aplicații; verifică dacă îl recunoști." to "Allows windows to appear over other apps. Some legitimate apps use this; check whether you recognize it.",
+    "Aplicația poate solicita instalarea altor pachete. Această setare nu înseamnă că a instalat ceva fără acord." to "The app can request installation of other packages. This does not mean it installed anything without your consent.",
+    "Aplicația poate gestiona o mare parte din fișierele partajate. Unele aplicații de fișiere sau backup au motive legitime; verifică dacă recunoști aplicația." to "The app can manage much of shared storage. File managers and backup apps may have legitimate reasons; check whether you recognize the app.",
+    "Aplicația poate vedea informații despre utilizarea altor aplicații. Accesul poate fi legitim pentru control parental, automatizare sau monitorizare acceptată." to "The app can see information about other apps' usage. This may be legitimate for parental controls, automation or monitoring you have agreed to."
+)
+
+private fun translateScanLabel(label: String): String = scanLabelEnglish[label] ?: label
 
 private fun launchSettings(context: Context, intent: Intent) {
     runCatching { context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
