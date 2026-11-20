@@ -138,10 +138,10 @@ private fun SafeguardScreen(
                         modifier = Modifier.fillMaxWidth().padding(5.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        val tabs = listOf("Acasă", "Protecție", "Rapoarte")
-                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Security, Icons.Filled.Assessment)
+                        val tabs = if (helpEnglish) listOf("My Phone", "Learn", "Actions") else listOf("Telefonul", "Învață", "Acțiuni")
+                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Assessment, Icons.Filled.Settings)
                         tabs.forEachIndexed { index, title ->
-                            val active = selectedTab == index
+                            val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
                             Surface(
                                 onClick = { selectedTab = index },
                                 modifier = Modifier.weight(1f).height(64.dp),
@@ -178,8 +178,8 @@ private fun SafeguardScreen(
                 DashboardOverview(report != null, scanning)
                 Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.Security, "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 1 }
-                    DashboardTile(Icons.Filled.Notifications, "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile(Icons.Filled.Security, "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 3 }
+                    DashboardTile(Icons.Filled.Notifications, "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 4 }
                     DashboardTile(Icons.Filled.Apps, "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                     }
@@ -191,10 +191,10 @@ private fun SafeguardScreen(
                     DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
                         launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                     }
-                    DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 2 }
+                    DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 4 }
                 }
                 Card(
-                    onClick = { selectedTab = 3 },
+                    onClick = { selectedTab = 5 },
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = paleGreen),
                     modifier = Modifier.fillMaxWidth()
@@ -210,14 +210,53 @@ private fun SafeguardScreen(
                 Text("Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 DeviceHealthCards(context, helpEnglish)
                 }
-                if (selectedTab == 3) {
+                if (selectedTab == 1 || selectedTab == 5) {
                     FoniWiseGlossary(
                         english = helpEnglish,
                         onBack = { selectedTab = 0 },
                         onLanguageChange = { helpEnglish = it }
                     )
                 }
-                if (selectedTab == 1) {
+                if (selectedTab == 2) {
+                    Text(if (helpEnglish) "Recommendations & Actions" else "Recomandări și acțiuni",
+                        style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+                    Text(if (helpEnglish) "Practical steps you control. FoniWise does not change Android settings automatically." else
+                        "Pași practici pe care îi controlezi tu. FoniWise nu modifică automat setările Android.")
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · Manual cache cleaning" else "Cum te poate ajuta? · Curățare manuală cache",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Checking an app's cache may help when it uses too much storage. Clearing cache differs from clearing app data." else
+                                "Verificarea cache-ului poate ajuta când o aplicație ocupă prea mult spațiu. Ștergerea cache-ului diferă de ștergerea datelor aplicației.")
+                            OutlinedButton(onClick = { showCacheGuide = true }) {
+                                Text(if (helpEnglish) "Read steps and warnings" else "Vezi pașii și avertismentele")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · App permissions" else "Cum te poate ajuta? · Permisiunile aplicațiilor",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Review permissions you no longer need. Changing them may affect app features." else
+                                "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
+                            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) {
+                                Text(if (helpEnglish) "Open Apps settings" else "Deschide Setări aplicații")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "How can it help you? · Animation scales" else "Cum te poate ajuta? · Scara animațiilor",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "At 0.5x, transitions can feel faster without improving CPU performance. Record original values first." else
+                                "La 0,5x, tranzițiile pot părea mai rapide fără să crească performanța procesorului. Notează întâi valorile inițiale.")
+                            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)) }) {
+                                Text(if (helpEnglish) "Open Developer options page" else "Deschide Opțiuni pentru dezvoltatori")
+                            }
+                        }
+                    }
+                }
+                if (selectedTab == 3) {
                 Card(
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
@@ -278,7 +317,7 @@ private fun SafeguardScreen(
                 }
 
                 }
-                if (selectedTab == 2) {
+                if (selectedTab == 4) {
                 Section("Rapoarte și activitate", "Inspectorul notificărilor: identifică local sursele notificărilor.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
