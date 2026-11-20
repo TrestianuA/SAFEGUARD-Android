@@ -724,13 +724,13 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Stocare", fontWeight = FontWeight.Bold, color = green)
+            Text(if (helpEnglish) "Storage" else "Stocare", fontWeight = FontWeight.Bold, color = green)
             if (storage != null && hasValidStorageReading(storage.first, storage.second)) {
-                Text("Utilizați: %.1f GB din %.1f GB".format(
+                Text((if (helpEnglish) "Used: %.1f GB of %.1f GB" else "Utilizați: %.1f GB din %.1f GB").format(
                     (storage.first - storage.second) / 1073741824.0,
                     storage.first / 1073741824.0
                 ))
-            } else Text("Date indisponibile")
+            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "SAFEGUARD does not measure each app’s cache or delete files automatically." else "SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
