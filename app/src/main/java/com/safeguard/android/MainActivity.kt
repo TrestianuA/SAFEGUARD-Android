@@ -157,13 +157,13 @@ private fun SafeguardScreen(
                         modifier = Modifier.fillMaxWidth().padding(5.dp),
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        val tabs = if (helpEnglish) listOf("My Phone", "Learn", "Actions") else listOf("Telefonul", "Învață", "Acțiuni")
+                        val tabs = if (helpEnglish) listOf("My phone", "Learn about\nyour phone", "Recommendations\nand actions") else listOf("Telefonul meu", "Învață despre\ntelefon", "Recomandări\nși acțiuni")
                         val icons = listOf(Icons.Filled.Home, Icons.Filled.Assessment, Icons.Filled.Settings)
                         tabs.forEachIndexed { index, title ->
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
                             Surface(
                                 onClick = { selectedTab = index },
-                                modifier = Modifier.weight(1f).height(64.dp),
+                                modifier = Modifier.weight(1f).height(78.dp),
                                 shape = RoundedCornerShape(28.dp),
                                 color = if (active) Color(0xFF9EEA47) else Color.Transparent,
                                 contentColor = if (active) navy else Color.White
@@ -178,7 +178,9 @@ private fun SafeguardScreen(
                                         title,
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                                        maxLines = 1
+                                        maxLines = 2,
+                                        textAlign = TextAlign.Center,
+                                        lineHeight = 14.sp
                                     )
                                 }
                             }
