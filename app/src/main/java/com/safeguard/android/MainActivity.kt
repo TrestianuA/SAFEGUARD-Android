@@ -103,6 +103,7 @@ private fun SafeguardScreen(
     var showPermissionsGuide by remember { mutableStateOf(false) }
     var showFraudGuide by remember { mutableStateOf(false) }
     var showSecuritySteps by remember { mutableStateOf(false) }
+    var showDeveloperGuide by remember { mutableStateOf(false) }
     val languagePreferences = remember(context) {
         context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
     }
@@ -297,6 +298,16 @@ private fun SafeguardScreen(
                             }
                         }
                     }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Understand advanced Android settings, risks and safe defaults before making changes."
+                                else "Înțelege setările Android avansate, riscurile și valorile recomandate înainte să modifici ceva.")
+                            OutlinedButton(onClick = { showDeveloperGuide = true }) {
+                                Text(if (helpEnglish) "Read the guide" else "Citește ghidul")
+                            }
+                        }
+                    }
                     FoniWiseGlossary(
                         english = helpEnglish,
                         onBack = { selectedTab = 0 },
@@ -464,6 +475,13 @@ private fun SafeguardScreen(
         }
     }
 
+    if (showDeveloperGuide) {
+        DeveloperOptionsGuideDialog(
+            english = helpEnglish,
+            onDismiss = { showDeveloperGuide = false },
+            onSettings = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)) }
+        )
+    }
     if (showSecuritySteps) {
         SecurityStepsDialog(
             english = helpEnglish,
@@ -750,6 +768,49 @@ private fun DashboardTile(
             Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
         }
     }
+}
+
+@Composable
+private fun DeveloperOptionsGuideDialog(
+    english: Boolean,
+    onDismiss: () -> Unit,
+    onSettings: () -> Unit
+) {
+    val topics = if (english) listOf(
+        "What is this menu?" to "Developer options are advanced Android controls intended mainly for testing and troubleshooting. They are usually hidden. You do not need to enable them for everyday phone use.",
+        "How to find it" to "On many phones, go to Settings → About phone → Software information → Build number and tap it seven times. Enter your screen lock if asked. On Samsung, Developer options usually appears near the bottom of Settings. Paths differ by model; do not activate this menu without a reason.",
+        "Animation scales" to "Window, transition and animator duration scales control interface animation length. At 0.5x, transitions may feel faster, but CPU power and physical RAM do not increase. Write down the original values and restore them if needed.",
+        "USB and wireless debugging" to "These features allow development tools to communicate with the phone after authorization or pairing. Keep them off unless actively using trusted tools. Never approve an unfamiliar computer or pairing request; turn debugging off when finished.",
+        "Background process limit" to "Restricting background processes can interrupt notifications, music, syncing and switching between apps. Android already manages memory. Keep the default unless you are deliberately testing an app.",
+        "Graphics and GPU settings" to "Options such as Force 4x MSAA may affect battery use, heat, graphics quality or compatibility. They are not universal performance boosts. Leave defaults unchanged without a specific reason.",
+        "OEM unlocking" to "This advanced option relates to bootloader unlocking on supported phones. Actually unlocking a bootloader can erase data and change security protections. Seeing the option does not mean the phone is unlocked. Do not use it as a routine optimization.",
+        "Safe approach" to "Change only one setting at a time, note its original value and observe the result. If unsure, leave it alone. FoniWise does not enable Developer options or change these settings automatically."
+    ) else listOf(
+        "Ce este acest meniu?" to "Opțiunile pentru dezvoltatori sunt controale Android avansate, destinate în principal testării și depanării. De obicei sunt ascunse. Nu trebuie activate pentru utilizarea obișnuită a telefonului.",
+        "Cum îl găsești" to "Pe multe telefoane: Setări → Despre telefon → Informații software → Număr versiune (Build number), apoi apasă de șapte ori. Introdu codul de blocare dacă este cerut. Pe Samsung, meniul apare de obicei spre finalul Setărilor. Traseul diferă după model; nu activa meniul fără un motiv.",
+        "Scara animațiilor" to "Scara animațiilor ferestrelor, tranzițiilor și animatorului controlează durata efectelor vizuale. La 0,5x, trecerile pot părea mai rapide, dar puterea procesorului și memoria RAM fizică nu cresc. Notează valorile inițiale și revino la ele dacă este nevoie.",
+        "Depanare USB și wireless" to "Aceste funcții permit instrumentelor de dezvoltare să comunice cu telefonul după autorizare sau asociere. Lasă-le dezactivate dacă nu folosești activ instrumente de încredere. Nu aproba computere sau cereri de asociere necunoscute; oprește depanarea când termini.",
+        "Limita proceselor în fundal" to "Restricționarea proceselor poate întrerupe notificările, muzica, sincronizarea și trecerea între aplicații. Android gestionează deja memoria. Păstrează valoarea implicită dacă nu testezi intenționat o aplicație.",
+        "Setări grafice și GPU" to "Opțiuni precum Forțează 4x MSAA pot afecta consumul bateriei, temperatura, calitatea grafică sau compatibilitatea. Nu sunt soluții universale pentru performanță. Păstrează valorile implicite fără un motiv concret.",
+        "Deblocare OEM" to "Această opțiune avansată privește deblocarea bootloaderului pe telefoanele compatibile. Deblocarea efectivă poate șterge date și modifica protecțiile de securitate. Prezența opțiunii nu înseamnă că telefonul este deblocat. Nu o folosi pentru optimizări obișnuite.",
+        "Cum procedezi în siguranță" to "Schimbă o singură setare pe rând, notează valoarea inițială și observă rezultatul. Dacă nu ești sigur, las-o neschimbată. FoniWise nu activează Opțiunile pentru dezvoltatori și nu modifică automat aceste setări."
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(24.dp),
+        containerColor = Color.White,
+        title = { Text(if (english) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", color = navy) },
+        text = {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                topics.forEach { (heading, explanation) ->
+                    Text(heading, color = green, fontWeight = FontWeight.Bold)
+                    Text(explanation, color = navy)
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(if (english) "Close" else "Închide") } },
+        dismissButton = { TextButton(onClick = onSettings) { Text(if (english) "Open Android settings" else "Deschide setările Android") } }
+    )
 }
 
 @Composable
