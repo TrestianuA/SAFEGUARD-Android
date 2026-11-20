@@ -1331,9 +1331,9 @@ private fun DeviceHealthCards(
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (helpEnglish) "Battery" else "Baterie", fontWeight = FontWeight.Bold, color = green)
             Text(if (battery == null) (if (helpEnglish) "Data unavailable" else "Date indisponibile") else (if (helpEnglish) "Battery level: $battery%" else "Nivel baterie: $battery%"))
-            Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "The percentage shows current charge, not battery health or which app uses the most power." else "Procentul arată încărcarea curentă, nu sănătatea bateriei sau ce aplicație consumă cel mai mult.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { showBatteryGuide = true }) {
-                Text(if (helpEnglish) "Battery saving guide" else "Ghid pentru economisirea bateriei")
+                Text(if (helpEnglish) "Understand battery usage and power saving" else "Înțelege consumul și economisirea bateriei")
             }
             OutlinedButton(onClick = { battery = readBatteryLevel() }) { Text(if (helpEnglish) "Refresh battery" else "Actualizează bateria") }
             OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text(if (helpEnglish) "Battery settings" else "Setările bateriei") }
