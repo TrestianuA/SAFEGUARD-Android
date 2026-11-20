@@ -39,3 +39,12 @@
 - Previzualizarea **nu este pictograma Android finală**: trebuie verificată la dimensiuni mici și în măștile adaptive Android înainte de aprobare.
 - În `AndroidManifest.xml`, eticheta rămâne `SAFEGUARD`, iar pictograma rămâne `@drawable/safeguard_logo_simplu`; în `app/build.gradle.kts`, `applicationId` rămâne `com.safeguard.android` și versiunea `0.7.3-rc1`.
 - Nu se activează nicio resursă FoniWise în aplicație prin acest PR.
+
+## Previzualizări pentru măști Android (neaprobate)
+
+Au fost create două fișiere PNG cu transparență, pornind de la previzualizarea pătrată de 512 × 512 px și aplicând numai măști geometrice, fără modificarea desenului:
+
+- `/FoniWise/Branding/FoniWise_icon_round_preview_neaprobat.png` — mască circulară.
+- `/FoniWise/Branding/FoniWise_icon_rounded_preview_neaprobat.png` — mască pătrată cu colțuri rotunjite.
+
+Acestea sunt doar simulări vizuale, **nu** resurse Android adaptive definitive. Originalul complet aprobat rămâne separat și nemodificat. Nu activați aceste fișiere în manifest fără evaluarea lizibilității la dimensiuni mici și aprobarea utilizatorului.
