@@ -98,7 +98,21 @@ private fun SafeguardScreen(
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
-    var helpEnglish by rememberSaveable { mutableStateOf(false) }
+    val languagePreferences = remember(context) {
+        context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
+    }
+    val savedLanguage = remember(languagePreferences) { languagePreferences.getString("language", null) }
+    var chosenLanguage by remember { mutableStateOf(savedLanguage) }
+    var helpEnglish by rememberSaveable { mutableStateOf(savedLanguage == "en") }
+    fun chooseLanguage(english: Boolean) {
+        helpEnglish = english
+        chosenLanguage = if (english) "en" else "ro"
+        languagePreferences.edit().putString("language", chosenLanguage).apply()
+    }
+    if (chosenLanguage == null) {
+        FoniWiseLanguageWelcome(onChooseLanguage = ::chooseLanguage)
+        return
+    }
 
     fun startScan() {
         scanning = true
@@ -173,7 +187,7 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
+                if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
@@ -232,7 +246,7 @@ private fun SafeguardScreen(
                     FoniWiseGlossary(
                         english = helpEnglish,
                         onBack = { selectedTab = 0 },
-                        onLanguageChange = { helpEnglish = it }
+                        onLanguageChange = { chooseLanguage(it) }
                     )
                 }
                 if (selectedTab == 2) {
@@ -395,7 +409,7 @@ private fun SafeguardScreen(
             adviceRo = "Curăță cache-ul doar dacă o aplicație ocupă prea mult spațiu sau nu funcționează corect. Începe cu aplicația care are problema și verifică spațiul liber după aceea. Nu este necesar să ștergi cache-ul tuturor aplicațiilor în fiecare zi. Aplicația poate crea din nou fișiere temporare la următoarea utilizare, deci spațiul eliberat poate fi temporar.",
             adviceEn = "Clear cache only when an app uses too much storage or is not working correctly. Start with the affected app and check available storage afterward. You do not need to clear every app's cache each day. The app may recreate temporary files the next time you use it, so freed space may be temporary.",
             english = helpEnglish,
-            onLanguageChange = { helpEnglish = it },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showCacheGuide = false },
             onSettings = {
                 showCacheGuide = false
@@ -417,7 +431,7 @@ private fun SafeguardScreen(
             adviceRo = "Rulează verificarea după instalarea unei aplicații noi sau când observi un comportament neobișnuit. Dacă apare o permisiune pe care nu o înțelegi, deschide detaliile aplicației în setările Android și verifică dacă are nevoie de ea. Nu elimina permisiuni la întâmplare: unele sunt necesare funcționării aplicației.",
             adviceEn = "Run a check after installing a new app or if your phone behaves unexpectedly. If a permission seems unfamiliar, open that app’s details in Android settings and decide whether it needs the access. Do not remove permissions at random: some are needed for the app to work.",
             english = helpEnglish,
-            onLanguageChange = { helpEnglish = it },
+            onLanguageChange = { chooseLanguage(it) },
             onDismiss = { showHelp = false }
         )
     }
@@ -461,6 +475,55 @@ private fun SafeguardScreen(
             },
             dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
         )
+    }
+}
+
+@Composable
+private fun FoniWiseLanguageWelcome(onChooseLanguage: (Boolean) -> Unit) {
+    var english by rememberSaveable { mutableStateOf(false) }
+    MaterialTheme(colorScheme = lightColorScheme(primary = green, background = paleBlue, surface = Color.White)) {
+        Column(
+            modifier = Modifier.fillMaxSize().background(paleBlue).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Card(
+                colors = CardDefaults.cardColors(containerColor = green),
+                shape = RoundedCornerShape(24.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(Modifier.fillMaxWidth().padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    BrandLogo(108.dp)
+                    Spacer(Modifier.height(10.dp))
+                    Text("FoniWise", color = Color.White, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+                    Text(if (english) "Know Your Phone" else "Cunoaște-ți telefonul", color = Color.White)
+                }
+            }
+            Spacer(Modifier.height(28.dp))
+            Text("Alege limba / Choose your language", style = MaterialTheme.typography.titleLarge, color = navy, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(12.dp))
+            Text(if (english) "You can change your language at any time." else "Poți schimba limba oricând.", color = navy, textAlign = TextAlign.Center)
+            Spacer(Modifier.height(22.dp))
+            listOf(false to "🇷🇴 Română", true to "🇬🇧 English").forEach { (optionEnglish, label) ->
+                Surface(
+                    onClick = { english = optionEnglish },
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    color = if (english == optionEnglish) paleGreen else Color.White,
+                    border = BorderStroke(if (english == optionEnglish) 2.dp else 1.dp, green)
+                ) {
+                    Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(selected = english == optionEnglish, onClick = { english = optionEnglish })
+                        Spacer(Modifier.width(10.dp))
+                        Text(label, color = navy, style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+            }
+            Spacer(Modifier.height(22.dp))
+            Button(onClick = { onChooseLanguage(english) }, modifier = Modifier.fillMaxWidth()) {
+                Text(if (english) "Continue" else "Continuă")
+            }
+        }
     }
 }
 
