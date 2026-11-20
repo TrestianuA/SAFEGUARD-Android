@@ -299,7 +299,7 @@ private fun SafeguardScreen(
                     }
                 }
                 }
-                Text("SAFEGUARD 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+                Text("FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
@@ -310,10 +310,10 @@ private fun SafeguardScreen(
             titleEn = "Cache Advisor",
             summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Cum te poate ajuta: poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
             summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. How it can help you: you may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
-            doesRo = "SAFEGUARD îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
-            doesEn = "SAFEGUARD explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
-            limitsRo = "SAFEGUARD nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
-            limitsEn = "SAFEGUARD does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
+            doesRo = "FoniWise îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
+            doesEn = "FoniWise explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
+            limitsRo = "FoniWise nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
+            limitsEn = "FoniWise does not automatically clear other apps' caches and cannot guarantee a faster phone. Warning: Clear data or Clear storage is a different action and may remove settings or signed-in sessions.",
             adviceRo = "Curăță cache-ul doar dacă o aplicație ocupă prea mult spațiu sau nu funcționează corect. Începe cu aplicația care are problema și verifică spațiul liber după aceea. Nu este necesar să ștergi cache-ul tuturor aplicațiilor în fiecare zi. Aplicația poate crea din nou fișiere temporare la următoarea utilizare, deci spațiul eliberat poate fi temporar.",
             adviceEn = "Clear cache only when an app uses too much storage or is not working correctly. Start with the affected app and check available storage afterward. You do not need to clear every app's cache each day. The app may recreate temporary files the next time you use it, so freed space may be temporary.",
             english = helpEnglish,
@@ -328,10 +328,10 @@ private fun SafeguardScreen(
 
     if (showHelp) {
         SafeguardInfoDialog(
-            titleRo = "Despre SAFEGUARD",
-            titleEn = "About SAFEGUARD",
-            summaryRo = "SAFEGUARD te ajută să înțelegi anumite setări și riscuri ale telefonului. Verificările se fac pe dispozitiv, fără să fie nevoie de un cont.",
-            summaryEn = "SAFEGUARD helps you understand some phone settings and possible risks. Checks run on your device, without requiring an account.",
+            titleRo = "Despre FoniWise",
+            titleEn = "About FoniWise",
+            summaryRo = "FoniWise te ajută să înțelegi anumite setări și riscuri ale telefonului. Verificările se fac pe dispozitiv, fără să fie nevoie de un cont.",
+            summaryEn = "FoniWise helps you understand some phone settings and possible risks. Checks run on your device, without requiring an account.",
             doesRo = "Poate analiza aplicațiile pe care Android îi permite să le vadă și unele permisiuni importante. O permisiune este un drept acordat unei aplicații, de exemplu accesul la cameră sau locație. Rezultatele te ajută să decizi ce merită verificat în setările telefonului.",
             doesEn = "It can examine apps that Android allows it to see and some important permissions. A permission is access granted to an app, such as the camera or location. The results help you decide what to review in your phone settings.",
             limitsRo = "Nu este un antivirus: nu verifică fiecare fișier, nu poate garanta că telefonul este lipsit de amenințări și nu blochează automat aplicațiile. Nu oferă protecție antivirus în timp real.",
@@ -348,7 +348,7 @@ private fun SafeguardScreen(
         AlertDialog(
             onDismissRequest = { showConsent = false },
             title = { Text("Acord pentru scanarea locală") },
-            text = { Text("SAFEGUARD va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
+            text = { Text("FoniWise va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
             confirmButton = {
                 TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text("Accept și scanează") }
             },
@@ -359,7 +359,7 @@ private fun SafeguardScreen(
         AlertDialog(
             onDismissRequest = { showNotificationConsent = false },
             title = { Text("Acces special la notificări") },
-            text = { Text("Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. SAFEGUARD folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
+            text = { Text("Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. FoniWise folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
             confirmButton = {
                 TextButton(onClick = {
                     showNotificationConsent = false
@@ -373,7 +373,7 @@ private fun SafeguardScreen(
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
             title = { Text("Ștergi istoricul local?") },
-            text = { Text("Vor fi șterse toate înregistrările păstrate de SAFEGUARD.") },
+            text = { Text("Vor fi șterse toate înregistrările păstrate de FoniWise.") },
             confirmButton = {
                 TextButton(onClick = {
                     NotificationLogStore(context).clear()
@@ -396,7 +396,7 @@ private fun BrandLogo(resourceName: String, size: androidx.compose.ui.unit.Dp) {
     if (id != 0) {
         Image(
             painter = painterResource(id),
-            contentDescription = "Logo SAFEGUARD",
+            contentDescription = "Sigla SAFEGUARD (temporară)",
             modifier = Modifier.size(size),
             contentScale = ContentScale.Fit
         )
@@ -644,7 +644,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 )
             }
             OutlinedButton(onClick = { memory = readDeviceMemory(context) }) { Text(if (helpEnglish) "Refresh RAM" else "Actualizează RAM") }
-            Text(if (helpEnglish) "SAFEGUARD does not stop processes automatically or force RAM to be freed." else "SAFEGUARD nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not stop processes automatically or force RAM to be freed." else "FoniWise nu oprește automat procese și nu eliberează forțat RAM.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Review apps" else "Verifică aplicațiile") }
         }
     }
@@ -654,16 +654,16 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             titleEn = "ⓘ RAM Monitor",
             summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere.",
             summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files.",
-            doesRo = "SAFEGUARD citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
-            doesEn = "SAFEGUARD reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
-            limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. SAFEGUARD nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
-            limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. SAFEGUARD does not close apps for you or forcibly free RAM.",
+            doesRo = "FoniWise citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
+            doesEn = "FoniWise reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
+            limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. FoniWise nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
+            limitsEn = "Used memory does not automatically mean a problem: Android manages RAM itself. FoniWise does not close apps for you or forcibly free RAM.",
             adviceRo = if (memorySnapshot != null && hasValidRamReading(memorySnapshot) && memorySnapshot.lowMemory)
                 "Android raportează presiune asupra memoriei. Dacă telefonul este lent, închide doar aplicațiile pe care nu le mai folosești și verifică dacă problema persistă. Poți reporni telefonul dacă încetinirea continuă."
-                else if (!hasValidRamReading(memorySnapshot)) "Măsurarea RAM nu este disponibilă acum. Apasă «Actualizează RAM» pentru a încerca din nou. SAFEGUARD nu poate aprecia presiunea asupra memoriei fără o citire validă." else "Android nu raportează acum lipsă critică de memorie. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
+                else if (!hasValidRamReading(memorySnapshot)) "Măsurarea RAM nu este disponibilă acum. Apasă «Actualizează RAM» pentru a încerca din nou. FoniWise nu poate aprecia presiunea asupra memoriei fără o citire validă." else "Android nu raportează acum lipsă critică de memorie. Dacă telefonul funcționează bine, nu trebuie să închizi aplicații doar pentru a vedea mai mult RAM liber. Dacă apar încetiniri, actualizează măsurătoarea.",
             adviceEn = if (memorySnapshot != null && hasValidRamReading(memorySnapshot) && memorySnapshot.lowMemory)
                 "Android reports memory pressure. If your phone is slow, close only apps you no longer need and see whether the problem continues. Restarting the phone may help if it remains slow."
-                else if (!hasValidRamReading(memorySnapshot)) "RAM readings are unavailable right now. Tap Refresh RAM to try again. SAFEGUARD cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
+                else if (!hasValidRamReading(memorySnapshot)) "RAM readings are unavailable right now. Tap Refresh RAM to try again. FoniWise cannot assess memory pressure without a valid reading." else "Android is not currently reporting critically low memory. If your phone works well, there is no need to close apps just to show more free RAM. Refresh the reading if you notice slowdowns.",
             english = ramInfoEnglish,
             onLanguageChange = { ramInfoEnglish = it },
             onDismiss = { showRamInfo = false }
@@ -696,10 +696,10 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             titleEn = "ⓘ Android animations",
             summaryRo = "Animațiile sunt efectele de mișcare pe care le vezi când deschizi o aplicație sau treci între ecrane. Ele fac schimbările mai ușor de urmărit, dar pe unele telefoane pot crea senzația de întârziere.",
             summaryEn = "Animations are the motion effects you see when opening an app or moving between screens. They can make changes easier to follow, but on some phones they may feel slow.",
-            doesRo = "SAFEGUARD îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
-            doesEn = "SAFEGUARD shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
-            limitsRo = "SAFEGUARD nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
-            limitsEn = "SAFEGUARD does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
+            doesRo = "FoniWise îți arată unde poți căuta opțiunea Android pentru reducerea animațiilor: Setări → Accesibilitate → Culori și mișcare / Îmbunătățiri pentru vizibilitate → Elimină animațiile. Denumirile diferă după producător și versiunea Android.",
+            doesEn = "FoniWise shows where to look for Android's animation reduction option: Settings → Accessibility → Color and motion / Visibility enhancements → Remove animations. Names vary by manufacturer and Android version.",
+            limitsRo = "FoniWise nu schimbă automat setările, nu activează Opțiunile pentru dezvoltatori și nu mărește memoria RAM fizică. Reducerea animațiilor poate schimba doar felul în care se simte navigarea.",
+            limitsEn = "FoniWise does not change settings automatically, enable Developer options or increase physical RAM. Reducing animations may only change how navigation feels.",
             adviceRo = "Încearcă reducerea animațiilor doar dacă mișcările te deranjează sau telefonul pare lent la schimbarea ecranelor. Verifică dacă îți place rezultatul. Dacă preferi efectele inițiale, revino în aceeași pagină de Accesibilitate și dezactivează opțiunea «Elimină animațiile». Dacă nu găsești opțiunea, lasă setările neschimbate.",
             adviceEn = "Try reducing animations if the motion bothers you or switching screens feels slow. Check whether you prefer the result. To restore the original effects, return to the same Accessibility page and turn off Remove animations. If you cannot find the option, leave the settings unchanged.",
             english = animationInfoEnglish,
@@ -715,7 +715,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Baterie", fontWeight = FontWeight.Bold, color = green)
             Text(if (battery == null) "Date indisponibile" else "Nivel baterie: $battery%")
-            Text("SAFEGUARD nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            Text("FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text("Setările bateriei") }
         }
     }
@@ -730,9 +730,9 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             } else Text("Date indisponibile")
             Text(if (helpEnglish) "ⓘ Cache contains temporary files used by apps. It is not the same as an app’s personal data." else "ⓘ Cache-ul conține fișiere temporare folosite de aplicații. Nu este același lucru cu datele personale ale aplicației.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "Cache Advisor: if an app uses too much storage, open Android Settings → Apps → select the app → Storage → Clear cache, if available. Do not tap Clear data unless you understand the consequences: you may lose settings or sign-in information." else "Cache Advisor: dacă o aplicație ocupă prea mult spațiu, deschide Setări Android → Aplicații → alege aplicația → Stocare → Șterge memoria cache, dacă opțiunea este disponibilă. Nu apăsa «Șterge datele» fără să înțelegi consecințele: poți pierde setări sau autentificări.", style = MaterialTheme.typography.bodySmall)
-            Text(if (helpEnglish) "SAFEGUARD does not measure each app’s cache or delete files automatically." else "SAFEGUARD nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not measure each app’s cache or delete files automatically." else "FoniWise nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Cache Advisor · App settings" else "Cache Advisor · Setări aplicații") }
-            Text(if (helpEnglish) "SAFEGUARD does not read or delete personal files." else "SAFEGUARD nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
+            Text(if (helpEnglish) "FoniWise does not read or delete personal files." else "FoniWise nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text("Setările stocării") }
         }
     }
