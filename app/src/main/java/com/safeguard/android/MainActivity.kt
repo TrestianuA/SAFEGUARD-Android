@@ -796,6 +796,11 @@ internal fun hasValidRamReading(totalBytes: Long, availableBytes: Long): Boolean
 private fun hasValidRamReading(info: ActivityManager.MemoryInfo?): Boolean =
     info != null && hasValidRamReading(info.totalMem, info.availMem)
 
+/** Returns a percentage only for valid Android battery level/scale readings. */
+internal fun batteryPercentage(level: Int, scale: Int): Int? =
+    if (level < 0 || scale <= 0 || level > scale) null
+    else (level.toLong() * 100L / scale).toInt()
+
 @Composable
 private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var memory by remember { mutableStateOf(readDeviceMemory(context)) }
@@ -808,8 +813,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
         val intent = context.registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
         val level = intent?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
         val scale = intent?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
-        if (level < 0 || scale <= 0 || level > scale) null
-        else (level.toLong() * 100L / scale).toInt()
+        batteryPercentage(level, scale)
     }.getOrNull()
     var battery by remember { mutableStateOf(readBatteryLevel()) }
     fun readInternalStorage(): Pair<Long, Long>? = runCatching {
