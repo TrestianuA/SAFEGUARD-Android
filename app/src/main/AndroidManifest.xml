@@ -8,14 +8,14 @@
     <application
         android:allowBackup="false"
         android:icon="@drawable/safeguard_logo_simplu"
-        android:label="SAFEGUARD"
+        android:label="FoniWise"
         android:supportsRtl="true"
         android:theme="@style/Theme.Safeguard"
         android:usesCleartextTraffic="false">
 
         <service
             android:name=".NotificationCaptureService"
-            android:label="SAFEGUARD – Inspector notificări"
+            android:label="FoniWise – Inspector notificări"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
             android:exported="true">
             <intent-filter>
