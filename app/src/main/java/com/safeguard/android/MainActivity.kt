@@ -101,6 +101,7 @@ private fun SafeguardScreen(
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
     var showPermissionsGuide by remember { mutableStateOf(false) }
+    var showFraudGuide by remember { mutableStateOf(false) }
     val languagePreferences = remember(context) {
         context.applicationContext.getSharedPreferences("foniwise_language", Context.MODE_PRIVATE)
     }
@@ -319,6 +320,17 @@ private fun SafeguardScreen(
                     }
                     Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(if (helpEnglish) "Fraud and phishing safety" else "Protecție antifraudă și antiphishing",
+                                fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "Learn warning signs in messages, links and calls. No private messages are read." else
+                                "Recunoaște semnele de alarmă din mesaje, linkuri și apeluri. Nu sunt citite mesaje personale.")
+                            OutlinedButton(onClick = { showFraudGuide = true }) {
+                                Text(if (helpEnglish) "Open safety checklist" else "Deschide lista de verificare")
+                            }
+                        }
+                    }
+                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text(if (helpEnglish) "How can it help you? · Animation scales" else "Cum te poate ajuta? · Scara animațiilor",
                                 fontWeight = FontWeight.Bold, color = navy)
                             Text(if (helpEnglish) "At 0.5x, transitions can feel faster without improving CPU performance. Record original values first." else
@@ -435,6 +447,25 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "FoniWise 0.7.3-rc1 • local analysis • no account or ads" else "FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
+    }
+
+    if (showFraudGuide) {
+        SafeguardInfoDialog(
+            titleRo = "Ghid antifraudă și antiphishing",
+            titleEn = "Fraud and phishing safety guide",
+            summaryRo = "Escrocii pot imita bănci, curieri, instituții sau persoane cunoscute prin SMS, e-mail, mesaje și apeluri. Un mesaj urgent, o amenințare sau o ofertă prea bună pot fi semne de alarmă.",
+            summaryEn = "Scammers may impersonate banks, delivery services, institutions or people you know via texts, emails, messages and calls. Urgency, threats or offers that seem too good to be true can be warning signs.",
+            doesRo = "Înainte de a deschide un link: 1. Oprește-te dacă mesajul cere acțiune imediată. 2. Verifică atent adresa și expeditorul; numele afișat poate fi falsificat. 3. Intră separat în aplicația sau site-ul oficial, fără să folosești linkul primit. 4. Nu introduce parole, PIN-uri sau coduri de autentificare dintr-un mesaj neașteptat.",
+            doesEn = "Before opening a link: 1. Pause if the message demands immediate action. 2. Check the address and sender carefully; displayed names can be spoofed. 3. Open the official app or website independently, not through the received link. 4. Do not enter passwords, PINs or verification codes requested by an unexpected message.",
+            limitsRo = "FoniWise nu citește automat SMS-uri, conversații sau e-mailuri și nu poate garanta că un mesaj ori un link este sigur. Acest ghid este educativ, nu un detector automat de fraude.",
+            limitsEn = "FoniWise does not automatically read texts, chats or emails and cannot guarantee that a message or link is safe. This is an educational guide, not an automatic fraud detector.",
+            adviceRo = "Dacă cineva îți cere un cod bancar sau să transferi urgent bani, închide apelul și contactează instituția prin numărul din aplicația oficială sau de pe card. Dacă ai introdus deja date sensibile, schimbă parola prin canalul oficial și contactează imediat banca atunci când sunt implicate date bancare. Nu instala aplicații de control la distanță la cererea unui apelant necunoscut.",
+            adviceEn = "If someone asks for a banking code or an urgent transfer, end the call and contact the institution using the number in its official app or on your card. If you already shared sensitive information, change the password through the official channel and contact your bank immediately if banking data is involved. Never install remote-control apps at an unknown caller's request.",
+            english = helpEnglish,
+            onLanguageChange = { },
+            onDismiss = { showFraudGuide = false },
+            onSettings = null
+        )
     }
 
     if (showPermissionsGuide) {
