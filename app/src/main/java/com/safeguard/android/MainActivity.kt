@@ -339,7 +339,7 @@ private fun SafeguardScreen(
                                 Text(app.grantedPermissions.joinToString(" • "), style = MaterialTheme.typography.bodySmall)
                                 Text(app.packageName, style = MaterialTheme.typography.labelSmall)
                                 TextButton(onClick = { openAppDetails(context, app.packageName) }) {
-                                    Text("Detalii aplicație")
+                                    Text(if (helpEnglish) "App details" else "Detalii aplicație")
                                 }
                             }
                         }
@@ -350,48 +350,48 @@ private fun SafeguardScreen(
 
                 }
                 if (selectedTab == 4) {
-                Section("Rapoarte și activitate", "Inspectorul notificărilor: identifică local sursele notificărilor.")
+                Section(if (helpEnglish) "Reports and activity" else "Rapoarte și activitate", if (helpEnglish) "Notification inspector: identifies notification sources locally." else "Inspectorul notificărilor: identifică local sursele notificărilor.")
                 Card {
                     Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
-                            if (notificationAccessEnabled) "Acces la notificări activ" else "Acces la notificări dezactivat",
+                            if (notificationAccessEnabled) (if (helpEnglish) "Notification access enabled" else "Acces la notificări activ") else (if (helpEnglish) "Notification access disabled" else "Acces la notificări dezactivat"),
                             fontWeight = FontWeight.Bold,
                             color = green
                         )
-                        Text("Păstrează local maximum 100 de înregistrări: numai pachetul-sursă și ora. Nu citește titlul, textul sau expeditorul notificării.", style = MaterialTheme.typography.bodySmall)
+                        Text(if (helpEnglish) "Stores up to 100 local records: only the source package and time. It does not read notification titles, message text or senders." else "Păstrează local maximum 100 de înregistrări: numai pachetul-sursă și ora. Nu citește titlul, textul sau expeditorul notificării.", style = MaterialTheme.typography.bodySmall)
                         if (!notificationAccessEnabled) {
-                            Button(onClick = { showNotificationConsent = true }) { Text("Configurează inspectorul") }
+                            Button(onClick = { showNotificationConsent = true }) { Text(if (helpEnglish) "Set up inspector" else "Configurează inspectorul") }
                         } else {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                OutlinedButton(onClick = onRefreshNotifications) { Text("Reîmprospătează") }
+                                OutlinedButton(onClick = onRefreshNotifications) { Text(if (helpEnglish) "Refresh" else "Reîmprospătează") }
                                 TextButton(onClick = {
                                     launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                                }) { Text("Gestionează accesul") }
+                                }) { Text(if (helpEnglish) "Manage access" else "Gestionează accesul") }
                             }
                         }
                         if (notificationEvents.isEmpty()) {
-                            Text("Nu există înregistrări locale.")
+                            Text(if (helpEnglish) "No local records." else "Nu există înregistrări locale.")
                         } else {
-                            Text("${notificationEvents.size} înregistrări locale")
-                            TextButton(onClick = { showDeleteConfirmation = true }) { Text("Șterge istoricul") }
+                            Text(if (helpEnglish) "${notificationEvents.size} local records" else "${notificationEvents.size} înregistrări locale")
+                            TextButton(onClick = { showDeleteConfirmation = true }) { Text(if (helpEnglish) "Clear history" else "Șterge istoricul") }
                             val sources = NotificationFrequencyAnalyzer.recentSources(notificationEvents, System.currentTimeMillis())
-                            Text("Surse în ultimele 15 minute", fontWeight = FontWeight.Bold)
-                            if (sources.isEmpty()) Text("Nu există evenimente recente.")
+                            Text(if (helpEnglish) "Sources in the last 15 minutes" else "Surse în ultimele 15 minute", fontWeight = FontWeight.Bold)
+                            if (sources.isEmpty()) Text(if (helpEnglish) "No recent events." else "Nu există evenimente recente.")
                             sources.take(5).forEach { source ->
-                                Text("${source.packageName}: ${source.count} notificări" +
-                                    if (source.count >= NotificationFrequencyAnalyzer.NOTICE_THRESHOLD) " · Frecvență ridicată" else "")
+                                Text("${source.packageName}: ${source.count} " + (if (helpEnglish) "notifications" else "notificări") +
+                                    if (source.count >= NotificationFrequencyAnalyzer.NOTICE_THRESHOLD) (if (helpEnglish) " · High frequency" else " · Frecvență ridicată") else "")
                             }
-                            Text("Frecvența ridicată nu indică automat malware.", style = MaterialTheme.typography.bodySmall)
+                            Text(if (helpEnglish) "High notification frequency does not automatically indicate malware." else "Frecvența ridicată nu indică automat malware.", style = MaterialTheme.typography.bodySmall)
                             notificationEvents.take(20).forEach { event ->
                                 Text("${event.packageName} · ${java.text.DateFormat.getDateTimeInstance().format(java.util.Date(event.postedAtMillis))}",
                                     style = MaterialTheme.typography.bodySmall)
-                                TextButton(onClick = { openAppDetails(context, event.packageName) }) { Text("Detalii aplicație") }
+                                TextButton(onClick = { openAppDetails(context, event.packageName) }) { Text(if (helpEnglish) "App details" else "Detalii aplicație") }
                             }
                         }
                     }
                 }
                 }
-                Text("FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
+                Text(if (helpEnglish) "FoniWise 0.7.3-rc1 • local analysis • no account or ads" else "FoniWise 0.7.3-rc1 • analiză locală • fără cont și fără reclame", style = MaterialTheme.typography.labelSmall)
             }
         }
     }
