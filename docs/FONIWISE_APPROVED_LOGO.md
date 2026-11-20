@@ -19,3 +19,15 @@
 - Pentru pictograma Android, realizați separat o adaptare lizibilă fără slogan, numai după aprobare.
 - Păstrați `applicationId`, configurația de semnare, funcțiile și compatibilitatea de actualizare.
 - Acest document nu confirmă o marcă înregistrată și nu reprezintă o lansare publică.
+
+## Verificare integritate și integrare viitoare
+
+- Original aprobat: `FoniWise_logo_aprobat.png`, PNG RGB, **1536 × 1536 px**.
+- SHA-256 al originalului: `cbdcf2f9156dee84c068249acaf56128f58d2add8528bcb9a55e380b001d9e1c`.
+- Imaginea aprobată a fost comparată pixel cu pixel cu atașamentul de referință al utilizatorului: **identică la nivelul pixelilor** (atașamentul inițial era codificat JPEG, chiar dacă avea extensia `.png`).
+- La integrarea în GitHub, copiați exact fișierul PNG din bibliotecă și verificați SHA-256 înainte de commit. Nu folosiți o variantă generată prin căutare de imagini.
+- Păstrați fișierul original într-un director de branding separat; nu înlocuiți automat resursele `mipmap`/`drawable` existente.
+- Pentru o pictogramă Android adaptivă, creați o variantă derivată cu simbolul telefonului lizibil la dimensiuni mici, validați decuparea circulară și cea cu colțuri rotunjite, apoi solicitați aprobare înainte de înlocuire.
+- După integrare, rulați `testDebugUnitTest` și `assembleDebug`, verificați auditul de semnare/permisiuni și efectuați un test vizual pe dispozitiv.
+
+**Limitare:** acest PR conține doar documentație; nu adaugă încă binarul PNG în GitHub și nu redenumește aplicația.
