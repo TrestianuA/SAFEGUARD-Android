@@ -586,6 +586,9 @@ private fun InfoCard(message: String) {
     Card { Text(message, Modifier.padding(14.dp)) }
 }
 
+internal fun hasValidStorageReading(totalBytes: Long, availableBytes: Long): Boolean =
+    totalBytes > 0L && availableBytes >= 0L && availableBytes <= totalBytes
+
 private fun readDeviceMemory(context: Context): ActivityManager.MemoryInfo? =
     runCatching {
         val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -722,7 +725,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text("Stocare", fontWeight = FontWeight.Bold, color = green)
-            if (storage != null && storage.first > 0L) {
+            if (storage != null && hasValidStorageReading(storage.first, storage.second)) {
                 Text("Utilizați: %.1f GB din %.1f GB".format(
                     (storage.first - storage.second) / 1073741824.0,
                     storage.first / 1073741824.0
