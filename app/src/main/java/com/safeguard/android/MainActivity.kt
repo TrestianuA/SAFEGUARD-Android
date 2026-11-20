@@ -812,12 +812,11 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             if (level < 0 || scale <= 0) null else level * 100 / scale
         }.getOrNull()
     }
-    val storage = remember {
-        runCatching {
-            val fs = StatFs(Environment.getDataDirectory().absolutePath)
-            Pair(fs.totalBytes, fs.availableBytes)
-        }.getOrNull()
-    }
+    fun readInternalStorage(): Pair<Long, Long>? = runCatching {
+        val fs = StatFs(Environment.getDataDirectory().absolutePath)
+        Pair(fs.totalBytes, fs.availableBytes)
+    }.getOrNull()
+    var storage by remember { mutableStateOf(readInternalStorage()) }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -935,6 +934,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Text(if (helpEnglish) "FoniWise does not measure each app’s cache or delete files automatically." else "FoniWise nu măsoară cache-ul fiecărei aplicații și nu șterge automat fișiere.", style = MaterialTheme.typography.bodySmall)
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS)) }) { Text(if (helpEnglish) "Cache Advisor · App settings" else "Cache Advisor · Setări aplicații") }
             Text(if (helpEnglish) "FoniWise does not read or delete personal files." else "FoniWise nu citește sau șterge fișiere personale.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { storage = readInternalStorage() }) { Text(if (helpEnglish) "Refresh storage" else "Actualizează stocarea") }
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)) }) { Text(if (helpEnglish) "Storage settings" else "Setările stocării") }
         }
     }
