@@ -839,6 +839,11 @@ private fun DeveloperOptionsGuideDialog(
     )
     var selectedGroup by rememberSaveable { mutableIntStateOf(-1) }
     var selectedTopic by rememberSaveable { mutableIntStateOf(-1) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    val categoryIndices = if (selectedGroup >= 0) groups[selectedGroup].second else emptyList()
+    val searchResults = topics.indices.filter { index ->
+        topics[index].first.contains(searchQuery.trim(), ignoreCase = true)
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(24.dp),
@@ -849,30 +854,68 @@ private fun DeveloperOptionsGuideDialog(
                 Column(modifier = Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     if (selectedTopic >= 0) {
                         OutlinedButton(onClick = { selectedTopic = -1 }) {
-                            Text(if (english) "Back to category" else "Înapoi la categorie")
+                            Text(if (english) "Back to topics" else "Înapoi la subiecte")
                         }
                         Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
                         Text(topics[selectedTopic].second, color = navy)
                         Text(if (english) "FoniWise cannot check or change this setting for you."
                             else "FoniWise nu poate verifica sau modifica această setare în locul tău.",
                             color = navy, style = MaterialTheme.typography.bodySmall)
-                    } else if (selectedGroup >= 0) {
-                        OutlinedButton(onClick = { selectedGroup = -1 }) {
-                            Text(if (english) "All categories" else "Toate categoriile")
-                        }
-                        Text(groups[selectedGroup].first, color = green, fontWeight = FontWeight.Bold)
-                        groups[selectedGroup].second.forEach { index ->
-                            OutlinedButton(onClick = { selectedTopic = index }, modifier = Modifier.fillMaxWidth()) {
-                                Text(topics[index].first)
+                        val navigationIndices = if (searchQuery.isNotBlank()) searchResults else categoryIndices
+                        val position = navigationIndices.indexOf(selectedTopic)
+                        if (position >= 0) {
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
+                                OutlinedButton(
+                                    onClick = { selectedTopic = navigationIndices[position - 1] },
+                                    enabled = position > 0,
+                                    modifier = Modifier.weight(1f)
+                                ) { Text(if (english) "Previous" else "Anterior") }
+                                OutlinedButton(
+                                    onClick = { selectedTopic = navigationIndices[position + 1] },
+                                    enabled = position < navigationIndices.lastIndex,
+                                    modifier = Modifier.weight(1f)
+                                ) { Text(if (english) "Next" else "Următor") }
                             }
                         }
                     } else {
-                        Text(if (english) "Choose a category. Some settings may be absent or named differently on your phone."
-                            else "Alege o categorie. Unele setări pot lipsi sau pot avea alte denumiri pe telefonul tău.",
-                            color = navy, style = MaterialTheme.typography.bodySmall)
-                        groups.forEachIndexed { index, group ->
-                            OutlinedButton(onClick = { selectedGroup = index }, modifier = Modifier.fillMaxWidth()) {
-                                Text(group.first + " (" + group.second.size + ")")
+                        OutlinedTextField(
+                            value = searchQuery,
+                            onValueChange = { searchQuery = it },
+                            label = { Text(if (english) "Search by option name" else "Caută după numele opțiunii") },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        if (searchQuery.isNotBlank()) {
+                            Text(if (english) "Matching topics: ${searchResults.size}" else "Subiecte găsite: ${searchResults.size}",
+                                color = navy, style = MaterialTheme.typography.bodySmall)
+                            searchResults.forEach { index ->
+                                OutlinedButton(onClick = {
+                                    selectedGroup = groups.indexOfFirst { (_, indices) -> index in indices }
+                                    selectedTopic = index
+                                }, modifier = Modifier.fillMaxWidth()) { Text(topics[index].first) }
+                            }
+                            if (searchResults.isEmpty()) {
+                                Text(if (english) "No matching option. Try another word."
+                                    else "Nu am găsit opțiunea. Încearcă alt cuvânt.", color = navy)
+                            }
+                        } else if (selectedGroup >= 0) {
+                            OutlinedButton(onClick = { selectedGroup = -1 }) {
+                                Text(if (english) "All categories" else "Toate categoriile")
+                            }
+                            Text(groups[selectedGroup].first, color = green, fontWeight = FontWeight.Bold)
+                            categoryIndices.forEach { index ->
+                                OutlinedButton(onClick = { selectedTopic = index }, modifier = Modifier.fillMaxWidth()) {
+                                    Text(topics[index].first)
+                                }
+                            }
+                        } else {
+                            Text(if (english) "Choose a category. Some settings may be absent or named differently on your phone."
+                                else "Alege o categorie. Unele setări pot lipsi sau pot avea alte denumiri pe telefonul tău.",
+                                color = navy, style = MaterialTheme.typography.bodySmall)
+                            groups.forEachIndexed { index, group ->
+                                OutlinedButton(onClick = { selectedGroup = index }, modifier = Modifier.fillMaxWidth()) {
+                                    Text(group.first + " (" + group.second.size + ")")
+                                }
                             }
                         }
                     }
