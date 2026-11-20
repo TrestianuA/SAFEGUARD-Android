@@ -176,22 +176,40 @@ private fun SafeguardScreen(
                 if (selectedTab == 0) FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { helpEnglish = !helpEnglish }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning)
-                Text("Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.Security, "Scanare\nsecuritate", "Locală", Modifier.weight(1f)) { selectedTab = 3 }
-                    DashboardTile(Icons.Filled.Notifications, "Inspector\nnotificări", if (notificationAccessEnabled) "Activ" else "Opțional", Modifier.weight(1f)) { selectedTab = 4 }
-                    DashboardTile(Icons.Filled.Apps, "Gestionare\naplicații", "Setări Android", Modifier.weight(1f)) {
+                    DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
+                        if (helpEnglish) "Local check" else "Verificare locală",
+                        if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
+                        helpEnglish, Modifier.weight(1f)) { selectedTab = 3 }
+                    DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
+                        if (notificationAccessEnabled) (if (helpEnglish) "Active" else "Activ") else (if (helpEnglish) "Optional access" else "Acces opțional"),
+                        if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
+                        helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
+                        if (helpEnglish) "Android settings" else "Setări Android",
+                        if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
+                        helpEnglish, Modifier.weight(1f)) {
+                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
+                    }
+                    DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
+                        if (helpEnglish) "Android settings" else "Setări Android",
+                        if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
+                        helpEnglish, Modifier.weight(1f)) {
                         launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    DashboardTile(Icons.Filled.CleaningServices, "Curățare\nmanuală", "Cache Advisor", Modifier.weight(1f)) {
-                        showCacheGuide = true
-                    }
-                    DashboardTile(Icons.Filled.BatteryChargingFull, "Setări\nbaterie", "Manual", Modifier.weight(1f)) {
-                        launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
-                    }
-                    DashboardTile(Icons.Filled.Assessment, "Rapoarte\nși activitate", "Date locale", Modifier.weight(1f)) { selectedTab = 4 }
+                    DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
+                        "Cache Advisor",
+                        if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
+                        helpEnglish, Modifier.weight(1f)) { showCacheGuide = true }
+                    DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Reports" else "Rapoarte",
+                        if (helpEnglish) "Local data" else "Date locale",
+                        if (helpEnglish) "Helps you review scan results and available notification activity." else "Te ajută să consulți rezultatele scanării și activitatea notificărilor disponibile.",
+                        helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
                 }
                 Card(
                     onClick = { selectedTab = 5 },
@@ -519,26 +537,29 @@ private fun DashboardTile(
     symbol: ImageVector,
     title: String,
     subtitle: String,
+    howItHelps: String,
+    english: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val narrowScreen = LocalConfiguration.current.screenWidthDp < 390
     Card(
         onClick = onClick,
-        modifier = modifier.height(if (narrowScreen) 158.dp else 140.dp),
+        modifier = modifier.height(218.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = paleGreen),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
         border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp, vertical = 12.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 10.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.CenterVertically)
+            verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.Top)
         ) {
             Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
+            Text(if (english) "How can it help you?" else "Cum te poate ajuta?", style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = navy, textAlign = TextAlign.Center)
+            Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center, maxLines = 5)
         }
     }
 }
