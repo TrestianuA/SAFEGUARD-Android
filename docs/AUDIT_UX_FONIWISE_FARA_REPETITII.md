@@ -64,3 +64,15 @@ Denumirile oficiale aprobate:
 
 ## Stare la redactare
 Auditul este **documentat**, nu toate remedierile sunt implementate. Ultima compilare verificată pentru commitul `0b5684f3ea71862d045f084bfd936f6dc60fca04`: GitHub Actions #161, succes. Testul Samsung: neefectuat.
+
+## Verificare incrementală — 20 noiembrie 2026, 18:04 (Europe/Bucharest)
+
+**Cod inspectat:** `app/src/main/java/com/safeguard/android/MainActivity.kt`, ramura `test/foniwise-073-integration`.
+- Cache Advisor: ghid de curățare **manuală**, avertismente și intrări către setările Android; fără ștergere automată.
+- RAM Monitor: citire `readDeviceMemory(context)`, verificare `hasValidRamReading`, recomandare diferențiată după `lowMemory`, actualizare manuală, fără oprire forțată de procese.
+- Animații Android: ⓘ cu explicații RO/EN și trimitere către Accesibilitate; fără schimbări automate.
+- **Defect UX corectat:** comutarea limbii din dialogurile ⓘ pentru RAM și animații modifica doar o variabilă locală; după închidere limba generală a aplicației rămânea neschimbată. Dialogurile folosesc acum `helpEnglish` și `onLanguageChange` ale ecranului, ca celelalte explicații. Nu s-a introdus mod Simplu/Detaliat.
+
+**Verificare statică:** au fost confirmate patru înlocuiri exacte în sursă; nu au fost schimbate citirile RAM, comportamentul Android, logo-urile, semnarea APK sau permisiunile. **Compilarea CI pentru commitul `2b00ea4223f44389fff726bbdc19e1aaac6006f7` nu avea încă un rezultat la verificare.** Nu s-a efectuat testare pe Samsung.
+
+**Test manual necesar:** schimbă limba din ⓘ RAM și verifică dacă ecranul și ⓘ animații folosesc aceeași limbă; repetă invers. Verifică RO/EN, închiderea dialogurilor și revenirea la ecranul principal. Următorul pas: CI și test de navigare pe Samsung, apoi reducerea textelor duplicate fără pierderea explicațiilor detaliate.
