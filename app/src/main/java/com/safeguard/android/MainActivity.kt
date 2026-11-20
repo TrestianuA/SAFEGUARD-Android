@@ -798,8 +798,15 @@ private fun SecurityStepsDialog(
                 Text(if (english) instructionsEn[step] else instructionsRo[step])
                 Surface(color = paleGreen, shape = RoundedCornerShape(12.dp)) {
                     Text(
-                        if (english) "These are manual checks. FoniWise cannot automatically confirm every screen-lock option, special permission or unknown-source setting on every phone."
-                        else "Acestea sunt verificări manuale. FoniWise nu poate confirma automat toate opțiunile de blocare, permisiunile speciale sau sursele necunoscute pe orice telefon.",
+                        if (english) when (step) {
+                            0 -> "Example: if the screen unlocks without a PIN, password or other lock, review the available screen-lock methods. FoniWise cannot read every lock setting automatically."
+                            1 -> "Tip: on Samsung phones, look for Software update in Settings. Available updates depend on the manufacturer, model and region; the patch date alone is not a safety verdict."
+                            else -> "Example: a notification listener or an app allowed to install unknown apps deserves review if you do not recognize why it needs that access. FoniWise cannot verify every special access setting automatically."
+                        } else when (step) {
+                            0 -> "Exemplu: dacă ecranul se deblochează fără PIN, parolă sau altă metodă de blocare, verifică opțiunile disponibile. FoniWise nu poate citi automat toate setările de blocare."
+                            1 -> "Sfat: pe telefoanele Samsung, caută Actualizare software în Setări. Actualizările disponibile depind de producător, model și regiune; data patch-ului nu este singură un verdict de siguranță."
+                            else -> "Exemplu: accesul la notificări sau dreptul de a instala aplicații din surse necunoscute merită verificat dacă nu recunoști motivul acordării. FoniWise nu poate confirma automat toate accesările speciale."
+                        },
                         modifier = Modifier.padding(12.dp), color = navy,
                         style = MaterialTheme.typography.bodySmall
                     )
