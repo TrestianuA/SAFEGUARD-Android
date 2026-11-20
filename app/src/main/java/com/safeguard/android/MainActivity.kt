@@ -439,41 +439,41 @@ private fun SafeguardScreen(
     if (showConsent) {
         AlertDialog(
             onDismissRequest = { showConsent = false },
-            title = { Text("Acord pentru scanarea locală") },
-            text = { Text("FoniWise va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
+            title = { Text(if (helpEnglish) "Consent for local scan" else "Acord pentru scanarea locală") },
+            text = { Text(if (helpEnglish) "FoniWise will locally check visible apps, granted permissions and certain special access settings. Your app inventory is sensitive. This version does not transmit or save it. Continue?" else "FoniWise va citi local lista aplicațiilor vizibile, permisiunile acordate și unele setări de acces special. Inventarul aplicațiilor este sensibil. În această versiune nu este transmis sau salvat. Continui?") },
             confirmButton = {
-                TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text("Accept și scanează") }
+                TextButton(onClick = { scanConsent = true; showConsent = false; startScan() }) { Text(if (helpEnglish) "Accept and scan" else "Accept și scanează") }
             },
-            dismissButton = { TextButton(onClick = { showConsent = false }) { Text("Anulează") } }
+            dismissButton = { TextButton(onClick = { showConsent = false }) { Text(if (helpEnglish) "Cancel" else "Anulează") } }
         )
     }
     if (showNotificationConsent) {
         AlertDialog(
             onDismissRequest = { showNotificationConsent = false },
-            title = { Text("Acces special la notificări") },
-            text = { Text("Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. FoniWise folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
+            title = { Text(if (helpEnglish) "Special notification access" else "Acces special la notificări") },
+            text = { Text(if (helpEnglish) "Android warns that notification services may access notification content. FoniWise uses only the source package and time, stored locally for up to 100 events. You enable access only through Android Settings." else "Android avertizează că serviciile de notificări pot vedea conținutul notificărilor. FoniWise folosește doar pachetul-sursă și ora, păstrate local, maximum 100 de evenimente. Accesul se activează numai din Setările Android.") },
             confirmButton = {
                 TextButton(onClick = {
                     showNotificationConsent = false
                     launchSettings(context, Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                }) { Text("Deschide Setări") }
+                }) { Text(if (helpEnglish) "Open Settings" else "Deschide Setări") }
             },
-            dismissButton = { TextButton(onClick = { showNotificationConsent = false }) { Text("Renunță") } }
+            dismissButton = { TextButton(onClick = { showNotificationConsent = false }) { Text(if (helpEnglish) "Not now" else "Renunță") } }
         )
     }
     if (showDeleteConfirmation) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirmation = false },
-            title = { Text("Ștergi istoricul local?") },
-            text = { Text("Vor fi șterse toate înregistrările păstrate de FoniWise.") },
+            title = { Text(if (helpEnglish) "Delete local history?" else "Ștergi istoricul local?") },
+            text = { Text(if (helpEnglish) "All records stored by FoniWise will be deleted." else "Vor fi șterse toate înregistrările păstrate de FoniWise.") },
             confirmButton = {
                 TextButton(onClick = {
                     NotificationLogStore(context).clear()
                     showDeleteConfirmation = false
                     onRefreshNotifications()
-                }) { Text("Șterge") }
+                }) { Text(if (helpEnglish) "Delete" else "Șterge") }
             },
-            dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text("Păstrează") } }
+            dismissButton = { TextButton(onClick = { showDeleteConfirmation = false }) { Text(if (helpEnglish) "Keep" else "Păstrează") } }
         )
     }
 }
