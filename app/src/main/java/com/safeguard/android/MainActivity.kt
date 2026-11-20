@@ -123,7 +123,7 @@ private fun SafeguardScreen(
                     SecurityScanner(context.applicationContext).scan()
                 }
             } catch (exception: Exception) {
-                error = exception.localizedMessage ?: "Scanarea nu a putut fi finalizată."
+                error = exception.localizedMessage ?: "Scan failed / Scanarea nu a putut fi finalizată."
             } finally {
                 scanning = false
             }
@@ -294,9 +294,9 @@ private fun SafeguardScreen(
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("Scanner local – prototip 0.7.3-rc1", fontWeight = FontWeight.Bold, color = green)
-                        Text("Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
-                        Text("Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
+                        Text(if (helpEnglish) "Local scanner – prototype 0.7.3-rc1" else "Scanner local – prototip 0.7.3-rc1", fontWeight = FontWeight.Bold, color = green)
+                        Text(if (helpEnglish) "Checks visible apps, sensitive permissions and some special Android access settings." else "Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
+                        Text(if (helpEnglish) "This is not an antivirus. It does not read messages, photos, files or browsing history, and does not transmit data." else "Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 Button(
@@ -304,21 +304,21 @@ private fun SafeguardScreen(
                     enabled = !scanning,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(if (scanning) "Se scanează…" else if (report == null) "Începe scanarea" else "Scanează din nou")
+                    Text(if (scanning) (if (helpEnglish) "Scanning…" else "Se scanează…") else if (report == null) (if (helpEnglish) "Start scan" else "Începe scanarea") else (if (helpEnglish) "Scan again" else "Scanează din nou"))
                 }
-                error?.let { InfoCard("Eroare: $it") }
+                error?.let { InfoCard((if (helpEnglish) "Error: " else "Eroare: ") + it) }
                 report?.let { scan ->
                     Card {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            Text("Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
+                            Text(if (helpEnglish) "Device checked" else "Dispozitiv verificat", color = green, fontWeight = FontWeight.Bold)
                             Text(scan.deviceModel, fontWeight = FontWeight.Bold)
                             Text("Android ${scan.androidRelease} (API ${scan.sdkInt})")
-                            Text("Patch de securitate: ${scan.securityPatch}")
-                            Text("${scan.installedApps} aplicații vizibile · ${scan.userApps} aplicații terțe")
+                            Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") + scan.securityPatch)
+                            Text(if (helpEnglish) "${scan.installedApps} visible apps · ${scan.userApps} third-party apps" else "${scan.installedApps} aplicații vizibile · ${scan.userApps} aplicații terțe")
                         }
                     }
-                    Section("Accesări speciale", "Nu reprezintă automat amenințări. Verifică dacă recunoști aplicațiile.")
-                    if (scan.specialAccess.isEmpty()) InfoCard("Nu au fost găsite accesări speciale în categoriile verificate.")
+                    Section(if (helpEnglish) "Special access" else "Accesări speciale", if (helpEnglish) "These are not automatically threats. Check whether you recognize the apps." else "Nu reprezintă automat amenințări. Verifică dacă recunoști aplicațiile.")
+                    if (scan.specialAccess.isEmpty()) InfoCard(if (helpEnglish) "No special access found in the checked categories." else "Nu au fost găsite accesări speciale în categoriile verificate.")
                     scan.specialAccess.forEach { item ->
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -326,12 +326,12 @@ private fun SafeguardScreen(
                                 Text(item.appLabel)
                                 Text(item.packageName, style = MaterialTheme.typography.labelSmall)
                                 Text(item.explanation, style = MaterialTheme.typography.bodySmall)
-                                OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text("Verifică în Setări") }
+                                OutlinedButton(onClick = { openSettingsFor(context, item) }) { Text(if (helpEnglish) "Review in Settings" else "Verifică în Setări") }
                             }
                         }
                     }
-                    Section("Permisiuni sensibile acordate", "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
-                    if (scan.permissionApps.isEmpty()) InfoCard("Nu au fost găsite aplicații terțe cu permisiunile verificate.")
+                    Section(if (helpEnglish) "Granted sensitive permissions" else "Permisiuni sensibile acordate", if (helpEnglish) "Some permissions are necessary for apps to function normally." else "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
+                    if (scan.permissionApps.isEmpty()) InfoCard(if (helpEnglish) "No third-party apps found with the checked permissions." else "Nu au fost găsite aplicații terțe cu permisiunile verificate.")
                     scan.permissionApps.take(40).forEach { app ->
                         Card {
                             Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -344,8 +344,8 @@ private fun SafeguardScreen(
                             }
                         }
                     }
-                    if (scan.permissionApps.size > 40) Text("Sunt afișate primele 40 din ${scan.permissionApps.size} aplicații.")
-                    InfoCard("Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
+                    if (scan.permissionApps.size > 40) Text(if (helpEnglish) "Showing the first 40 of ${scan.permissionApps.size} apps." else "Sunt afișate primele 40 din ${scan.permissionApps.size} aplicații.")
+                    InfoCard(if (helpEnglish) "This checks configuration, not malware. It does not analyze app code and cannot confirm that a device is malware-free." else "Acesta este un control de configurare, nu o scanare antivirus. Nu analizează codul aplicațiilor și nu poate confirma că dispozitivul este curat.")
                 }
 
                 }
