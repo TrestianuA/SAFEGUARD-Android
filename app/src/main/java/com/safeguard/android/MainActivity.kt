@@ -225,10 +225,6 @@ private fun SafeguardScreen(
                             "Cache Advisor",
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
-                            DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Scan results" else "Rezultatele scanării",
-                            if (helpEnglish) "Local scan" else "Scanare locală",
-                            if (helpEnglish) "Review the local security scan and its findings. Notification activity is available separately in Notification inspector." else "Consultă scanarea locală de securitate și rezultatele ei. Activitatea notificărilor se află separat în Inspectorul notificărilor.",
-                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
                         }
                     } else {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -255,16 +251,10 @@ private fun SafeguardScreen(
                             launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                         }
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
-                            "Cache Advisor",
-                            if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
-                            helpEnglish, Modifier.weight(1f)) { showCacheGuide = true }
-                        DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Scan results" else "Rezultatele scanării",
-                            if (helpEnglish) "Local scan" else "Scanare locală",
-                            if (helpEnglish) "Review the local security scan and its findings. Notification activity is available separately in Notification inspector." else "Consultă scanarea locală de securitate și rezultatele ei. Activitatea notificărilor se află separat în Inspectorul notificărilor.",
-                            helpEnglish, Modifier.weight(1f)) { selectedTab = 3 }
-                    }
+                    DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
+                        "Cache Advisor",
+                        if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
+                        helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
                     }
                 }
                 Card(
