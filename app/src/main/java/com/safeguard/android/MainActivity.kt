@@ -635,7 +635,9 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text((if (helpEnglish) "Available: %.1f GB of %.1f GB" else "Disponibil: %.1f GB din %.1f GB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
-            } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
+            } else {
+                Text(if (helpEnglish) "RAM data unavailable. Tap Refresh RAM to try another Android reading; no memory recommendation can be made yet." else "Datele RAM nu sunt disponibile. Apasă Actualizează RAM pentru o nouă citire Android; încă nu se poate formula o recomandare despre memorie.", style = MaterialTheme.typography.bodySmall)
+            }
             Text(if (helpEnglish) "Tap ⓘ for a simple explanation and recommendations." else "Apasă ⓘ pentru explicații simple și recomandări.", style = MaterialTheme.typography.bodySmall)
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
                 Text(if (helpEnglish) "Advice based on this reading:" else "Sfat adaptat măsurătorii:", fontWeight = FontWeight.SemiBold, color = green)
