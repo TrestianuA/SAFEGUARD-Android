@@ -1285,7 +1285,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
                 }
             }
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
-                Text((if (helpEnglish) "Available: %.1f GB of %.1f GB" else "Disponibil: %.1f GB din %.1f GB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
+                Text((if (helpEnglish) "Available: %.1f GiB of %.1f GiB" else "Disponibil: %.1f GiB din %.1f GiB").format(memorySnapshot.availMem / 1073741824.0, memorySnapshot.totalMem / 1073741824.0))
                 Text(if (memorySnapshot.lowMemory) { if (helpEnglish) "Android reports memory pressure." else "Android raportează presiune asupra memoriei." } else { if (helpEnglish) "Android does not report critically low memory." else "Android nu raportează memorie critic de redusă." })
             } else Text(if (helpEnglish) "Data unavailable" else "Date indisponibile")
             if (memorySnapshot != null && hasValidRamReading(memorySnapshot)) {
@@ -1306,8 +1306,8 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
         SafeguardInfoDialog(
             titleRo = "ⓘ Memorie RAM",
             titleEn = "ⓘ RAM Monitor",
-            summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere.",
-            summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files.",
+            summaryRo = "RAM este memoria de lucru temporară a telefonului. Android o folosește pentru aplicațiile deschise și pentru a le porni mai repede. Nu este același lucru cu spațiul pentru poze și fișiere. Valorile sunt afișate în GiB (1 GiB = 1.024 MiB).",
+            summaryEn = "RAM is your phone's temporary working memory. Android uses it for open apps and to launch them faster. It is different from the storage used for photos and files. Values are shown in GiB (1 GiB = 1,024 MiB).",
             doesRo = "FoniWise citește de la Android câtă memorie RAM există, câtă este disponibilă și dacă sistemul semnalează lipsă de memorie. Poți apăsa «Actualizează RAM» pentru o nouă citire.",
             doesEn = "FoniWise reads Android's total and available RAM and whether the system reports low memory. Tap Refresh RAM to take another reading.",
             limitsRo = "Memoria ocupată nu înseamnă automat o problemă: Android o gestionează singur. FoniWise nu închide aplicații în locul tău și nu poate elibera forțat RAM.",
@@ -1360,7 +1360,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean, onLanguage
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(if (helpEnglish) "Storage" else "Stocare", fontWeight = FontWeight.Bold, color = green)
             if (storageSnapshot != null && hasValidStorageReading(storageSnapshot.first, storageSnapshot.second)) {
-                Text((if (helpEnglish) "Used: %.1f GB of %.1f GB" else "Utilizați: %.1f GB din %.1f GB").format(
+                Text((if (helpEnglish) "Used: %.1f GiB of %.1f GiB" else "Utilizați: %.1f GiB din %.1f GiB").format(
                     (storageSnapshot.first - storageSnapshot.second) / 1073741824.0,
                     storageSnapshot.first / 1073741824.0
                 ))
