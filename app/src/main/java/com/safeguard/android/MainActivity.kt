@@ -867,6 +867,16 @@ private fun DeveloperOptionsGuideDialog(
                         OutlinedButton(onClick = { selectedTopic = -1 }) {
                             Text(if (english) "Back to topics" else "Înapoi la subiecte")
                         }
+                        val activeGroup = groups.getOrNull(selectedGroup)
+                        val activePosition = activeGroup?.second?.indexOf(selectedTopic) ?: -1
+                        if (activeGroup != null && activePosition >= 0) {
+                            Text(
+                                activeGroup.first + " • " +
+                                    (if (english) "Topic " else "Subiectul ") +
+                                    (activePosition + 1) + "/" + activeGroup.second.size,
+                                color = green, style = MaterialTheme.typography.labelSmall
+                            )
+                        }
                         Text(topics[selectedTopic].first, color = green, fontWeight = FontWeight.Bold)
                         Text(topics[selectedTopic].second, color = navy)
                         Text(if (english) "FoniWise cannot check or change this setting for you."
@@ -922,7 +932,15 @@ private fun DeveloperOptionsGuideDialog(
                                 OutlinedButton(onClick = {
                                     selectedGroup = groups.indexOfFirst { (_, indices) -> index in indices }
                                     selectedTopic = index
-                                }, modifier = Modifier.fillMaxWidth()) { Text(topics[index].first) }
+                                }, modifier = Modifier.fillMaxWidth()) {
+                                    Column {
+                                        Text(topics[index].first)
+                                        val groupName = groups.firstOrNull { (_, indices) -> index in indices }?.first
+                                        if (groupName != null) {
+                                            Text(groupName, style = MaterialTheme.typography.labelSmall)
+                                        }
+                                    }
+                                }
                             }
                             if (searchResults.isEmpty()) {
                                 Text(if (english) "No matching option. Try another word."
