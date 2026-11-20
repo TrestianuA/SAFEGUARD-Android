@@ -689,6 +689,11 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
                 else "Animațiile sunt efectele vizuale dintre ecrane. Apasă ⓘ pentru explicații, pași siguri și recomandări.",
                 style = MaterialTheme.typography.bodySmall
             )
+            Text(
+                if (helpEnglish) "The Reduce animations option may be named differently or unavailable on your device. This button opens Accessibility settings only; SAFEGUARD does not change the setting."
+                else "Opțiunea de reducere a animațiilor poate avea alt nume sau poate lipsi pe telefonul tău. Butonul deschide doar setările de Accesibilitate; SAFEGUARD nu schimbă setarea.",
+                style = MaterialTheme.typography.bodySmall
+            )
             OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) }) {
                 Text(if (helpEnglish) "Open Accessibility settings" else "Deschide Accesibilitate")
             }
