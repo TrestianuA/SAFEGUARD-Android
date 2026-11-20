@@ -7,7 +7,8 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/safeguard_logo_simplu"
+        android:icon="@drawable/foniwise_symbol_original_approved"
+        android:roundIcon="@drawable/foniwise_symbol_original_approved"
         android:label="FoniWise"
         android:supportsRtl="true"
         android:theme="@style/Theme.Safeguard"
