@@ -123,7 +123,7 @@ private fun SafeguardScreen(
                     SecurityScanner(context.applicationContext).scan()
                 }
             } catch (exception: Exception) {
-                error = exception.localizedMessage ?: "Scan failed / Scanarea nu a putut fi finalizată."
+                error = exception.localizedMessage
             } finally {
                 scanning = false
             }
@@ -329,7 +329,7 @@ private fun SafeguardScreen(
                     colors = CardDefaults.cardColors(containerColor = paleGreen)
                 ) {
                     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(if (helpEnglish) "Local scanner – prototype 0.7.3-rc1" else "Scanner local – prototip 0.7.3-rc1", fontWeight = FontWeight.Bold, color = green)
+                        Text(if (helpEnglish) "Local security scan" else "Scanare de securitate locală", fontWeight = FontWeight.Bold, color = green)
                         Text(if (helpEnglish) "Checks visible apps, sensitive permissions and some special Android access settings." else "Verifică aplicațiile vizibile, permisiunile sensibile și câteva accesări speciale Android.")
                         Text(if (helpEnglish) "This is not an antivirus. It does not read messages, photos, files or browsing history, and does not transmit data." else "Nu este antivirus. Nu citește mesaje, fotografii, fișiere sau istoricul browserului și nu transmite date.", style = MaterialTheme.typography.bodySmall)
                     }
@@ -341,7 +341,7 @@ private fun SafeguardScreen(
                 ) {
                     Text(if (scanning) (if (helpEnglish) "Scanning…" else "Se scanează…") else if (report == null) (if (helpEnglish) "Start scan" else "Începe scanarea") else (if (helpEnglish) "Scan again" else "Scanează din nou"))
                 }
-                error?.let { InfoCard((if (helpEnglish) "Error: " else "Eroare: ") + it) }
+                error?.let { InfoCard((if (helpEnglish) "Scan failed. Please try again." else "Scanarea nu a putut fi finalizată. Încearcă din nou.") + (if (it.isNotBlank()) " ($it)" else "")) }
                 report?.let { scan ->
                     Card {
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
