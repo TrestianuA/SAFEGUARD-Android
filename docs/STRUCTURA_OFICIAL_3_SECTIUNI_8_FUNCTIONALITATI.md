@@ -31,11 +31,10 @@ Funcționalitate principală:
 - **#1 Asistent de securitate pas cu pas** — blocarea ecranului, actualizări și accesări speciale, cu pași manuali.
 - Pașii practici ai celorlalte ghiduri, recomandări și scurtături către setările Android. Acestea pot fi accesate contextual și din „Telefonul” sau „Învață”.
 
-## #7 Mod simplificat pentru începători — transversal
-**#7** nu devine a patra secțiune. Se aplică tuturor celor trei secțiuni:
-- **Simplu**: texte mai mari, explicații scurte, butoane vizibile, pași de tip „Pasul 1 din 3”.
-- **Detaliat**: informații și explicații suplimentare.
-- Identitatea vizuală FoniWise aprobată rămâne aceeași în ambele moduri.
+## #7 Accesibilitatea explicațiilor — decizie actualizată
+**Decizie explicită a utilizatorului (20 noiembrie 2026): nu implementăm comutatorul „Simplu / Detaliat” și nu oferim două versiuni ale explicațiilor.**
+
+Există un singur nivel de prezentare în toate cele trei secțiuni: **explicații detaliate, corecte, pe înțelesul tuturor**, inclusiv exemple practice, pași clari și limitele informațiilor disponibile. Nu se creează o a patra secțiune, un mod separat sau o preferință de nivel. Accesibilitatea se obține prin limbaj inteligibil, structurare și design lizibil, fără să eliminăm detalii importante. Identitatea vizuală aprobată se păstrează.
 
 ## Reguli de integrare
 1. Navigația principală are cele trei zone aprobate **Telefonul meu | Învață despre telefon | Recomandări și acțiuni**; nu adăugăm opt butoane principale sau o a patra secțiune.
