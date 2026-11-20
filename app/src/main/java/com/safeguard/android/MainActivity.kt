@@ -823,6 +823,7 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     var storage by remember { mutableStateOf(readInternalStorage()) }
     val storageSnapshot = storage
     var showUpdateInfo by remember { mutableStateOf(false) }
+    var showBatteryGuide by remember { mutableStateOf(false) }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -967,9 +968,33 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
             Text(if (helpEnglish) "How can it help you?" else "Cum te poate ajuta?", fontWeight = FontWeight.SemiBold, color = green)
             Text(if (helpEnglish) "The battery percentage helps you decide when to charge. For unusual drain, check Android battery usage before changing settings." else "Procentul bateriei te ajută să decizi când să încarci telefonul. Dacă bateria se consumă neobișnuit, verifică utilizarea în Android înainte să schimbi setări.", style = MaterialTheme.typography.bodySmall)
             Text(if (helpEnglish) "FoniWise does not automatically change power settings." else "FoniWise nu modifică automat setările de energie.", style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { showBatteryGuide = true }) {
+                Text(if (helpEnglish) "Battery saving guide" else "Ghid pentru economisirea bateriei")
+            }
             OutlinedButton(onClick = { battery = readBatteryLevel() }) { Text(if (helpEnglish) "Refresh battery" else "Actualizează bateria") }
             OutlinedButton(onClick = { launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY")) }) { Text(if (helpEnglish) "Battery settings" else "Setările bateriei") }
         }
+    }
+    if (showBatteryGuide) {
+        SafeguardInfoDialog(
+            titleRo = "Consilier pentru baterie",
+            titleEn = "Battery advisor",
+            summaryRo = "Bateria alimentează telefonul. Procentul afișat de Android arată încărcarea curentă, nu gradul exact de uzură.",
+            summaryEn = "The battery powers your phone. Android's percentage shows the current charge, not precise battery wear.",
+            doesRo = "Pentru a găsi aplicațiile cu consum ridicat, deschide Setări → Baterie → Utilizarea bateriei și verifică aplicațiile din listă. Denumirile diferă între telefoane.",
+            doesEn = "To find apps using more power, open Settings → Battery → Battery usage and review the listed apps. Menu names vary between phones.",
+            limitsRo = "FoniWise nu măsoară precis uzura bateriei pe orice telefon, nu poate identifica singur aplicațiile care consumă cel mai mult și nu promite creșteri miraculoase ale autonomiei.",
+            limitsEn = "FoniWise cannot precisely measure battery wear on every phone, cannot independently identify the highest-drain apps and does not promise dramatic battery-life gains.",
+            adviceRo = "Dacă ai nevoie de autonomie suplimentară, caută în Setări → Baterie opțiunea Economisire energie. Poate reduce activitatea în fundal și unele funcții. Activeaz-o când ai baterie puțină sau nu poți încărca telefonul; dezactiveaz-o dacă limitează funcții de care ai nevoie. Nu restricționa aplicații importante fără să înțelegi efectele.",
+            adviceEn = "If you need longer battery life, look for Power saving in Settings → Battery. It may limit background activity and some features. Enable it when charge is low or charging is unavailable; turn it off if it limits features you need. Do not restrict important apps without understanding the effects.",
+            english = helpEnglish,
+            onLanguageChange = { },
+            onDismiss = { showBatteryGuide = false },
+            onSettings = {
+                showBatteryGuide = false
+                launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
+            }
+        )
     }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
