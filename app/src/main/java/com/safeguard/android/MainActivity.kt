@@ -822,6 +822,53 @@ private fun DeviceHealthCards(context: Context, helpEnglish: Boolean) {
     }.getOrNull()
     var storage by remember { mutableStateOf(readInternalStorage()) }
     val storageSnapshot = storage
+    var showUpdateInfo by remember { mutableStateOf(false) }
+    Card {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(if (helpEnglish) "Android and security updates" else "Android și actualizări de securitate",
+                    fontWeight = FontWeight.Bold, color = green, modifier = Modifier.weight(1f))
+                IconButton(onClick = { showUpdateInfo = true },
+                    modifier = Modifier.semantics {
+                        contentDescription = if (helpEnglish) "Information about Android updates" else "Informații despre actualizările Android"
+                    }) {
+                    Text("ⓘ", color = navy, style = MaterialTheme.typography.titleLarge)
+                }
+            }
+            Text((if (helpEnglish) "Android version: " else "Versiune Android: ") + Build.VERSION.RELEASE)
+            val patch = Build.VERSION.SECURITY_PATCH.takeIf { it.isNotBlank() }
+            Text((if (helpEnglish) "Security patch: " else "Patch de securitate: ") +
+                (patch ?: if (helpEnglish) "Not reported by Android" else "Neraportat de Android"))
+            Text(if (helpEnglish)
+                "Updates can fix known issues. A patch date alone cannot determine whether a phone is secure."
+                else "Actualizările pot remedia probleme cunoscute. Data patch-ului nu stabilește singură dacă telefonul este sigur.",
+                style = MaterialTheme.typography.bodySmall)
+            OutlinedButton(onClick = { launchSettings(context, Intent(Settings.ACTION_SYSTEM_UPDATE_SETTINGS)) }) {
+                Text(if (helpEnglish) "Check Android updates" else "Verifică actualizările Android")
+            }
+        }
+    }
+    if (showUpdateInfo) {
+        SafeguardInfoDialog(
+            titleRo = "ⓘ Android și securitate",
+            titleEn = "ⓘ Android and security",
+            summaryRo = "Versiunea Android identifică sistemul instalat. Data patch-ului indică nivelul actualizărilor de securitate raportat de dispozitiv.",
+            summaryEn = "The Android version identifies the installed system. The security patch date is the security update level reported by the device.",
+            doesRo = "FoniWise afișează aceste valori oferite de Android și deschide pagina de actualizări, dacă telefonul o acceptă.",
+            doesEn = "FoniWise displays the values provided by Android and opens the update settings page when supported.",
+            limitsRo = "O dată mai veche nu înseamnă automat că telefonul este nesigur. FoniWise nu poate garanta securitatea dispozitivului și nu instalează actualizări.",
+            limitsEn = "An older date does not automatically mean the phone is unsafe. FoniWise cannot guarantee device security and does not install updates.",
+            adviceRo = "Verifică periodic actualizările oferite de producător. Dacă nu se deschide pagina dedicată, caută «Actualizare software» în Setările Android.",
+            adviceEn = "Check periodically for updates from your manufacturer. If the dedicated page does not open, look for Software update in Android Settings.",
+            english = helpEnglish,
+            onLanguageChange = { },
+            onDismiss = { showUpdateInfo = false },
+            onSettings = {
+                showUpdateInfo = false
+                launchSettings(context, Intent(Settings.ACTION_SYSTEM_UPDATE_SETTINGS))
+            }
+        )
+    }
     Card {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
