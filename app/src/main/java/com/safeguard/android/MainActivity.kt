@@ -158,6 +158,7 @@ private fun SafeguardScreen(
         )
     ) {
         Scaffold(
+            containerColor = Color.White,
             bottomBar = {
                 if (selectedTab in 0..2) Surface(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
@@ -207,14 +208,28 @@ private fun SafeguardScreen(
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                if (selectedTab > 2) {
-                    TextButton(onClick = { selectedTab = if (selectedTab == 5) 1 else 0 }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = null, tint = navy)
-                        Spacer(Modifier.width(8.dp))
-                        Text(if (helpEnglish) "Back" else "Înapoi", color = navy)
+                if (selectedTab in 0..2) {
+                    FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
+                } else {
+                    Surface(color = navy, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)) {
+                            IconButton(onClick = { selectedTab = if (selectedTab == 5) 1 else 0 }) {
+                                Icon(Icons.Filled.ArrowBack, contentDescription = if (helpEnglish) "Back" else "Înapoi", tint = Color.White)
+                            }
+                            Text(
+                                when (selectedTab) {
+                                    3 -> if (helpEnglish) "Security scan" else "Scanare de securitate"
+                                    4 -> if (helpEnglish) "Notification inspector" else "Inspector notificări"
+                                    5 -> if (helpEnglish) "Dictionary" else "Dicționar"
+                                    6 -> if (helpEnglish) "Performance" else "Performanță"
+                                    else -> "FoniWise"
+                                },
+                                modifier = Modifier.weight(1f), color = Color.White,
+                                style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
-                FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning, helpEnglish)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
@@ -291,8 +306,22 @@ private fun SafeguardScreen(
                             style = MaterialTheme.typography.bodySmall)
                     }
                 }
-                Text(if (helpEnglish) "Device status" else "Starea dispozitivului", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
-                DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) }, onCacheGuide = { showCacheGuide = true })
+                Card(
+                    onClick = { selectedTab = 6 },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(containerColor = paleGreen),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Filled.Assessment, contentDescription = null, tint = green, modifier = Modifier.size(32.dp))
+                        Spacer(Modifier.width(14.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(if (helpEnglish) "Phone performance" else "Performanța telefonului", fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "RAM · Storage · Battery · Android" else "RAM · Stocare · Baterie · Android", style = MaterialTheme.typography.bodySmall)
+                        }
+                        Text("›", color = green, style = MaterialTheme.typography.headlineMedium)
+                    }
+                }
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
@@ -377,6 +406,10 @@ private fun SafeguardScreen(
                             }
                         }
                     }
+                }
+                if (selectedTab == 6) {
+                    Text(if (helpEnglish) "Android readings are informational, not a diagnosis." else "Valorile raportate de Android sunt orientative, nu un diagnostic.", color = navy)
+                    DeviceHealthCards(context, helpEnglish, onLanguageChange = { chooseLanguage(it) }, onCacheGuide = { showCacheGuide = true })
                 }
                 if (selectedTab == 3) {
                 Card(
@@ -812,7 +845,7 @@ private fun DashboardTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 218.dp),
+        modifier = modifier.heightIn(min = 174.dp),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = paleGreen),
         elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
@@ -823,7 +856,11 @@ private fun DashboardTile(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(7.dp, Alignment.Top)
         ) {
-            Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(38.dp))
+            Surface(color = Color(0xFFD5F8B9), shape = RoundedCornerShape(16.dp)) {
+                Box(Modifier.padding(12.dp), contentAlignment = Alignment.Center) {
+                    Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(36.dp))
+                }
+            }
             Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
             Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
             Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
