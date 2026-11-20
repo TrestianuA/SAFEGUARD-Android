@@ -48,3 +48,9 @@ Au fost create două fișiere PNG cu transparență, pornind de la previzualizar
 - `/FoniWise/Branding/FoniWise_icon_rounded_preview_neaprobat.png` — mască pătrată cu colțuri rotunjite.
 
 Acestea sunt doar simulări vizuale, **nu** resurse Android adaptive definitive. Originalul complet aprobat rămâne separat și nemodificat. Nu activați aceste fișiere în manifest fără evaluarea lizibilității la dimensiuni mici și aprobarea utilizatorului.
+
+## Decizie finală privind forma pictogramei
+
+**Aprobat explicit de proprietarul proiectului:** pictograma FoniWise **cu colțuri rotunjite**. Fișierul de referință este `/FoniWise/Branding/FoniWise_icon_rounded_preview_neaprobat.png` (denumirea istorică a fișierului conține «neaprobat», dar varianta vizuală a fost ulterior aprobată).
+
+Varianta rotundă rămâne doar o simulare, nu alegerea principală. Logo-ul complet aprobat, cu slogan, rămâne neschimbat. Aprobarea direcției vizuale **nu înseamnă** că resursele adaptive Android au fost generate, integrate sau testate. Înainte de activare, validați lizibilitatea și decuparea pe dispozitiv și păstrați resursele SAFEGUARD existente până la verificarea noului APK.
