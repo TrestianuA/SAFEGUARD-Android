@@ -225,10 +225,10 @@ private fun SafeguardScreen(
                             "Cache Advisor",
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
-                            DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Reports" else "Rapoarte",
-                            if (helpEnglish) "Local data" else "Date locale",
-                            if (helpEnglish) "Helps you review scan results and available notification activity." else "Te ajută să consulți rezultatele scanării și activitatea notificărilor disponibile.",
-                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
+                            DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Scan results" else "Rezultatele scanării",
+                            if (helpEnglish) "Local scan" else "Scanare locală",
+                            if (helpEnglish) "Review the local security scan and its findings. Notification activity is available separately in Notification inspector." else "Consultă scanarea locală de securitate și rezultatele ei. Activitatea notificărilor se află separat în Inspectorul notificărilor.",
+                            helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
                         }
                     } else {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -260,10 +260,10 @@ private fun SafeguardScreen(
                             "Cache Advisor",
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.weight(1f)) { showCacheGuide = true }
-                        DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Reports" else "Rapoarte",
-                            if (helpEnglish) "Local data" else "Date locale",
-                            if (helpEnglish) "Helps you review scan results and available notification activity." else "Te ajută să consulți rezultatele scanării și activitatea notificărilor disponibile.",
-                            helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
+                        DashboardTile(Icons.Filled.Assessment, if (helpEnglish) "Scan results" else "Rezultatele scanării",
+                            if (helpEnglish) "Local scan" else "Scanare locală",
+                            if (helpEnglish) "Review the local security scan and its findings. Notification activity is available separately in Notification inspector." else "Consultă scanarea locală de securitate și rezultatele ei. Activitatea notificărilor se află separat în Inspectorul notificărilor.",
+                            helpEnglish, Modifier.weight(1f)) { selectedTab = 3 }
                     }
                     }
                 }
@@ -542,7 +542,7 @@ private fun SafeguardScreen(
             titleRo = "Cache Advisor",
             titleEn = "Cache Advisor",
             summaryRo = "Cache-ul este un spațiu în care aplicațiile păstrează temporar imagini și alte informații, ca să se deschidă mai repede. În timp, unele aplicații pot ocupa mult spațiu. Poți recupera spațiu pe telefon ștergând manual cache-ul unei aplicații, dacă Android permite.",
-            summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. How it can help you: you may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
+            summaryEn = "A cache is temporary storage where apps keep images and other information so they can open faster. Over time, some apps may use a lot of space. You may recover phone storage by manually clearing an app\'s cache, if Android allows it.",
             doesRo = "FoniWise îți explică pașii pentru a curăța manual cache-ul unei aplicații. Poți deschide lista aplicațiilor Android, alege aplicația dorită, apoi căuta Stocare → Șterge cache. Numele opțiunilor diferă între telefoane.",
             doesEn = "FoniWise explains how to clear an app's cache manually. Open the Android app list, choose an app, then look for Storage → Clear cache. The labels vary by phone.",
             limitsRo = "FoniWise nu șterge automat cache-ul altor aplicații și nu garantează că telefonul va deveni mai rapid. Atenție: «Șterge datele» sau «Golire stocare» este altă acțiune și poate elimina setări ori sesiuni de conectare.",
