@@ -76,3 +76,12 @@ Auditul este **documentat**, nu toate remedierile sunt implementate. Ultima comp
 **Verificare statică:** au fost confirmate patru înlocuiri exacte în sursă; nu au fost schimbate citirile RAM, comportamentul Android, logo-urile, semnarea APK sau permisiunile. **Compilarea CI pentru commitul `2b00ea4223f44389fff726bbdc19e1aaac6006f7` nu avea încă un rezultat la verificare.** Nu s-a efectuat testare pe Samsung.
 
 **Test manual necesar:** schimbă limba din ⓘ RAM și verifică dacă ecranul și ⓘ animații folosesc aceeași limbă; repetă invers. Verifică RO/EN, închiderea dialogurilor și revenirea la ecranul principal. Următorul pas: CI și test de navigare pe Samsung, apoi reducerea textelor duplicate fără pierderea explicațiilor detaliate.
+
+
+## Verificare incrementală — 20 noiembrie 2026, 20:03 (Europe/Bucharest)
+
+- CI confirmat pentru commiturile Cache Advisor `8a720997eb7ab4d6bf9cef34cbb0ffed80b1b5e4` (#186) și documentare `1eae36887cd00715eb2f37bc37ff680dfe51ebeb` (#187): **success**. Aceste rezultate nu validează commiturile ulterioare.
+- Cod inspectat pe ramura `test/foniwise-073-integration`: RAM Monitor folosește citirile `ActivityManager.MemoryInfo`, verifică validitatea și diferențiază recomandările după `lowMemory`; Cache Advisor explică ștergerea manuală și avertizează despre pierderea datelor; ghidul pentru animații rămâne în „Învață despre telefon” / Opțiuni pentru dezvoltatori, fără modificări automate.
+- **Corecție de precizie:** în cardurile RAM și stocare se împart octeții la `1_073_741_824` (2^30), deci unitatea corectă este **GiB**, nu GB. Au fost schimbate doar etichetele RO/EN și a fost explicată unitatea în dialogul ⓘ RAM; calculele, valorile brute, recomandările și permisiunile rămân neschimbate. Commit `38367c38ec39d10b52ef7954383ffadc6b07d3bf`.
+- **Teste statice:** am verificat cele două expresii de formatare și cele două traduceri RO/EN din fișierul sursă. **Teste necesare:** compilare CI pentru commitul de cod, afișare RAM/stocare pe Samsung cu valori reale și rotunjire la o zecimală, deschiderea ⓘ RAM în RO/EN, font mărit și revenire din Setări. Nu a fost efectuat un test pe telefon.
+- Identitatea vizuală aprobată, logo-urile, semnarea APK, citirile sistemului și `main` nu au fost modificate.
