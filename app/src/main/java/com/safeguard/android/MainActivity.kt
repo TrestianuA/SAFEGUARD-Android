@@ -193,9 +193,9 @@ private fun SafeguardScreen(
                                         title,
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = if (active) FontWeight.Bold else FontWeight.Medium,
-                                        maxLines = 2,
-                                        textAlign = TextAlign.Center,
-                                        lineHeight = 14.sp
+                                        // Let the label wrap naturally when Android font scaling is large.
+                                        // A fixed two-line limit could hide the third navigation title.
+                                        textAlign = TextAlign.Center
                                     )
                                 }
                             }
