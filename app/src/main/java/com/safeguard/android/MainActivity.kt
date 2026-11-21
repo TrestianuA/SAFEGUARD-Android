@@ -236,8 +236,9 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    // Keep quick-access labels readable on narrow phones and with larger system fonts.
-                    if (maxWidth < 420.dp) {
+                    // Use one column when either the screen is narrow or Android's font size is enlarged.
+                    // This avoids squeezing long RO/EN descriptions into two narrow tiles.
+                    if (maxWidth < 420.dp || androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
                             if (helpEnglish) "Local check" else "Verificare locală",
