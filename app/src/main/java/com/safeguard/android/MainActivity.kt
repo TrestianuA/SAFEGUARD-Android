@@ -236,7 +236,8 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    if (maxWidth < 360.dp) {
+                    // Keep quick-access labels readable on narrow phones and with larger system fonts.
+                    if (maxWidth < 420.dp) {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
                             if (helpEnglish) "Local check" else "Verificare locală",
