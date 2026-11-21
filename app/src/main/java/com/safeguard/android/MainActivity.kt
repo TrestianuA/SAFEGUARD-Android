@@ -178,13 +178,13 @@ private fun SafeguardScreen(
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
                             Surface(
                                 onClick = { selectedTab = index },
-                                modifier = Modifier.weight(1f).height(78.dp),
+                                modifier = Modifier.weight(1f).heightIn(min = 78.dp),
                                 shape = RoundedCornerShape(28.dp),
                                 color = if (active) Color(0xFF9EEA47) else Color.Transparent,
                                 contentColor = if (active) navy else Color.White
                             ) {
                                 Column(
-                                    modifier = Modifier.fillMaxSize(),
+                                    modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
