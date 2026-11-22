@@ -234,12 +234,8 @@ private fun SafeguardScreen(
                 if (selectedTab == 0) {
                 DashboardOverview(report != null, scanning, helpEnglish)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
-                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    // Use one column when either the screen is narrow or Android's font size is enlarged.
-                    // This avoids squeezing long RO/EN descriptions into two narrow tiles.
-                    if (maxWidth < 420.dp || androidx.compose.ui.platform.LocalDensity.current.fontScale > 1.15f) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                // Five full-width quick-access cards, in a stable single-column layout.
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                             DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
                             if (helpEnglish) "Local check" else "Verificare locală",
                             if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
@@ -264,38 +260,7 @@ private fun SafeguardScreen(
                             "Cache Advisor",
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
-                        }
-                    } else {
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
-                            if (helpEnglish) "Local check" else "Verificare locală",
-                            if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
-                            helpEnglish, Modifier.weight(1f)) { selectedTab = 3 }
-                        DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
-                            if (notificationAccessEnabled) (if (helpEnglish) "Active" else "Activ") else (if (helpEnglish) "Optional access" else "Acces opțional"),
-                            if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
-                            helpEnglish, Modifier.weight(1f)) { selectedTab = 4 }
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
-                            if (helpEnglish) "Android settings" else "Setări Android",
-                            if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
-                            helpEnglish, Modifier.weight(1f)) {
-                            launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
-                        }
-                        DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
-                            if (helpEnglish) "Android settings" else "Setări Android",
-                            if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
-                            helpEnglish, Modifier.weight(1f)) {
-                            launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
-                        }
-                    }
-                    DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
-                        "Cache Advisor",
-                        if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
-                        helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
-                    }
-                    }
+                }
                 }
                 Card(
                     onClick = { selectedTab = 5 },
