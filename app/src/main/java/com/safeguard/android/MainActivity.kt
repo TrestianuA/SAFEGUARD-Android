@@ -232,7 +232,7 @@ private fun SafeguardScreen(
                     }
                 }
                 if (selectedTab == 0) {
-                DashboardOverview(report != null, scanning, helpEnglish)
+                DashboardOverview(helpEnglish)
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
                 // Five full-width quick-access cards, in a stable single-column layout.
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
@@ -745,7 +745,7 @@ private fun BrandLogo(size: androidx.compose.ui.unit.Dp) {
 }
 
 @Composable
-private fun DashboardOverview(hasReport: Boolean, scanning: Boolean, english: Boolean) {
+private fun DashboardOverview(english: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(22.dp),
@@ -768,36 +768,7 @@ private fun DashboardOverview(hasReport: Boolean, scanning: Boolean, english: Bo
                 style = MaterialTheme.typography.bodyMedium,
                 color = navy
             )
-            Surface(
-                color = Color.White,
-                shape = RoundedCornerShape(14.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier.padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Icon(Icons.Filled.Security, contentDescription = null, tint = green)
-                    Column {
-                        Text(
-                            when {
-                                scanning -> if (english) "Local check in progress" else "Verificare locală în desfășurare"
-                                hasReport -> if (english) "Local check completed" else "Verificare locală finalizată"
-                                else -> if (english) "Local check available" else "Verificare locală disponibilă"
-                            },
-                            fontWeight = FontWeight.SemiBold,
-                            color = navy
-                        )
-                        Text(
-                            if (hasReport) (if (english) "Results are available in the security scan." else "Rezultatele sunt disponibile în scanarea de securitate.")
-                            else (if (english) "Does not provide real-time antivirus protection." else "Nu oferă protecție antivirus în timp real."),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = navy
-                        )
-                    }
-                }
-            }
+
         }
     }
 }
