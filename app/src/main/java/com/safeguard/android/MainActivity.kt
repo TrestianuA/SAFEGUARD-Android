@@ -261,7 +261,6 @@ private fun SafeguardScreen(
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
                 }
-                }
                 Card(
                     onClick = { selectedTab = 5 },
                     shape = RoundedCornerShape(20.dp),
