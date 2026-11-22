@@ -25,6 +25,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -162,8 +163,8 @@ private fun SafeguardScreen(
             containerColor = Color.White,
             bottomBar = {
                 if (selectedTab in 0..2) Surface(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
-                    shape = RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomStart = 14.dp, bottomEnd = 14.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(0.dp),
                     color = navy,
                     shadowElevation = 7.dp,
                     border = BorderStroke(1.dp, green)
@@ -173,21 +174,23 @@ private fun SafeguardScreen(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         val tabs = if (helpEnglish) listOf("My phone", "Learn about\nyour phone", "Recommendations\nand actions") else listOf("Telefonul meu", "Învață despre\ntelefon", "Recomandări\nși acțiuni")
-                        val icons = listOf(Icons.Filled.Home, Icons.Filled.Assessment, Icons.Filled.Settings)
+                        val icons = listOf(Icons.Filled.Smartphone, Icons.Filled.MenuBook, Icons.Filled.Checklist)
                         tabs.forEachIndexed { index, title ->
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
                             Surface(
                                 onClick = { selectedTab = index },
                                 modifier = Modifier.weight(1f).heightIn(min = 78.dp),
-                                shape = RoundedCornerShape(28.dp),
-                                color = if (active) Color(0xFF9EEA47) else Color.Transparent,
-                                contentColor = if (active) navy else Color.White
+                                shape = RoundedCornerShape(0.dp),
+                                color = Color.Transparent,
+                                contentColor = if (active) Color(0xFFB5F52C) else Color.White
                             ) {
                                 Column(
                                     modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
+                                    if (active) Box(Modifier.width(32.dp).height(4.dp).background(Color(0xFFB5F52C), RoundedCornerShape(3.dp)))
+                                    else Spacer(Modifier.height(4.dp))
                                     Icon(icons[index], contentDescription = null, modifier = Modifier.size(25.dp))
                                     Text(
                                         title,
@@ -237,21 +240,21 @@ private fun SafeguardScreen(
                 // Five full-width quick-access cards, in a stable single-column layout.
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                             DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
-                            if (helpEnglish) "Local check" else "Verificare locală",
+                            if (helpEnglish) "Review apps and permissions with your consent" else "Verifică aplicațiile și permisiunile, cu acordul tău",
                             if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
                             DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
-                            if (notificationAccessEnabled) (if (helpEnglish) "Active" else "Activ") else (if (helpEnglish) "Optional access" else "Acces opțional"),
+                            if (helpEnglish) "See which apps send notifications and how to manage them" else "Descoperă ce aplicații îți trimit notificări și cum le poți gestiona.",
                             if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
                             DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
-                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Android information and settings" else "Informații și setări Android",
                             if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
                             helpEnglish, Modifier.fillMaxWidth()) {
                             launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                             }
                             DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
-                            if (helpEnglish) "Android settings" else "Setări Android",
+                            if (helpEnglish) "Permissions and settings" else "Permisiuni și setări",
                             if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
                             helpEnglish, Modifier.fillMaxWidth()) {
                             launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
@@ -261,6 +264,7 @@ private fun SafeguardScreen(
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
                 }
+                /* Education and performance live in their own bottom tabs.
                 Card(
                     onClick = { selectedTab = 5 },
                     shape = RoundedCornerShape(20.dp),
@@ -291,6 +295,7 @@ private fun SafeguardScreen(
                         Text("›", color = green, style = MaterialTheme.typography.headlineMedium)
                     }
                 }
+                */
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
@@ -332,6 +337,12 @@ private fun SafeguardScreen(
                     )
                 }
                 if (selectedTab == 2) {
+                    Card(onClick = { selectedTab = 6 }, colors = CardDefaults.cardColors(containerColor = paleGreen), modifier = Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(16.dp)) {
+                            Text(if (helpEnglish) "Phone performance" else "Performanța telefonului", fontWeight = FontWeight.Bold, color = navy)
+                            Text(if (helpEnglish) "RAM · Storage · Battery · Android" else "RAM · Stocare · Baterie · Android", style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
                     Text(if (helpEnglish) "Recommendations & Actions" else "Recomandări și acțiuni",
                         style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
                     Text(if (helpEnglish) "Practical steps you control. FoniWise does not change Android settings automatically." else
@@ -739,7 +750,7 @@ private fun BrandLogo(size: androidx.compose.ui.unit.Dp) {
     Image(
         painter = painterResource(R.drawable.foniwise_symbol_original_approved),
         contentDescription = "Simbolul original FoniWise",
-        modifier = Modifier.size(size),
+        modifier = Modifier.size(size).clip(RoundedCornerShape(12.dp)),
         contentScale = ContentScale.Fit
     )
 }
@@ -764,7 +775,7 @@ private fun DashboardOverview(english: Boolean) {
                 color = navy
             )
             Text(
-                if (english) "Understand your phone, discover available tools and decide what works for you." else "Înțelege-ți telefonul, descoperă instrumentele disponibile și decide ce este potrivit pentru tine.",
+                if (english) "Understand your phone, step by step." else "Înțelege-ți telefonul, pas cu pas.",
                 style = MaterialTheme.typography.bodyMedium,
                 color = navy
             )
@@ -785,25 +796,26 @@ private fun DashboardTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 132.dp),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = paleGreen),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFC5E9B6))
+        modifier = modifier.heightIn(min = 64.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE7F8DB)),
+        border = BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.Top)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Surface(color = Color(0xFFD5F8B9), shape = RoundedCornerShape(14.dp)) {
-                Box(Modifier.padding(8.dp), contentAlignment = Alignment.Center) {
-                    Icon(imageVector = symbol, contentDescription = null, tint = green, modifier = Modifier.size(26.dp))
+            Surface(color = Color(0xFF064D2B), shape = CircleShape) {
+                Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) {
+                    Icon(symbol, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
                 }
             }
-            Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center, lineHeight = 16.sp)
-            Text(subtitle, style = MaterialTheme.typography.labelSmall, color = green, textAlign = TextAlign.Center, maxLines = 2)
-            Text(howItHelps, style = MaterialTheme.typography.labelSmall, color = navy, textAlign = TextAlign.Center)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodyMedium)
+                Text(subtitle, color = Color(0xFF4C564C), style = MaterialTheme.typography.labelSmall)
+            }
+            Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = navy)
         }
     }
 }
