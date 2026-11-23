@@ -52,6 +52,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,6 +87,8 @@ class MainActivity : ComponentActivity() {
         events.value = NotificationLogStore(this).readRecent()
     }
 }
+
+private val nunitoSans = FontFamily(Font(R.font.nunito_sans))
 
 private val green = Color(0xFF087C26)
 private val navy = Color(0xFF064D2B)
@@ -155,6 +159,25 @@ private fun SafeguardScreen(
     }
 
     MaterialTheme(
+        typography = MaterialTheme.typography.let { base ->
+            androidx.compose.material3.Typography(
+                displayLarge = base.displayLarge.copy(fontFamily = nunitoSans),
+                displayMedium = base.displayMedium.copy(fontFamily = nunitoSans),
+                displaySmall = base.displaySmall.copy(fontFamily = nunitoSans),
+                headlineLarge = base.headlineLarge.copy(fontFamily = nunitoSans),
+                headlineMedium = base.headlineMedium.copy(fontFamily = nunitoSans),
+                headlineSmall = base.headlineSmall.copy(fontFamily = nunitoSans),
+                titleLarge = base.titleLarge.copy(fontFamily = nunitoSans),
+                titleMedium = base.titleMedium.copy(fontFamily = nunitoSans),
+                titleSmall = base.titleSmall.copy(fontFamily = nunitoSans),
+                bodyLarge = base.bodyLarge.copy(fontFamily = nunitoSans),
+                bodyMedium = base.bodyMedium.copy(fontFamily = nunitoSans),
+                bodySmall = base.bodySmall.copy(fontFamily = nunitoSans),
+                labelLarge = base.labelLarge.copy(fontFamily = nunitoSans),
+                labelMedium = base.labelMedium.copy(fontFamily = nunitoSans),
+                labelSmall = base.labelSmall.copy(fontFamily = nunitoSans)
+            )
+        },
         colorScheme = lightColorScheme(
             primary = green,
             secondary = navy,
