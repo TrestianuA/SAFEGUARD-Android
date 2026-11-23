@@ -240,7 +240,7 @@ private fun SafeguardScreen(
                 }
                 if (selectedTab == 0) {
                 DashboardOverview(helpEnglish)
-                Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = navy)
+                Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 // Five full-width quick-access cards, in a stable single-column layout.
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
                             DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
@@ -768,8 +768,8 @@ private fun DashboardTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 64.dp),
-        shape = RoundedCornerShape(12.dp),
+        modifier = modifier.heightIn(min = 78.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFE7F8DB)),
         border = BorderStroke(1.dp, Color(0xFFC5E9B6))
     ) {
@@ -779,13 +779,13 @@ private fun DashboardTile(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Surface(color = Color(0xFF064D2B), shape = CircleShape) {
-                Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) {
-                    Icon(symbol, contentDescription = null, tint = Color.White, modifier = Modifier.size(24.dp))
+                Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
+                    Icon(symbol, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
                 }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.bodyMedium)
-                Text(subtitle, color = Color(0xFF4C564C), style = MaterialTheme.typography.labelSmall)
+                Text(title, fontWeight = FontWeight.Bold, color = navy, style = MaterialTheme.typography.titleMedium)
+                Text(subtitle, color = Color(0xFF4D4D4D), style = MaterialTheme.typography.bodySmall)
             }
             Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = navy)
         }
