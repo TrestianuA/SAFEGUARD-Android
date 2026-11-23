@@ -244,7 +244,7 @@ private fun SafeguardScreen(
                             if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
                             DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
-                            if (helpEnglish) "See which apps send notifications and how to manage them" else "Descoperă ce aplicații îți trimit notificări și cum le poți gestiona.",
+                            if (helpEnglish) "Optional access" else "Acces opțional",
                             if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
                             DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
@@ -264,38 +264,6 @@ private fun SafeguardScreen(
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
                 }
-                /* Education and performance live in their own bottom tabs.
-                Card(
-                    onClick = { selectedTab = 5 },
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = paleGreen),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                        Text(if (helpEnglish) "Know Your Phone · Dictionary" else "Cunoaște-ți telefonul · Dicționar",
-                            fontWeight = FontWeight.Bold, color = navy)
-                        Text(if (helpEnglish) "Practical explanations and tips · RO / EN" else
-                            "Explicații utile și recomandări practice · RO / EN",
-                            style = MaterialTheme.typography.bodySmall)
-                    }
-                }
-                Card(
-                    onClick = { selectedTab = 6 },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = paleGreen),
-                    shape = RoundedCornerShape(18.dp)
-                ) {
-                    Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Filled.Assessment, contentDescription = null, tint = green, modifier = Modifier.size(32.dp))
-                        Spacer(Modifier.width(14.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(if (helpEnglish) "Phone performance" else "Performanța telefonului", fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "RAM · Storage · Battery · Android" else "RAM · Stocare · Baterie · Android", style = MaterialTheme.typography.bodySmall)
-                        }
-                        Text("›", color = green, style = MaterialTheme.typography.headlineMedium)
-                    }
-                }
-                */
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
