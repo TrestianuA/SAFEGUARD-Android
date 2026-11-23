@@ -24,8 +24,16 @@ jobs:
           cache: gradle
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
-      - name: Build debug APK
-        run: bash ./gradlew :app:assembleDebug --stacktrace
+      - name: Run unit tests and build debug APK
+        run: bash ./gradlew :app:testDebugUnitTest :app:assembleDebug --stacktrace
+      - name: Verify APK output
+        run: |
+          set -euo pipefail
+          apk=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$apk"
+          echo "APK exists: $apk"
+          sha256sum "$apk"
+          ls -lh "$apk"
       - name: Upload test APK
         if: success()
         uses: actions/upload-artifact@v4
