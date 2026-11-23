@@ -24,6 +24,8 @@ jobs:
           cache: gradle
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
+      - name: Install official Nunito Sans font
+        run: bash ./tools/install_nunito_sans.sh
       - name: Run unit tests and build debug APK
         run: bash ./gradlew :app:testDebugUnitTest :app:assembleDebug --stacktrace
       - name: Verify APK output
