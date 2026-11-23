@@ -166,7 +166,7 @@ private fun SafeguardScreen(
         Scaffold(
             containerColor = Color.White,
             bottomBar = {
-                if (selectedTab in 0..2) Surface(
+                if (selectedTab in 0..2 || selectedTab == 6) Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(0.dp),
                     color = navy,
@@ -180,7 +180,7 @@ private fun SafeguardScreen(
                         val tabs = if (helpEnglish) listOf("My phone", "Learn about\nyour phone", "Recommendations\nand actions") else listOf("Telefonul meu", "Învață despre\ntelefon", "Recomandări\nși acțiuni")
                         val icons = listOf(Icons.Filled.Smartphone, Icons.Filled.MenuBook, Icons.Filled.Checklist)
                         tabs.forEachIndexed { index, title ->
-                            val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5)
+                            val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5) || (index == 2 && selectedTab == 6)
                             Surface(
                                 onClick = { selectedTab = index },
                                 modifier = Modifier.weight(1f).heightIn(min = 78.dp),
@@ -221,7 +221,7 @@ private fun SafeguardScreen(
                 } else {
                     Surface(color = navy, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)) {
-                            IconButton(onClick = { selectedTab = if (selectedTab == 5) 1 else 0 }) {
+                            IconButton(onClick = { selectedTab = when (selectedTab) { 5 -> 1; 6 -> 2; else -> 0 } }) {
                                 Icon(Icons.Filled.ArrowBack, contentDescription = if (helpEnglish) "Back" else "Înapoi", tint = Color.White)
                             }
                             Text(
