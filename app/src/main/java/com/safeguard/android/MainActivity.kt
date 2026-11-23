@@ -179,6 +179,7 @@ private fun SafeguardScreen(
                     ) {
                         val tabs = if (helpEnglish) listOf("My phone", "Learn about\nyour phone", "Recommendations\nand actions") else listOf("Telefonul meu", "Învață despre\ntelefon", "Recomandări\nși acțiuni")
                         val icons = listOf(Icons.Filled.Smartphone, Icons.Filled.MenuBook, Icons.Filled.Checklist)
+                        val originalIcons = listOf("foniwise_nav_phone", "foniwise_nav_learn", "foniwise_nav_recommendations")
                         tabs.forEachIndexed { index, title ->
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5) || (index == 2 && selectedTab == 6)
                             Surface(
@@ -195,7 +196,7 @@ private fun SafeguardScreen(
                                 ) {
                                     if (active) Box(Modifier.width(32.dp).height(4.dp).background(Color(0xFFB5F52C), RoundedCornerShape(3.dp)))
                                     else Spacer(Modifier.height(4.dp))
-                                    Icon(icons[index], contentDescription = null, modifier = Modifier.size(25.dp))
+                                    ApprovedCanvaIcon(originalIcons[index], icons[index], Modifier.size(25.dp), tintFallback = if (active) Color(0xFFB5F52C) else Color.White)
                                     Text(
                                         title,
                                         style = MaterialTheme.typography.labelMedium,
@@ -243,27 +244,27 @@ private fun SafeguardScreen(
                 Text(if (helpEnglish) "Quick access" else "Acces rapid", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = navy)
                 // Five full-width quick-access cards, in a stable single-column layout.
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                            DashboardTile(Icons.Filled.Security, if (helpEnglish) "Security scan" else "Scanare securitate",
+                            DashboardTile(Icons.Filled.Security, "foniwise_icon_security", if (helpEnglish) "Security scan" else "Scanare securitate",
                             if (helpEnglish) "Review apps and permissions with your consent" else "Verifică aplicațiile și permisiunile, cu acordul tău",
                             if (helpEnglish) "Helps you review visible apps, sensitive permissions and special access. Not an antivirus." else "Te ajută să verifici aplicații vizibile, permisiuni sensibile și accesări speciale. Nu este antivirus.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 3 }
-                            DashboardTile(Icons.Filled.Notifications, if (helpEnglish) "Notification inspector" else "Inspector notificări",
+                            DashboardTile(Icons.Filled.Notifications, "foniwise_icon_notifications", if (helpEnglish) "Notification inspector" else "Inspector notificări",
                             if (helpEnglish) "Optional access" else "Acces opțional",
                             if (helpEnglish) "Helps you review notifications made available by Android. Requires your permission." else "Te ajută să examinezi notificările oferite de Android. Necesită acordul tău.",
                             helpEnglish, Modifier.fillMaxWidth()) { selectedTab = 4 }
-                            DashboardTile(Icons.Filled.BatteryChargingFull, if (helpEnglish) "Battery" else "Baterie",
+                            DashboardTile(Icons.Filled.BatteryChargingFull, "foniwise_icon_battery", if (helpEnglish) "Battery" else "Baterie",
                             if (helpEnglish) "Android information and settings" else "Informații și setări Android",
                             if (helpEnglish) "Helps you check battery usage and decide which settings deserve attention." else "Te ajută să verifici consumul bateriei și să decizi ce setări merită atenție.",
                             helpEnglish, Modifier.fillMaxWidth()) {
                             launchSettings(context, Intent("android.intent.action.POWER_USAGE_SUMMARY"))
                             }
-                            DashboardTile(Icons.Filled.Apps, if (helpEnglish) "Apps" else "Aplicații",
+                            DashboardTile(Icons.Filled.Apps, "foniwise_icon_apps", if (helpEnglish) "Apps" else "Aplicații",
                             if (helpEnglish) "Permissions and settings" else "Permisiuni și setări",
                             if (helpEnglish) "Helps you review installed apps, their permissions and available controls." else "Te ajută să verifici aplicațiile instalate, permisiunile și controalele disponibile.",
                             helpEnglish, Modifier.fillMaxWidth()) {
                             launchSettings(context, Intent(Settings.ACTION_APPLICATION_SETTINGS))
                             }
-                            DashboardTile(Icons.Filled.CleaningServices, if (helpEnglish) "Manual cleaning" else "Curățare manuală",
+                            DashboardTile(Icons.Filled.CleaningServices, "foniwise_icon_cleaning", if (helpEnglish) "Manual cleaning" else "Curățare manuală",
                             "Cache Advisor",
                             if (helpEnglish) "Shows when clearing an app's cache may help and how to avoid deleting its data." else "Îți arată când poate ajuta ștergerea cache-ului și cum eviți ștergerea datelor.",
                             helpEnglish, Modifier.fillMaxWidth()) { showCacheGuide = true }
@@ -756,9 +757,39 @@ private fun DashboardOverview(english: Boolean) {
     }
 }
 
+/**
+ * Prefer the eight original Canva PNGs when present in drawable-nodpi.
+ * The fallback keeps the test branch buildable until the exact exports arrive.
+ * Original artwork is rendered without tint or cropping.
+ */
+@Composable
+private fun ApprovedCanvaIcon(
+    drawableName: String,
+    fallback: ImageVector,
+    modifier: Modifier,
+    tintFallback: Color
+) {
+    val context = LocalContext.current
+    @Suppress("DEPRECATION")
+    val resourceId = remember(context, drawableName) {
+        context.resources.getIdentifier(drawableName, "drawable", context.packageName)
+    }
+    if (resourceId != 0) {
+        Image(
+            painter = painterResource(resourceId),
+            contentDescription = null,
+            modifier = modifier,
+            contentScale = ContentScale.Fit
+        )
+    } else {
+        Icon(fallback, contentDescription = null, modifier = modifier, tint = tintFallback)
+    }
+}
+
 @Composable
 private fun DashboardTile(
     symbol: ImageVector,
+    originalIconName: String,
     title: String,
     subtitle: String,
     howItHelps: String,
@@ -780,7 +811,7 @@ private fun DashboardTile(
         ) {
             Surface(color = Color(0xFF064D2B), shape = CircleShape) {
                 Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Icon(symbol, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+                    ApprovedCanvaIcon(originalIconName, symbol, Modifier.size(40.dp), tintFallback = Color.White)
                 }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
