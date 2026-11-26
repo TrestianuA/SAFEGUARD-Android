@@ -67,3 +67,6 @@ V35 APK: cutie, conținut dezvăluit la apăsare. V36 fundal: cronologie 60 min,
 - V38 Blocarea ecranului / Screen lock: telefon cu lacăt, notificare și șase pictograme, trei funcții posibile, selector blocat/deblocat și trei opțiuni notificări, explicație dinamică și reset.
 - V04 Criptare / Encryption: trei panouri, document cu colț pliat, cheie și lacăt, rezultat cu patru rânduri demonstrative, selecție și explicații, comutare criptare/decriptare.
 - HTML RO și SVG RO: detalii recuperate din conversație; validare vizuală și funcțională încă necesară. Traduceri EN pregătite pentru aceste două scheme; restul catalogului necesită reconciliere.
+
+## V05/V06 — revizie bilingvă
+V05: păstrează ambele desene istorice TLS și E2EE; selector tip, explorare expeditor/server/destinatar cu evidențiere, explicații și reset. TLS terminat la server intermediar în model; E2EE poate utiliza TLS. V06: lacăt vectorial, 4/6/8 cifre, 10^n combinații, n log2(10) biți, reset la 6. HTML și SVG RO/EN actualizate; versiunile istorice RO păstrate. Testarea browser și reconcilierea tuturor stărilor SVG rămân deschise.
