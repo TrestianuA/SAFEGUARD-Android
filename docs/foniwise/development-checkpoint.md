@@ -159,3 +159,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Revizie — Fraude și înșelătorii
 31/55 lecții revizuite RO/EN. Phishing, Smishing, Vishing, Coduri QR frauduloase, Deepfake: definiții înaintea analogiilor, clarificarea identității, HTTPS, DNS, VoIP, provenienței și erorilor de detectare. Exemple păstrate. Reutilizare V12–V14; fără prototipuri noi. Commit d03fa0d326f1d7dc920172d67fcb4bd9d9f986f6. Urmează Internet și conectivitate. Validarea independentă și testarea rămân necesare.
+
+## Revizie — Internet și conectivitate
+38/55 lecții revizuite RO/EN. Wi-Fi, Bluetooth, NFC, GPS, Date mobile, Hotspot, DNS. Definiție înaintea analogiei inclusiv DNS; termeni tehnici explicați, exemple păstrate. Reutilizare V15–V17. Schema DNS din conversație rămâne de arhivat separat. Commit a4886b3810a7f56ef6fae8ffba8cfb8122f2399b. Urmează Notificări. Validarea și testarea rămân necesare.
