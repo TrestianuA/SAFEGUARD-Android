@@ -144,3 +144,6 @@ Definiția clară și accesibilă precedă analogia familiară, apoi explicația
 
 ## Revizie — Memorie și stocare
 10/55 lecții revizuite. Cele cinci lecții de memorie păstrează definițiile înaintea analogiilor și exemplele numerice originale; terminologia avansată este explicată în context. Commit 548d9a949931ec0969b471289ef9cbae3565f31c. Urmează Cum funcționează telefonul. Testarea rămâne necesară.
+
+## Arhivare vizuală — V26
+Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regula: arhivarea fiecărei scheme noi înainte de următoarea categorie. SVG-ul istoric nu este încă sincronizat integral cu HTML; verificarea vizuală și integrarea Android rămân necesare.
