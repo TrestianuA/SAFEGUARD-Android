@@ -36,6 +36,8 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V24 Animații: selector 0,5×/1×/2×, durată de bază 400 ms, încărcare ipotetică constantă 600 ms, bare separate; trei cadre de tranziție, nu benchmark și nu sumă obligatorie a duratelor.
 - V25 Bootloader: patru etape conceptuale Buton de pornire → Componente de pornire → Bootloader → Android; evidențiere bootloader, ordine simplificată, fără instrucțiuni de deblocare.
 
+- V26 RAM, stocare internă și cache: masa cu documente în lucru, dulap cu dosare și sertar cu obiecte la îndemână; cache-ul poate exista în RAM, stocare sau procesor. Analogie conceptuală, nu trei memorii fizice obligatoriu separate.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
