@@ -235,3 +235,5 @@ HTML și SVG RO/EN și catalog actualizate pentru V05/V06. Versiuni istorice RO 
 V06: grafic logaritmic, raport dinamic și toate cele trei stări SVG arhivate RO/EN; sintaxă JS verificată. Browser, celelalte stări și controale rămân deschise; nu se avansează categoria.
 
 Arhivare stări alternative: 33 cadre SVG per limbă V38/V04/V39/V40, catalog actualizat. Nu reprezintă verificare browser; V05 selecții alternative, controale și reconcilierea istorică rămân deschise.
+
+V05: șase stări SVG per limbă, controale segmentate HTML RO/EN, catalog actualizat, sintaxă JS verificată. Verificarea browser și uniformizarea celorlalte controale rămân deschise; nu se avansează categoria.
