@@ -195,3 +195,6 @@ Utilizatorul aprobă integrarea simulărilor interactive în Android oriunde ace
 
 ## Fidelitate vizuală aprobată
 Utilizatorul solicită păstrarea aspectului detaliat din conversație, nu doar a calculelor. V33 și V34 actualizate în HTML cu diagramă circulară și grilă de 100 cereri, legende și rezultate; SVG păstrează starea implicită. Arhivele sunt reconstrucții apropiate, nu capturi identice. Validare vizuală și funcțională, EN, Android și sincronizarea celorlalte scheme rămân de realizat. Nu se trece peste salvarea variantelor detaliate.
+
+## Revizie finală — Cum funcționează telefonul
+16/55 lecții parcurse textual RO/EN. V02 revizuit și salvat în HTML interactiv și SVG static, cu selector 1/2/4/8 și reset. SVG vechi V02 rămâne și trebuie reconciliat. V07–V09 inspectate în HTML; îmbunătățirea vizuală și simulările suplimentare rămân de realizat înainte de închiderea categoriei. Fără teste browser sau Android. 34 concepte catalogate.
