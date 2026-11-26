@@ -71,3 +71,6 @@ Acest document este un punct de reluare, nu o copie integrală a conversației s
 Model de referință: explicația DNS prin analogia cu agenda telefonului. Primul nivel pornește de la experiențe familiare, explică termenii indispensabili imediat, utilizează exemple concrete și scheme intuitive. Al doilea nivel aprofundează progresiv, fără jargon neexplicat. Claritatea primează asupra țintelor de lungime; acestea nu mai sunt obligatorii. Se păstrează informația tehnică utilă, dar se reorganizează. Cele 17 lecții rămase urmează acest standard; cele 38 aprofundate vor fi revizuite editorial pentru accesibilitate. Fără lecții noi sau modificări ale primei pagini.
 
 Stadiu actual: 42/55 aprofundate; 13 rămase. Notificările și DNS urmează standardul accesibil revizuit; restul lecțiilor anterioare necesită revizie.
+
+## Stadiu actual — Sistem și actualizări
+46/55 intrări DetailedLesson; 9 rămase. Blob sursă: 6712d7f5c0b302ac834104292aa9cbe6f50314d5. Commit: 6f8c84960c557667aad74a0895794ff451d23011. Patru lecții noi aprofundate: Actualizările Android, Actualizări de securitate, Firmware, Google Play Services. Următoarea categorie: Accesibilitate. Revizia editorială și testarea rămân necesare.
