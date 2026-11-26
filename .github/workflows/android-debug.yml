@@ -59,6 +59,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
 
       - name: Check preinstalled Android SDK
         if: steps.project.outputs.ready == 'true'
@@ -104,10 +105,21 @@ jobs:
               print(f"Validated committed logo: {path} ({len(data)} bytes)")
           PY
 
+      - name: Install Nunito Sans
+        if: steps.project.outputs.ready == 'true'
+        shell: bash
+        run: bash tools/install_nunito_sans.sh
+
       - name: Build debug APK
         if: steps.project.outputs.ready == 'true'
         shell: bash
-        run: bash ./gradlew --no-daemon assembleDebug
+        run: |
+          set -o pipefail
+          for attempt in 1 2 3; do
+            if bash ./gradlew --no-daemon assembleDebug 2>&1 | tee build-attempt.log; then exit 0; fi
+            if [[ "$attempt" == 3 ]] || ! grep -Eq '429|Too Many Requests' build-attempt.log; then exit 1; fi
+            sleep $(( attempt * 60 ))
+          done
 
       - name: Run debug unit tests
         if: steps.project.outputs.ready == 'true'
