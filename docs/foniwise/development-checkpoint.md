@@ -207,3 +207,6 @@ HTML și SVG actualizate cu desene detaliate și simulări pentru atingere, lumi
 
 ## Standard vizual educativ aprobat pentru întreaga bibliotecă
 Utilizatorul aprobă abordarea V02 și V07–V09: reprezentarea detaliată a componentei fizice sau a conceptului prin analogie familiară, explicarea fenomenului, experimentarea interactivă unde are valoare educativă și concluzia care leagă modelul de telefon. Păstrăm fidel geometria, paleta, legendele, comparațiile și comportamentul aprobat; arhivăm HTML funcțional și SVG static înainte de integrarea nativă Compose. Offline, RO/EN, accesibilitate, reset, fără acces hardware sau permisiuni suplimentare. Recuperarea detaliilor V07–V09 din conversație, reconcilierea SVG, validarea browser și integrarea Android rămân deschise; nu declarăm fidelitate sau funcționare testată înainte de verificare.
+
+## Revizie finală — Aplicații și permisiuni
+21/55 lecții parcurse textual; ajustări punctuale RO/EN la cele cinci lecții. V11 HTML interactiv și SVG static revizuite: microfon/cameră/locație, acord și solicitare separată, reset. V03 și restul reviziei vizuale din categorie, catalogul V11, reconcilierea SVG, EN, browser și Android rămân de realizat.
