@@ -189,3 +189,6 @@ Patru concepte noi arhivate în catalog, HTML și SVG ca reprezentări statice s
 
 ## Standard final aprobat — interactivitate educativă
 Utilizatorul aprobă integrarea simulărilor interactive în Android oriunde acestea îmbunătățesc înțelegerea: selectare valori, opțiuni, rezultate recalculate și resetare. Offline, fără permisiuni suplimentare, fără modificarea setărilor reale; accesibilitate și echivalente RO/EN. Păstrăm aspectul și culorile V01 anterioare, fără schimbarea pragurilor propusă ulterior. Exemple: baterie, cicluri, CPU, RAM, lumină cameră, PIN, Wi-Fi, date mobile, text, mărire, animații. Modelele simplificate trebuie explicate; nu reprezintă măsurători ale telefonului. Integrarea Android și testarea sunt încă în așteptare. Revizia finală continuă cu Memorie și stocare.
+
+## Revizie finală — Memorie și stocare
+10/55 lecții parcurse în revizia textuală finală. Cinci lecții RO/EN actualizate, analogii repetitive eliminate, termeni și exemple clarificați. V26 păstrat. V33–V34 salvate în HTML și catalog, 34 concepte catalogate. SVG pentru V33–V34, simularea RAM, traducerile vizuale, validarea browser și integrarea Android rămân de realizat. Urmează Cum funcționează telefonul.
