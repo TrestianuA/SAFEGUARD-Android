@@ -82,3 +82,6 @@ SVG RO/EN: V38 patru stări vizuale distincte; V04 șase combinații criptare/se
 
 ### V05 — stări și controale RO/EN
 Șase cadre SVG per limbă (TLS/E2EE × expeditor/server/destinatar), extrase fără redesenare. HTML: butoane segmentate cu selecție lime și aria-pressed, reset și explicații existente. Sintaxă JS verificată; browser nevalidat.
+
+### Uniformizare controale securitate
+V38/V04/V06/V39/V40: șase selectoare transformate în butoane segmentate RO/EN, aria-pressed, înălțime minimă 44px, culori lime/pale, reset suplimentar V04. Geometria SVG inline păstrată identic; sintaxa scripturilor modificate verificată. Validare browser și TalkBack neefectuată.
