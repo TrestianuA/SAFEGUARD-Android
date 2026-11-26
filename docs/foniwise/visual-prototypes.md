@@ -56,3 +56,6 @@ Finalizarea conținutului celor 55 de lecții; selectarea schemelor utile; compo
 
 - V33: stocare 128 GB, 104 GB ocupați inițial, filmare selectabilă 0–24 GB, liber = 24 − filmare; reset la 4 GB.
 - V34: cache, rată de găsire 0–100%, timp mediu = p × 10 + (1 − p) × 200 ms; reset la 80%. Model cu durate fixe, nu măsurătoare.
+
+## Revizie V07–V09
+V07 straturi conceptuale, selectoare 60/120/240 Hz atingere și 60/90/120 Hz afișaj, intervale 1000/f ms. V08 obiectiv, senzor, peisaj ilustrativ cu lumină și zgomot variabile, 100–400 fotoni, SNR sqrt(N) în model fotonic. V09 undă, membrană, eșantioane, selector 16/44,1/48 kHz, durată 1–10 min, PCM mono 16 biți. Reset pentru fiecare; fără acces hardware.
