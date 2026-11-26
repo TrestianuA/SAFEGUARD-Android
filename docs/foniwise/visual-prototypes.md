@@ -16,6 +16,10 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V10 Degradare: grafic conceptual descendent 100% spre 80%, fără a pretinde o curbă universală.
 - V11 Permisiuni: aplicație → Android → componentă; diferențiază autorizare, utilizare efectivă și transfer de date.
 
+- V12 Inginerie socială: antet verde închis, nod Phishing verde, ramuri spre Smishing/SMS, Vishing/apel vocal, Quishing/cod QR, fundal verde pal.
+- V13 Identitatea paginii: două machete identice, adrese fictive serviciu.example și imitatie.example, lacăt HTTPS la ambele, câmpuri nefuncționale. Aspectul și criptarea transportului nu dovedesc legitimitatea.
+- V14 Detector deepfake: două grile de câte 100 celule, 5 alarme false (coral) și 90 sintetice detectate (verde) implicit. Două cursoare independente 0–100; nedetectate = 100 minus detectate. Nu este detector real.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
