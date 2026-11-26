@@ -117,9 +117,9 @@ private fun SafeguardScreen(
     var error by remember { mutableStateOf<String?>(null) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var libraryCategory by rememberSaveable { mutableIntStateOf(-1) }
-    var libraryTopic by rememberSaveable { mutableStateOf(false) }
+    var libraryTopic by rememberSaveable { mutableStateOf(-1) }
     androidx.activity.compose.BackHandler(enabled = selectedTab == 1 && libraryCategory >= 0) {
-        if (libraryTopic) libraryTopic = false else libraryCategory = -1
+        if (libraryTopic >= 0) libraryTopic = -1 else libraryCategory = -1
     }
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
@@ -216,7 +216,7 @@ private fun SafeguardScreen(
                         tabs.forEachIndexed { index, title ->
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5) || (index == 2 && selectedTab == 6)
                             Surface(
-                                onClick = { selectedTab = index; if (index == 1) { libraryCategory = -1; libraryTopic = false } },
+                                onClick = { selectedTab = index; if (index == 1) { libraryCategory = -1; libraryTopic = -1 } },
                                 modifier = Modifier.weight(1f).heightIn(min = 78.dp),
                                 shape = RoundedCornerShape(0.dp),
                                 color = Color.Transparent,
@@ -306,7 +306,7 @@ private fun SafeguardScreen(
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
                     EducationalLibrary(helpEnglish, libraryCategory, libraryTopic,
-                        onCategory = { libraryCategory = it; libraryTopic = false },
+                        onCategory = { libraryCategory = it; libraryTopic = -1 },
                         onTopic = { libraryTopic = it })
                 }
                 if (selectedTab == 2) {
@@ -351,7 +351,7 @@ private fun SafeguardScreen(
                             OutlinedButton(onClick = {
                                 selectedTab = 1
                                 libraryCategory = 5
-                                libraryTopic = true
+                                libraryTopic = 0
                             }) {
                                 Text(if (helpEnglish) "Understand app permissions" else "Înțelege permisiunile aplicațiilor")
                             }
@@ -411,7 +411,7 @@ private fun SafeguardScreen(
                     OutlinedButton(onClick = {
                         selectedTab = 1
                                 libraryCategory = 5
-                                libraryTopic = true
+                                libraryTopic = 0
                     }) {
                         Text(if (helpEnglish) "Understand what permissions mean" else "Înțelege ce înseamnă permisiunile")
                     }
@@ -1536,32 +1536,74 @@ private val educationEntries = listOf(
     EducationEntry(Icons.Filled.MenuBook, listOf("Dicționar de termeni", "Cache", "Cache-ul păstrează temporar date pentru acces mai rapid.", "Cache-ul reutilizează rezultate sau resurse pentru a reduce operațiile repetate.", "Un browser poate păstra imagini deja încărcate."), listOf("Glossary", "Cache", "A cache temporarily stores data for faster access.", "A cache reuses results or resources to reduce repeated operations.", "A browser may retain previously loaded images."))
 )
 
+private data class LibraryLesson(val category: Int, val ro: List<String>, val en: List<String>)
+private val libraryLessons = educationEntries.mapIndexed { index, entry -> LibraryLesson(index, entry.ro.drop(1), entry.en.drop(1)) } + listOf(
+    LibraryLesson(0, listOf("Procesor", "Procesorul execută instrucțiunile aplicațiilor.", "Nucleele procesorului prelucrează operații, iar frecvența lor poate varia cu sarcina.", "Când deschizi o fotografie, procesorul ajută la decodarea ei."), listOf("Processor", "The processor executes app instructions.", "Processor cores execute operations and their frequency can vary with workload.", "When you open a photo, the processor helps decode it.")),
+    LibraryLesson(0, listOf("Senzori", "Senzorii măsoară lucruri din jurul telefonului.", "Accelerometrul măsoară accelerația, iar giroscopul măsoară rotația.", "Rotirea telefonului poate schimba orientarea ecranului."), listOf("Sensors", "Sensors measure things around the phone.", "An accelerometer measures acceleration and a gyroscope measures rotation.", "Rotating the phone can change screen orientation.")),
+    LibraryLesson(1, listOf("Criptare", "Criptarea transformă datele într-o formă greu de citit fără cheia potrivită.", "Android folosește criptarea bazată pe fișiere pe dispozitivele moderne compatibile.", "Fotografiile stocate pot fi protejate prin criptarea dispozitivului."), listOf("Encryption", "Encryption transforms data into a form difficult to read without the correct key.", "Android uses file-based encryption on compatible modern devices.", "Stored photos can be protected by device encryption.")),
+    LibraryLesson(1, listOf("Autentificare în doi pași", "Identitatea este verificată prin două etape.", "Factorii independenți pot reduce riscul asociat compromiterii unei parole.", "După parolă, un serviciu poate solicita confirmarea pe telefon."), listOf("Two-step verification", "Identity is checked in two steps.", "Independent factors can reduce the risk of a compromised password.", "After a password, a service may request confirmation on your phone.")),
+    LibraryLesson(2, listOf("Smishing", "Smishingul este phishing prin mesaje text.", "Mesajele pot imita expeditori legitimi și pot conține linkuri înșelătoare.", "Un SMS fals poate pretinde că un colet așteaptă plata unei taxe."), listOf("Smishing", "Smishing is phishing through text messages.", "Messages may impersonate legitimate senders and contain deceptive links.", "A fake SMS may claim a parcel requires a fee.")),
+    LibraryLesson(2, listOf("Vishing", "Vishingul este o înșelătorie prin apeluri vocale.", "Identitatea afișată a apelantului poate fi falsificată.", "Un apelant poate pretinde că reprezintă banca."), listOf("Vishing", "Vishing is a scam using voice calls.", "Caller ID can be spoofed.", "A caller may pretend to represent a bank.")),
+    LibraryLesson(3, listOf("Capacitate (mAh)", "mAh este o unitate pentru cantitatea de sarcină electrică a bateriei.", "Energia în Wh depinde atât de capacitatea în Ah, cât și de tensiune.", "Două baterii cu aceeași capacitate pot avea autonomii diferite în telefoane diferite."), listOf("Capacity (mAh)", "mAh is a unit of battery electric charge capacity.", "Energy in Wh depends on both capacity in Ah and voltage.", "Two batteries with equal capacity can yield different runtimes in different phones.")),
+    LibraryLesson(3, listOf("Cicluri de încărcare", "Un ciclu echivalent înseamnă utilizarea cumulată a unei capacități complete.", "Uzura celulelor depinde și de temperatură, timp și condițiile de încărcare.", "Două utilizări de câte 50% însumează aproximativ un ciclu."), listOf("Charge cycles", "An equivalent cycle means cumulative use of one full capacity.", "Cell aging also depends on temperature, time and charging conditions.", "Two uses of 50% add up to approximately one cycle.")),
+    LibraryLesson(4, listOf("Memorie internă", "Memoria internă păstrează aplicații și fișiere chiar după oprirea telefonului.", "Memoria flash nevolatilă stochează date fără alimentare continuă.", "O fotografie rămâne salvată după repornire."), listOf("Internal storage", "Internal storage retains apps and files even when the phone is off.", "Nonvolatile flash memory stores data without continuous power.", "A photo remains saved after restarting.")),
+    LibraryLesson(4, listOf("Memorie cache", "Cache-ul păstrează copii temporare ale datelor folosite frecvent.", "Reutilizarea datelor reduce accesările repetate ale sursei originale.", "O aplicație poate reutiliza miniaturile fotografiilor."), listOf("Cache memory", "A cache keeps temporary copies of frequently used data.", "Reusing data reduces repeated access to the original source.", "An app may reuse photo thumbnails.")),
+    LibraryLesson(5, listOf("APK", "Un APK este un pachet de instalare pentru aplicații Android.", "Pachetul conține cod, resurse și un manifest; Android verifică semnătura la instalare.", "O aplicație distribuită direct poate veni ca fișier APK."), listOf("APK", "An APK is an Android app installation package.", "The package contains code, resources and a manifest; Android verifies its signature during installation.", "A directly distributed app may come as an APK file.")),
+    LibraryLesson(5, listOf("Procese în fundal", "Unele aplicații pot efectua activități fără a fi afișate pe ecran.", "Android limitează execuția în fundal în funcție de versiune și tipul activității.", "O aplicație de muzică poate continua redarea când ecranul este stins."), listOf("Background processes", "Some apps can perform activities without being displayed.", "Android restricts background execution depending on version and activity type.", "A music app may continue playback when the screen is off.")),
+    LibraryLesson(6, listOf("Bluetooth", "Bluetooth conectează dispozitive apropiate fără cablu.", "Bluetooth folosește unde radio în banda de 2,4 GHz și include moduri cu consum redus.", "Căștile wireless primesc sunet de la telefon."), listOf("Bluetooth", "Bluetooth connects nearby devices wirelessly.", "Bluetooth uses radio waves in the 2.4 GHz band and includes low-energy modes.", "Wireless headphones receive audio from the phone.")),
+    LibraryLesson(6, listOf("NFC", "NFC permite comunicarea fără fir la distanțe foarte mici.", "Tehnologia utilizează cuplaj electromagnetic la 13,56 MHz.", "Un telefon compatibil poate comunica cu un terminal de plată apropiat."), listOf("NFC", "NFC enables wireless communication over very short distances.", "The technology uses electromagnetic coupling at 13.56 MHz.", "A compatible phone can communicate with a nearby payment terminal.")),
+    LibraryLesson(7, listOf("Canale de notificări", "Canalele grupează notificările unei aplicații după tip.", "Android permite configurarea importanței canalelor începând cu Android 8.", "O aplicație poate separa mesajele de promoții."), listOf("Notification channels", "Channels group an app's notifications by type.", "Android supports configurable channel importance starting with Android 8.", "An app may separate messages from promotions.")),
+    LibraryLesson(7, listOf("Notificări silențioase", "Aceste notificări pot apărea fără sunet.", "Comportamentul depinde de importanța canalului și setările sistemului.", "O informare meteo poate apărea fără alertă sonoră."), listOf("Silent notifications", "These notifications may appear without sound.", "Behavior depends on channel importance and system settings.", "A weather update may appear without an audible alert.")),
+    LibraryLesson(8, listOf("Actualizări de securitate", "Aceste actualizări corectează probleme de securitate ale software-ului.", "Remedierile pot viza componente Android, nucleul sistemului sau componente ale producătorului.", "O actualizare poate remedia o vulnerabilitate dintr-o componentă multimedia."), listOf("Security updates", "These updates fix software security issues.", "Fixes may target Android components, the kernel or manufacturer components.", "An update may fix a vulnerability in a media component.")),
+    LibraryLesson(8, listOf("Firmware", "Firmware-ul este software care controlează componentele dispozitivului.", "Poate include cod pentru modem, pornire și alte subsisteme hardware.", "O actualizare poate modifica software-ul modemului."), listOf("Firmware", "Firmware is software that controls device components.", "It may include code for the modem, boot process and other hardware subsystems.", "An update may change modem software.")),
+    LibraryLesson(9, listOf("TalkBack", "TalkBack citește și descrie elementele interfeței.", "Cititorul de ecran utilizează informații de accesibilitate oferite de aplicații.", "Un buton poate fi anunțat vocal când primește focalizarea."), listOf("TalkBack", "TalkBack reads and describes interface elements.", "The screen reader uses accessibility information provided by apps.", "A button may be spoken aloud when it receives focus.")),
+    LibraryLesson(9, listOf("Mărirea ecranului", "Mărirea ecranului afișează o zonă a interfeței la scară mai mare.", "Sistemul poate mări imaginea fără a modifica dimensiunile originale ale elementelor.", "Un detaliu mic dintr-o imagine poate deveni mai vizibil."), listOf("Screen magnification", "Magnification displays an area of the interface at a larger scale.", "The system can enlarge the image without changing original element dimensions.", "A small detail in an image may become more visible.")),
+    LibraryLesson(10, listOf("Depanare USB", "Depanarea USB permite comunicarea cu instrumente de dezvoltare.", "ADB comunică cu dispozitivul printr-un serviciu de depanare și mecanisme de autorizare.", "Un dezvoltator poate consulta jurnalele propriei aplicații."), listOf("USB debugging", "USB debugging enables communication with development tools.", "ADB communicates with the device through a debugging service and authorization mechanisms.", "A developer can inspect logs from their own app.")),
+    LibraryLesson(10, listOf("Animații", "Animațiile creează tranziții vizuale între elemente.", "Scările de animație pot modifica durata unor tranziții Android.", "Deschiderea unei ferestre poate fi însoțită de o tranziție."), listOf("Animations", "Animations create visual transitions between elements.", "Animation scales can change the duration of some Android transitions.", "Opening a window may include a transition."))
+)
+
 @Composable
-private fun EducationalLibrary(english: Boolean, category: Int, topic: Boolean, onCategory: (Int) -> Unit, onTopic: (Boolean) -> Unit) {
+private fun EducationalLibrary(english: Boolean, category: Int, topic: Int, onCategory: (Int) -> Unit, onTopic: (Int) -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
     var advanced by rememberSaveable(category, topic) { mutableStateOf(false) }
     val entry = educationEntries.getOrNull(category)
+    fun words(lesson: LibraryLesson) = if (english) lesson.en else lesson.ro
+    fun matches(value: String): Boolean {
+        fun normalize(text: String) = Normalizer.normalize(text, Normalizer.Form.NFD).replace(Regex("\\p{M}+"), "").lowercase(Locale.ROOT)
+        return normalize(value).contains(normalize(query.trim()))
+    }
+    val lessons = if (category == 11) libraryLessons.sortedBy { words(it)[0].lowercase(Locale.ROOT) } else libraryLessons.filter { it.category == category }
+    val lesson = lessons.getOrNull(topic)
     if (entry == null) {
         Text(if (english) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
         Text(if (english) "Educational library" else "Bibliotecă educativă")
         OutlinedTextField(value = query, onValueChange = { query = it }, label = { Text(if (english) "Search topics" else "Caută un subiect") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
-        educationEntries.forEachIndexed { index, item ->
-            val words = if (english) item.en else item.ro
-            if (words.any { it.contains(query.trim(), ignoreCase = true) }) {
-                EducationTile(item.icon, words[0], words[1]) { onCategory(index) }
+        if (query.isBlank()) {
+            educationEntries.forEachIndexed { index, item ->
+                val title = if (english) item.en[0] else item.ro[0]
+                EducationTile(item.icon, title, "") { onCategory(index) }
+            }
+        } else {
+            val results = libraryLessons.filter { words(it).any(::matches) || matches(if (english) educationEntries[it.category].en[0] else educationEntries[it.category].ro[0]) }
+            if (results.isEmpty()) Text(if (english) "No results" else "Niciun rezultat")
+            results.forEach { result ->
+                val index = libraryLessons.filter { it.category == result.category }.indexOf(result)
+                val target = if (result.category == 11) libraryLessons.sortedBy { words(it)[0].lowercase(Locale.ROOT) }.indexOf(result) else index
+                EducationTile(educationEntries[result.category].icon, words(result)[0], if (english) educationEntries[result.category].en[0] else educationEntries[result.category].ro[0]) { onCategory(result.category); onTopic(target) }
             }
         }
     } else {
-        val words = if (english) entry.en else entry.ro
-        TextButton(onClick = { if (topic) onTopic(false) else onCategory(-1) }) {
+        TextButton(onClick = { if (topic >= 0) onTopic(-1) else onCategory(-1) }) {
             Icon(Icons.Filled.ArrowBack, contentDescription = null)
             Text(if (english) "Back" else "Înapoi")
         }
-        Text(words[0], style = MaterialTheme.typography.titleLarge, color = navy)
-        if (!topic) {
-            EducationTile(entry.icon, words[1], "") { onTopic(true) }
+        Text(if (english) entry.en[0] else entry.ro[0], style = MaterialTheme.typography.titleLarge, color = navy)
+        if (lesson == null) {
+            lessons.forEachIndexed { index, item -> EducationTile(educationEntries[item.category].icon, words(item)[0], "") { onTopic(index) } }
         } else {
-            Text(words[1], style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+            val content = words(lesson)
+            Icon(educationEntries[lesson.category].icon, contentDescription = null, tint = green, modifier = Modifier.size(48.dp))
+            Text(content[0], style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 FilterChip(selected = !advanced, onClick = { advanced = false }, label = { Text(if (english) "In simple terms" else "Pe înțelesul tuturor") }, modifier = Modifier.weight(1f))
                 FilterChip(selected = advanced, onClick = { advanced = true }, label = { Text(if (english) "Learn more" else "Află mai multe") }, modifier = Modifier.weight(1f))
@@ -1569,14 +1611,18 @@ private fun EducationalLibrary(english: Boolean, category: Int, topic: Boolean, 
             Card(colors = CardDefaults.cardColors(containerColor = paleGreen), modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (english) "Definition" else "Definiție", fontWeight = FontWeight.Bold, color = navy)
-                    Text(words[2])
+                    Text(content[1])
                     if (advanced) {
                         Text(if (english) "How it works" else "Cum funcționează?", fontWeight = FontWeight.Bold, color = navy)
-                        Text(words[3])
+                        Text(content[2])
                     }
                     Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
-                    Text(words[4])
+                    Text(content[3])
                 }
+            }
+            Text(if (english) "Related topics" else "Subiecte conexe", fontWeight = FontWeight.Bold, color = navy)
+            lessons.withIndex().filter { it.index != topic && it.value.category == lesson.category }.take(4).forEach { related ->
+                EducationTile(educationEntries[related.value.category].icon, words(related.value)[0], "") { onTopic(related.index) }
             }
         }
     }
