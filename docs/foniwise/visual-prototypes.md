@@ -53,3 +53,6 @@ Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slide
 
 ## Ordine
 Finalizarea conținutului celor 55 de lecții; selectarea schemelor utile; componente reutilizabile; integrare RO/EN; legături între concepte; testare. Catalogul este extensibil. Nu se adaugă lecții noi în această etapă.
+
+- V33: stocare 128 GB, 104 GB ocupați inițial, filmare selectabilă 0–24 GB, liber = 24 − filmare; reset la 4 GB.
+- V34: cache, rată de găsire 0–100%, timp mediu = p × 10 + (1 − p) × 200 ms; reset la 80%. Model cu durate fixe, nu măsurătoare.
