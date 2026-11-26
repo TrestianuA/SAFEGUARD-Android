@@ -171,3 +171,6 @@ Schema DNS cu agenda de contacte, reconstruită din conceptul aprobat, salvată 
 
 ## Revizie — Sistem și actualizări
 46/55 lecții revizuite RO/EN. Actualizările Android, Actualizări de securitate, Firmware, Google Play Services: definiții înaintea analogiilor, clarificarea OTA, A/B, patch, firmware, driver și API. Exemple păstrate. Reutilizare V20–V21; fără prototipuri noi. Commit e96c3b3ea4ae9755b248c8c3041ca366fa12af38. Urmează Accesibilitate. Validarea și testarea rămân necesare.
+
+## Standard de prezentare — simplificare
+La cererea utilizatorului: date complete ZZ.LL.AAAA în RO, fără eticheta «Dată ilustrativă»; formulări naturale «Exemplu» sau «De exemplu» în loc de «Exemplu ipotetic», cu precizări despre simulări numai când sunt necesare pentru interpretarea corectă. V20 actualizat în HTML și catalog: 01.09.2025 și 01.10.2025, exemple de niveluri de securitate, nu măsurători ale unor telefoane reale. Aplicare generală la revizia finală.
