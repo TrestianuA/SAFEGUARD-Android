@@ -61,3 +61,6 @@ Catalog vizual: 96e97813ff188e6550728be52c006a60109858b4
 HTML: ff0b846413953ce1f0fd63f8d935efdf3d7ceb57
 SVG: 347bd38a4aff14bec79bf6de620bbc4471de8319
 Acest document este un punct de reluare, nu o copie integrală a conversației sau o confirmare a funcționării APK.
+
+## Standard educativ revizuit — aprobat
+Model de referință: explicația DNS prin analogia cu agenda telefonului. Primul nivel pornește de la experiențe familiare, explică termenii indispensabili imediat, utilizează exemple concrete și scheme intuitive. Al doilea nivel aprofundează progresiv, fără jargon neexplicat. Claritatea primează asupra țintelor de lungime; acestea nu mai sunt obligatorii. Se păstrează informația tehnică utilă, dar se reorganizează. Cele 17 lecții rămase urmează acest standard; cele 38 aprofundate vor fi revizuite editorial pentru accesibilitate. Fără lecții noi sau modificări ale primei pagini.
