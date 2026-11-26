@@ -177,3 +177,6 @@ La cererea utilizatorului: date complete ZZ.LL.AAAA în RO, fără eticheta «Da
 
 ## Revizie — Accesibilitate
 50/55 lecții revizuite RO/EN. Dimensiunea textului, TalkBack, Mărirea ecranului, Subtitrări: definiție înaintea analogiei, scalare, semantică, rezoluție și subtitrare locală explicate. Exemple păstrate, formulări simplificate. Reutilizare V22–V23; fără prototipuri noi. Commit 36676f2409af44ca3302e62f3adb216737000a74. Urmează Setări avansate și Dicționar. Validarea și testarea rămân necesare.
+
+## Revizie — Setări avansate și Dicționar
+55/55 lecții revizuite RO/EN editorial. Opțiuni pentru dezvoltatori, Depanare USB, Animații, Bootloader, Cache. Distincții între meniu și activarea funcțiilor, autorizare ADB, animații și încărcare, blocare ecran și bootloader, OEM unlocking și deblocare, cache și date. Fără instrucțiuni de modificare. Reutilizare V24–V26. Commit 45ccf66e1a62dcac670f52fc83093cd0956c8c81. Urmează validarea și integrarea vizuală; arhivele necesită sincronizare.
