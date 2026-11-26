@@ -27,7 +27,7 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V18 Canale de notificări: dulap cu trei sertare Mesaje (3), Comenzi (2), Oferte (4), numere fictive; nivel aprofundat: aplicație → două canale Comenzi/cu sunet și Oferte/fără sunet. Selector de nivel. Analogia nu implică existența unor sertare fizice.
 - V19 Push: două diagrame telefon/server, verificări periodice cu săgeți spre server, push cu săgeată spre telefon și plic; conexiunea și traficul de întreținere sunt omise din schema simplificată.
 
-- V20 Actualizări de securitate: două uși identice, încuietoare defectă coral înainte și reparată verde după; selector nivel, nivel aprofundat două telefoane Android 14 cu niveluri de securitate fictive 1 septembrie și 1 octombrie. Nu implică protecție absolută.
+- V20 Actualizări de securitate: două uși identice, încuietoare defectă coral înainte și reparată verde după; selector nivel, nivel aprofundat două telefoane Android 14 cu niveluri de securitate exemplificate prin 01.09.2025 și 01.10.2025, fără etichete de tip «Dată ilustrativă». Nu implică protecție absolută.
 - V21 Google Play Services: trei aplicații de exemplu → serviciu comun → localizare, autentificare, alte funcții; schema nu implică acces automat la toate funcțiile sau partajarea datelor între aplicații.
 
 - V22 Dimensiunea textului: mesaj identic, cursor 100–200% în pași de 25%, textul se reașază, buton reset. Model liniar ilustrativ, nu reproducere a scalării Android.
