@@ -79,3 +79,6 @@ Grafic logaritmic cu 3 bare, evidențiere dinamică și raport față de 4 cifre
 
 ### Stări alternative V38/V04/V39/V40
 SVG RO/EN: V38 patru stări vizuale distincte; V04 șase combinații criptare/selecție; V39 opt combinații bife/selecție; V40 cincisprezece combinații praguri reprezentative 0/70/78/79/100 și selecție. Total 33 cadre per limbă, extrase din geometria HTML existentă. Pragurile intermediare rămân interactive în HTML. Validarea vizuală și funcțională în browser rămâne necesară.
+
+### V05 — stări și controale RO/EN
+Șase cadre SVG per limbă (TLS/E2EE × expeditor/server/destinatar), extrase fără redesenare. HTML: butoane segmentate cu selecție lime și aria-pressed, reset și explicații existente. Sintaxă JS verificată; browser nevalidat.
