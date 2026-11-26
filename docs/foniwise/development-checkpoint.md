@@ -150,3 +150,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Revizie — Cum funcționează telefonul
 16/55 lecții revizuite RO/EN. Android, Procesor, Senzori, Ecran tactil, Camera foto, Microfon: definiție înaintea analogiei, termeni explicați, exemple numerice păstrate cu clarificări PCM. Reutilizare propusă V02, V07, V08, V09, V11; fără scheme noi în această etapă. Commit dcc02561eb435f17c3aaa744d216683153a0a0e0. Urmează Aplicații și permisiuni. Testarea rămâne necesară.
+
+## Revizie — Aplicații și permisiuni
+21/55 lecții revizuite RO/EN. Definiții înaintea analogiilor, clarificarea sandbox, SELinux, AppOps, APK, servicii foreground și aplicații de sistem. Exemple numerice păstrate. Reutilizare propusă V03 și V11; fără scheme noi. Commit 482a975543db3b6c703790246883da50e5d975a5. Urmează Securitate și confidențialitate. Validarea și testarea rămân necesare.
