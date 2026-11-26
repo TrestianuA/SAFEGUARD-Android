@@ -192,3 +192,6 @@ Utilizatorul aprobă integrarea simulărilor interactive în Android oriunde ace
 
 ## Revizie finală — Memorie și stocare
 10/55 lecții parcurse în revizia textuală finală. Cinci lecții RO/EN actualizate, analogii repetitive eliminate, termeni și exemple clarificați. V26 păstrat. V33–V34 salvate în HTML și catalog, 34 concepte catalogate. SVG pentru V33–V34, simularea RAM, traducerile vizuale, validarea browser și integrarea Android rămân de realizat. Urmează Cum funcționează telefonul.
+
+## Fidelitate vizuală aprobată
+Utilizatorul solicită păstrarea aspectului detaliat din conversație, nu doar a calculelor. V33 și V34 actualizate în HTML cu diagramă circulară și grilă de 100 cereri, legende și rezultate; SVG păstrează starea implicită. Arhivele sunt reconstrucții apropiate, nu capturi identice. Validare vizuală și funcțională, EN, Android și sincronizarea celorlalte scheme rămân de realizat. Nu se trece peste salvarea variantelor detaliate.
