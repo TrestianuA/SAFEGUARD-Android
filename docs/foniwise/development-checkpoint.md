@@ -201,3 +201,6 @@ Utilizatorul solicită păstrarea aspectului detaliat din conversație, nu doar 
 
 ## V02 — Desenul cipului aprobat explicit
 Păstrăm geometria cipului din conversație, opt nuclee numerotate, pini, culori dinamice, selector 1/2/4/8, reset și rezultate. HTML actualizat cu desenul dinamic și procentul economisit; SVG cu starea implicită de două nuclee. Integrarea Android, EN și verificarea în browser rămân de realizat. Nu este o reprezentare a arhitecturii fizice reale a unui anumit cip.
+
+## Revizie vizuală V07–V09
+HTML și SVG actualizate cu desene detaliate și simulări pentru atingere, lumină și audio. SVG conține și variantele istorice; reconcilierea, verificarea grafică și JS în browser, traducerile EN și Android rămân necesare. 16/55 textual, 34 concepte. Fără acces la hardware sau schimbări Home.
