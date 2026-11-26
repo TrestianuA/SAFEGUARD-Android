@@ -168,3 +168,6 @@ Schema DNS cu agenda de contacte, reconstruită din conceptul aprobat, salvată 
 
 ## Revizie — Notificări
 42/55 lecții revizuite RO/EN. Notificarea, Canale de notificări, Notificări silențioase, Notificări push: definiție înaintea analogiei, clarificarea identificatorilor, importanței canalelor, polling și FCM. Exemple păstrate. Reutilizare V18–V19; fără prototipuri noi. Commit 7b073754447d3fa6f356650e2ba2d80e81bbbfdb. Urmează Sistem și actualizări. Validarea și testarea rămân necesare.
+
+## Revizie — Sistem și actualizări
+46/55 lecții revizuite RO/EN. Actualizările Android, Actualizări de securitate, Firmware, Google Play Services: definiții înaintea analogiilor, clarificarea OTA, A/B, patch, firmware, driver și API. Exemple păstrate. Reutilizare V20–V21; fără prototipuri noi. Commit e96c3b3ea4ae9755b248c8c3041ca366fa12af38. Urmează Accesibilitate. Validarea și testarea rămân necesare.
