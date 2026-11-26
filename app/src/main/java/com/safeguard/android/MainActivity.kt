@@ -30,6 +30,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Accessibility
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.Storage
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Security
@@ -111,6 +116,11 @@ private fun SafeguardScreen(
     var report by remember { mutableStateOf<ScanReport?>(null) }
     var error by remember { mutableStateOf<String?>(null) }
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
+    var libraryCategory by rememberSaveable { mutableIntStateOf(-1) }
+    var libraryTopic by rememberSaveable { mutableStateOf(false) }
+    androidx.activity.compose.BackHandler(enabled = selectedTab == 1 && libraryCategory >= 0) {
+        if (libraryTopic) libraryTopic = false else libraryCategory = -1
+    }
     var showHelp by remember { mutableStateOf(false) }
     var showCacheGuide by remember { mutableStateOf(false) }
     var showPermissionsGuide by remember { mutableStateOf(false) }
@@ -201,12 +211,12 @@ private fun SafeguardScreen(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         val tabs = if (helpEnglish) listOf("My phone", "Learn about\nyour phone", "Recommendations\nand actions") else listOf("Telefonul meu", "Învață despre\ntelefon", "Recomandări\nși acțiuni")
-                        val icons = listOf(Icons.Filled.Smartphone, Icons.Filled.MenuBook, Icons.Filled.Checklist)
+                        val icons = listOf(Icons.Filled.Smartphone, Icons.Filled.Assessment, Icons.Filled.Settings)
                         val originalIcons = listOf("foniwise_nav_phone", "foniwise_nav_learn", "foniwise_nav_recommendations")
                         tabs.forEachIndexed { index, title ->
                             val active = selectedTab == index || (index == 0 && (selectedTab == 3 || selectedTab == 4)) || (index == 1 && selectedTab == 5) || (index == 2 && selectedTab == 6)
                             Surface(
-                                onClick = { selectedTab = index },
+                                onClick = { selectedTab = index; if (index == 1) { libraryCategory = -1; libraryTopic = false } },
                                 modifier = Modifier.weight(1f).heightIn(min = 78.dp),
                                 shape = RoundedCornerShape(0.dp),
                                 color = Color.Transparent,
@@ -219,7 +229,8 @@ private fun SafeguardScreen(
                                 ) {
                                     if (active) Box(Modifier.width(32.dp).height(4.dp).background(Color(0xFFB5F52C), RoundedCornerShape(3.dp)))
                                     else Spacer(Modifier.height(4.dp))
-                                    ApprovedCanvaIcon(originalIcons[index], icons[index], Modifier.size(25.dp), tintFallback = if (active) Color(0xFFB5F52C) else Color.White)
+                                    if (index == 0) ApprovedCanvaIcon(originalIcons[index], icons[index], Modifier.size(25.dp), tintFallback = if (active) Color(0xFFB5F52C) else Color.White)
+                                    else Icon(icons[index], contentDescription = null, modifier = Modifier.size(25.dp), tint = if (active) Color(0xFFB5F52C) else Color.White)
                                     Text(
                                         title,
                                         style = MaterialTheme.typography.labelMedium,
@@ -241,7 +252,7 @@ private fun SafeguardScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 if (selectedTab in 0..2) {
-                    FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish)
+                    FoniWiseHeader(onHelp = { showHelp = true }, onLanguage = { chooseLanguage(!helpEnglish) }, helpEnglish = helpEnglish, showLanguage = selectedTab == 0)
                 } else {
                     Surface(color = navy, shape = RoundedCornerShape(18.dp), modifier = Modifier.fillMaxWidth()) {
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp)) {
@@ -294,43 +305,9 @@ private fun SafeguardScreen(
                 }
                 }
                 if (selectedTab == 1 || selectedTab == 5) {
-                    Text(if (helpEnglish) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
-                    Text(if (helpEnglish) "Clear explanations and practical examples. Choose a topic when you need it." else "Explicații clare și exemple practice. Alege subiectul care te interesează.")
-                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "App permissions explained" else "Permisiunile aplicațiilor, pe înțelesul tău", fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "Why apps ask for camera, microphone, location or contacts, with examples." else "De ce cer aplicațiile acces la cameră, microfon, locație sau contacte, cu exemple.")
-                            OutlinedButton(onClick = { showPermissionsGuide = true }) {
-                                Text(if (helpEnglish) "Read the guide" else "Citește ghidul")
-                            }
-                        }
-                    }
-                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "Fraud and phishing safety" else "Protecție antifraudă și antiphishing",
-                                fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "Learn warning signs in messages, links and calls. No private messages are read." else
-                                "Recunoaște semnele de alarmă din mesaje, linkuri și apeluri. Nu sunt citite mesaje personale.")
-                            OutlinedButton(onClick = { showFraudGuide = true }) {
-                                Text(if (helpEnglish) "Open safety checklist" else "Deschide lista de verificare")
-                            }
-                        }
-                    }
-                    Card(colors = CardDefaults.cardColors(containerColor = paleGreen)) {
-                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(if (helpEnglish) "Developer options explained" else "Opțiuni pentru dezvoltatori, explicate", fontWeight = FontWeight.Bold, color = navy)
-                            Text(if (helpEnglish) "Understand advanced Android settings, risks and safe defaults before making changes."
-                                else "Înțelege setările Android avansate, riscurile și valorile recomandate înainte să modifici ceva.")
-                            OutlinedButton(onClick = { showDeveloperGuide = true }) {
-                                Text(if (helpEnglish) "Read the guide" else "Citește ghidul")
-                            }
-                        }
-                    }
-                    FoniWiseGlossary(
-                        english = helpEnglish,
-                        onBack = { selectedTab = 0 },
-                        onLanguageChange = { chooseLanguage(it) }
-                    )
+                    EducationalLibrary(helpEnglish, libraryCategory, libraryTopic,
+                        onCategory = { libraryCategory = it; libraryTopic = false },
+                        onTopic = { libraryTopic = it })
                 }
                 if (selectedTab == 2) {
                     Card(onClick = { selectedTab = 6 }, colors = CardDefaults.cardColors(containerColor = paleGreen), modifier = Modifier.fillMaxWidth()) {
@@ -373,7 +350,8 @@ private fun SafeguardScreen(
                                 "Verifică permisiunile de care aplicațiile nu mai au nevoie. Modificarea lor poate afecta unele funcții.")
                             OutlinedButton(onClick = {
                                 selectedTab = 1
-                                showPermissionsGuide = true
+                                libraryCategory = 5
+                                libraryTopic = true
                             }) {
                                 Text(if (helpEnglish) "Understand app permissions" else "Înțelege permisiunile aplicațiilor")
                             }
@@ -432,7 +410,8 @@ private fun SafeguardScreen(
                     Section(if (helpEnglish) "Granted sensitive permissions" else "Permisiuni sensibile acordate", if (helpEnglish) "Some permissions are necessary for apps to function normally." else "Unele permisiuni sunt necesare pentru funcționarea normală a aplicațiilor.")
                     OutlinedButton(onClick = {
                         selectedTab = 1
-                        showPermissionsGuide = true
+                                libraryCategory = 5
+                                libraryTopic = true
                     }) {
                         Text(if (helpEnglish) "Understand what permissions mean" else "Înțelege ce înseamnă permisiunile")
                     }
@@ -1234,7 +1213,7 @@ private fun SafeguardInfoDialog(
 }
 
 @Composable
-private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean) {
+private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEnglish: Boolean, showLanguage: Boolean = true) {
     Card(
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = navy),
@@ -1252,7 +1231,7 @@ private fun FoniWiseHeader(onHelp: () -> Unit, onLanguage: () -> Unit, helpEngli
                 Text(if (helpEnglish) "Know Your Phone" else "Cunoaște-ți telefonul", style = MaterialTheme.typography.labelSmall, color = Color(0xFFD1F5C5))
             }
             IconButton(onClick = onHelp) { Icon(Icons.Filled.Settings, contentDescription = if (helpEnglish) "About and settings" else "Despre și setări", tint = Color.White, modifier = Modifier.size(30.dp)) }
-            TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
+            if (showLanguage) TextButton(onClick = onLanguage, contentPadding = PaddingValues(2.dp)) { Text(if (helpEnglish) "EN" else "RO", color = Color.White, fontWeight = FontWeight.Bold) }
         }
     }
 }
@@ -1539,4 +1518,82 @@ private fun openSettingsFor(context: Context, item: SpecialAccessItem) {
         SettingsTarget.USAGE_ACCESS -> Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
     }
     launchSettings(context, intent)
+}
+
+private data class EducationEntry(val icon: ImageVector, val ro: List<String>, val en: List<String>)
+private val educationEntries = listOf(
+    EducationEntry(Icons.Filled.Smartphone, listOf("Cunoaște-ți telefonul", "Android", "Android este sistemul de operare al telefonului.", "Android coordonează hardware-ul și aplicațiile prin servicii de sistem.", "Ecranul principal este o interfață Android."), listOf("Know your phone", "Android", "Android is the phone's operating system.", "Android coordinates hardware and apps through system services.", "The home screen is an Android interface.")),
+    EducationEntry(Icons.Filled.Security, listOf("Securitate și confidențialitate", "Blocarea ecranului", "Blocarea ecranului limitează accesul la telefon.", "Android verifică acreditările înainte de a permite accesul la sesiune.", "Un cod PIN poate debloca ecranul."), listOf("Security and privacy", "Screen lock", "Screen lock restricts access to the phone.", "Android verifies credentials before allowing session access.", "A PIN can unlock the screen.")),
+    EducationEntry(Icons.Filled.Warning, listOf("Fraude și înșelătorii", "Phishing", "Phishingul este o tentativă de a obține date prin înșelăciune.", "Atacatorii imită servicii legitime pentru a determina divulgarea datelor.", "Un mesaj fals poate imita o bancă."), listOf("Fraud and scams", "Phishing", "Phishing is an attempt to obtain data through deception.", "Attackers impersonate legitimate services to induce disclosure.", "A fake message may impersonate a bank.")),
+    EducationEntry(Icons.Filled.BatteryChargingFull, listOf("Baterie și autonomie", "Bateria", "Bateria stochează energia folosită de telefon.", "Celulele litiu-ion transformă energia chimică în energie electrică.", "Ecranul aprins consumă energie."), listOf("Battery and endurance", "Battery", "The battery stores energy used by the phone.", "Lithium-ion cells convert chemical energy into electrical energy.", "An illuminated screen uses energy.")),
+    EducationEntry(Icons.Filled.Storage, listOf("Memorie și stocare", "Memoria RAM", "RAM este memoria temporară folosită de aplicații.", "RAM este volatilă; Android gestionează alocarea și eliberarea memoriei proceselor.", "O aplicație recentă poate rămâne în memorie."), listOf("Memory and storage", "RAM", "RAM is temporary memory used by apps.", "RAM is volatile; Android manages process memory allocation and reclamation.", "A recent app may remain in memory.")),
+    EducationEntry(Icons.Filled.Apps, listOf("Aplicații și permisiuni", "Permisiunile aplicațiilor", "Permisiunile controlează accesul aplicațiilor la funcții și date.", "Android aplică reguli de acces, inclusiv permisiuni acordate în timpul utilizării.", "O aplicație foto poate cere acces la cameră."), listOf("Apps and permissions", "App permissions", "Permissions control app access to features and data.", "Android enforces access rules, including runtime permissions.", "A photo app may request camera access.")),
+    EducationEntry(Icons.Filled.Wifi, listOf("Internet și conectivitate", "Wi-Fi", "Wi-Fi conectează telefonul la o rețea fără cablu.", "Wi-Fi transmite date prin unde radio conform standardelor IEEE 802.11.", "Telefonul se poate conecta la routerul de acasă."), listOf("Internet and connectivity", "Wi-Fi", "Wi-Fi connects the phone to a network wirelessly.", "Wi-Fi transmits data over radio using IEEE 802.11 standards.", "The phone can connect to a home router.")),
+    EducationEntry(Icons.Filled.Notifications, listOf("Notificări", "Notificarea", "O notificare este o informare afișată de sistem sau aplicație.", "Android organizează notificările aplicațiilor în canale configurabile.", "Un calendar poate afișa un memento."), listOf("Notifications", "Notification", "A notification is a message displayed by the system or an app.", "Android organizes app notifications into configurable channels.", "A calendar can display a reminder.")),
+    EducationEntry(Icons.Filled.Refresh, listOf("Sistem și actualizări", "Actualizările Android", "Actualizările modifică software-ul telefonului.", "Actualizările pot include remedieri de securitate și modificări ale componentelor sistemului.", "O actualizare poate corecta o eroare."), listOf("System and updates", "Android updates", "Updates change the phone's software.", "Updates can include security fixes and system component changes.", "An update may fix a bug.")),
+    EducationEntry(Icons.Filled.Accessibility, listOf("Accesibilitate", "Dimensiunea textului", "Dimensiunea textului modifică mărimea literelor afișate.", "Android oferă scalare tipografică pe baza preferințelor utilizatorului.", "Un text mai mare poate fi mai ușor de citit."), listOf("Accessibility", "Text size", "Text size changes the size of displayed letters.", "Android provides font scaling based on user preferences.", "Larger text may be easier to read.")),
+    EducationEntry(Icons.Filled.Settings, listOf("Setări avansate", "Opțiuni pentru dezvoltatori", "Aceste opțiuni sunt setări Android destinate în principal dezvoltatorilor.", "Ele includ instrumente de depanare, monitorizare și configurare a comportamentului sistemului.", "Depanarea USB permite comunicarea cu instrumente de dezvoltare."), listOf("Advanced settings", "Developer options", "These Android settings are mainly intended for developers.", "They include debugging, monitoring and system behavior controls.", "USB debugging enables communication with development tools.")),
+    EducationEntry(Icons.Filled.MenuBook, listOf("Dicționar de termeni", "Cache", "Cache-ul păstrează temporar date pentru acces mai rapid.", "Cache-ul reutilizează rezultate sau resurse pentru a reduce operațiile repetate.", "Un browser poate păstra imagini deja încărcate."), listOf("Glossary", "Cache", "A cache temporarily stores data for faster access.", "A cache reuses results or resources to reduce repeated operations.", "A browser may retain previously loaded images."))
+)
+
+@Composable
+private fun EducationalLibrary(english: Boolean, category: Int, topic: Boolean, onCategory: (Int) -> Unit, onTopic: (Boolean) -> Unit) {
+    var query by rememberSaveable { mutableStateOf("") }
+    var advanced by rememberSaveable(category, topic) { mutableStateOf(false) }
+    val entry = educationEntries.getOrNull(category)
+    if (entry == null) {
+        Text(if (english) "Learn about your phone" else "Învață despre telefon", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+        Text(if (english) "Educational library" else "Bibliotecă educativă")
+        OutlinedTextField(value = query, onValueChange = { query = it }, label = { Text(if (english) "Search topics" else "Caută un subiect") }, modifier = Modifier.fillMaxWidth(), singleLine = true)
+        educationEntries.forEachIndexed { index, item ->
+            val words = if (english) item.en else item.ro
+            if (words.any { it.contains(query.trim(), ignoreCase = true) }) {
+                EducationTile(item.icon, words[0], words[1]) { onCategory(index) }
+            }
+        }
+    } else {
+        val words = if (english) entry.en else entry.ro
+        TextButton(onClick = { if (topic) onTopic(false) else onCategory(-1) }) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = null)
+            Text(if (english) "Back" else "Înapoi")
+        }
+        Text(words[0], style = MaterialTheme.typography.titleLarge, color = navy)
+        if (!topic) {
+            EducationTile(entry.icon, words[1], "") { onTopic(true) }
+        } else {
+            Text(words[1], style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = navy)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(selected = !advanced, onClick = { advanced = false }, label = { Text(if (english) "In simple terms" else "Pe înțelesul tuturor") }, modifier = Modifier.weight(1f))
+                FilterChip(selected = advanced, onClick = { advanced = true }, label = { Text(if (english) "Learn more" else "Află mai multe") }, modifier = Modifier.weight(1f))
+            }
+            Card(colors = CardDefaults.cardColors(containerColor = paleGreen), modifier = Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(if (english) "Definition" else "Definiție", fontWeight = FontWeight.Bold, color = navy)
+                    Text(words[2])
+                    if (advanced) {
+                        Text(if (english) "How it works" else "Cum funcționează?", fontWeight = FontWeight.Bold, color = navy)
+                        Text(words[3])
+                    }
+                    Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
+                    Text(words[4])
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun EducationTile(icon: ImageVector, title: String, subtitle: String, onClick: () -> Unit) {
+    Surface(onClick = onClick, modifier = Modifier.fillMaxWidth().heightIn(min = 78.dp), shape = RoundedCornerShape(16.dp), color = paleGreen, border = BorderStroke(1.dp, Color(0xFFC5E9B6))) {
+        Row(Modifier.padding(10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Box(Modifier.size(48.dp).background(green, CircleShape), contentAlignment = Alignment.Center) {
+                Icon(icon, contentDescription = null, tint = Color.White, modifier = Modifier.size(28.dp))
+            }
+            Column(Modifier.weight(1f)) {
+                Text(title, fontWeight = FontWeight.Bold, color = navy)
+                if (subtitle.isNotEmpty()) Text(subtitle, style = MaterialTheme.typography.bodySmall)
+            }
+            Icon(Icons.Filled.ChevronRight, contentDescription = null, tint = navy)
+        }
+    }
 }
