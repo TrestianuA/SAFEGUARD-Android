@@ -250,3 +250,6 @@ Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de
 - Date RO ZZ.LL.AAAA; «Exemplu»/«De exemplu»; păstrăm avertismentele necesare. Limba aplicației selectată pe prima pagină.
 - Exclusiv test/foniwise-073-integration; nu modificăm main, prima pagină sau Canva fără acord explicit.
 - Punct de reluare: 55 lecții, 26 revizuite textual final, 40 concepte. Securitate: 6 prototipuri bilingve, test JS cu DOM simulat trecut; browser real, fidelitate grafică, ecrane mici și Android nevalidate. Nu avansăm categoria până la reconcilierea necesară. Revizuim și restanțele grafice istorice, inclusiv cip V02, V07–09, APK V35.
+
+### Regula obligatorie de reluare
+Înainte de a răspunde la orice comandă de lucru FoniWise și la fiecare reluare, recitește direct din GitHub acest document și standardul permanent, pe ramura test/foniwise-073-integration. Nu te baza doar pe memoria conversației. Dacă documentul nu poate fi accesat, informează utilizatorul înainte de a continua lucrul.
