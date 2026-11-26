@@ -147,3 +147,6 @@ Definiția clară și accesibilă precedă analogia familiară, apoi explicația
 
 ## Arhivare vizuală — V26
 Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regula: arhivarea fiecărei scheme noi înainte de următoarea categorie. SVG-ul istoric nu este încă sincronizat integral cu HTML; verificarea vizuală și integrarea Android rămân necesare.
+
+## Revizie — Cum funcționează telefonul
+16/55 lecții revizuite RO/EN. Android, Procesor, Senzori, Ecran tactil, Camera foto, Microfon: definiție înaintea analogiei, termeni explicați, exemple numerice păstrate cu clarificări PCM. Reutilizare propusă V02, V07, V08, V09, V11; fără scheme noi în această etapă. Commit dcc02561eb435f17c3aaa744d216683153a0a0e0. Urmează Aplicații și permisiuni. Testarea rămâne necesară.
