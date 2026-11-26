@@ -162,3 +162,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Revizie — Internet și conectivitate
 38/55 lecții revizuite RO/EN. Wi-Fi, Bluetooth, NFC, GPS, Date mobile, Hotspot, DNS. Definiție înaintea analogiei inclusiv DNS; termeni tehnici explicați, exemple păstrate. Reutilizare V15–V17. Schema DNS din conversație rămâne de arhivat separat. Commit a4886b3810a7f56ef6fae8ffba8cfb8122f2399b. Urmează Notificări. Validarea și testarea rămân necesare.
+
+## Arhivare V27
+Schema DNS cu agenda de contacte, reconstruită din conceptul aprobat, salvată în catalog, HTML și SVG. 27 prototipuri catalogate. SVG istoric incomplet; schema bateriei cu două jumătăți de sticlă rămâne de arhivat. Fără integrare Android sau verificare grafică.
