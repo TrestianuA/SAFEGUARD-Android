@@ -5,7 +5,7 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 
 ## Prototipuri păstrate
 - V01 Baterie: două baterii verticale, nouă și degradată, ambele încărcate la 100%; sănătatea afișată separat; capacitate inițială 5000 mAh, cursor 40–100%, implicit 80%; capacitate rămasă = 5000 × procent / 100; pierdută = 5000 minus rămasă. Verde la >=80%, ocru #D6A32F la >=60%, coral #C96846 sub 60%. Simulare, nu măsurătoare.
-- V02 Procesor: bare orizontale 10, 7, 5,5 secunde pentru 1, 2, 4 nuclee; segment secvențial 4 s verde închis, segment paralel 6/n verde grafic. Model ideal, nu benchmark.
+- V02 Procesor: selector 1/2/4/8 nuclee, implicit 2, reset; durată 4 + 6/n secunde; comparație statică păstrată.  bare orizontale 10, 7, 5,5 secunde pentru 1, 2, 4 nuclee; segment secvențial 4 s verde închis, segment paralel 6/n verde grafic. Model ideal, nu benchmark.
 - V03 Dezinstalare: două coloane înainte/după, 80 MB cod (#72B94C), 120 MB date private (#087C26), 300 MB fotografii partajate (#D1E6C5); după, primii 200 MB reprezentați prin contur punctat, fotografiile rămân. Exemplu ipotetic.
 - V04 Criptare: document cu linii, săgeată, lacăt verde-lime pe fond verde închis, săgeată, text cifrat ilustrativ A9 F2 8C / 7D 3B E1 / C4 0A 6F / 2E 9B 5D. Etichete date originale / criptare / date criptate.
 - V05 Comunicații: două diagrame cu telefoane la capete și server central. TLS: două legături criptate distincte, serverul poate citi mesajul. E2EE: conținut protejat între capete, serverul retransmite text cifrat. Nu sugera că toate metadatele sunt ascunse.
