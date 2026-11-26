@@ -74,3 +74,6 @@ Stadiu actual: 42/55 aprofundate; 13 rămase. Notificările și DNS urmează sta
 
 ## Stadiu actual — Sistem și actualizări
 46/55 intrări DetailedLesson; 9 rămase. Blob sursă: 6712d7f5c0b302ac834104292aa9cbe6f50314d5. Commit: 6f8c84960c557667aad74a0895794ff451d23011. Patru lecții noi aprofundate: Actualizările Android, Actualizări de securitate, Firmware, Google Play Services. Următoarea categorie: Accesibilitate. Revizia editorială și testarea rămân necesare.
+
+## Stadiu actual — Accesibilitate
+50/55 intrări DetailedLesson; 5 rămase. Blob: 4ed6caf84bc7b07502e4fe845adf50b00a6a984c. Commit: 7cc3c5122f0e519aec8328c014d611d3a8283a2c. Lecții: Dimensiunea textului, TalkBack, Mărirea ecranului, Subtitrări. Următoarea categorie: Setări avansate. Revizia editorială și testarea rămân necesare.
