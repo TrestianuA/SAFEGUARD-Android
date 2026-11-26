@@ -62,3 +62,8 @@ V07 straturi conceptuale, selectoare 60/120/240 Hz atingere și 60/90/120 Hz afi
 
 ## V35–V37 și V03 revizuit
 V35 APK: cutie, conținut dezvăluit la apăsare. V36 fundal: cronologie 60 min, 0–12 sincronizări de 5 s, reset. V37 sistem: două zone conceptuale, selector explicații, reset. V03: două telefoane, simulare 80+120 MB eliberați, 300 MB fotografii partajate rămase, reset. V11: selector microfon/cameră/locație, acord și solicitare distincte. Toate offline, fără acces real.
+
+## V38 și V04 — reconciliere
+- V38 Blocarea ecranului / Screen lock: telefon cu lacăt, notificare și șase pictograme, trei funcții posibile, selector blocat/deblocat și trei opțiuni notificări, explicație dinamică și reset.
+- V04 Criptare / Encryption: trei panouri, document cu colț pliat, cheie și lacăt, rezultat cu patru rânduri demonstrative, selecție și explicații, comutare criptare/decriptare.
+- HTML RO și SVG RO: detalii recuperate din conversație; validare vizuală și funcțională încă necesară. Traduceri EN pregătite pentru aceste două scheme; restul catalogului necesită reconciliere.
