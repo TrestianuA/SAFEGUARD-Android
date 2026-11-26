@@ -204,3 +204,6 @@ Păstrăm geometria cipului din conversație, opt nuclee numerotate, pini, culor
 
 ## Revizie vizuală V07–V09
 HTML și SVG actualizate cu desene detaliate și simulări pentru atingere, lumină și audio. SVG conține și variantele istorice; reconcilierea, verificarea grafică și JS în browser, traducerile EN și Android rămân necesare. 16/55 textual, 34 concepte. Fără acces la hardware sau schimbări Home.
+
+## Standard vizual educativ aprobat pentru întreaga bibliotecă
+Utilizatorul aprobă abordarea V02 și V07–V09: reprezentarea detaliată a componentei fizice sau a conceptului prin analogie familiară, explicarea fenomenului, experimentarea interactivă unde are valoare educativă și concluzia care leagă modelul de telefon. Păstrăm fidel geometria, paleta, legendele, comparațiile și comportamentul aprobat; arhivăm HTML funcțional și SVG static înainte de integrarea nativă Compose. Offline, RO/EN, accesibilitate, reset, fără acces hardware sau permisiuni suplimentare. Recuperarea detaliilor V07–V09 din conversație, reconcilierea SVG, validarea browser și integrarea Android rămân deschise; nu declarăm fidelitate sau funcționare testată înainte de verificare.
