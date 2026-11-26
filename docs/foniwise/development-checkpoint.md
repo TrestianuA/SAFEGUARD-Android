@@ -222,3 +222,6 @@ Utilizatorul aprobă deschiderea grafică a cutiei APK, selectarea Cod/Imagini/C
 
 ## Condiție obligatorie de închidere a categoriei — aprobare utilizator
 Nu se trece la categoria următoare înainte de reconcilierea grafică integrală a prototipurilor aprobate (geometrie, pictograme, culori, proporții, legende, stări), HTML cu interactivitate și explorare completă, SVG cu stări statice relevante, traduceri vizuale RO/EN pentru toate etichetele, explicațiile și controalele, catalog actualizat și verificare comparativă. Regula este retroactivă, inclusiv V02 cip, V07–V09, V35 APK și toate celelalte prototipuri. Nu se declară fidelitate sau testare fără verificare efectivă. Categoria securitate rămâne deschisă; arhivele existente sunt parțial simplificate și traducerile incomplete. Nu se modifică home, Canva sau main.
+
+## Reconciliere V38/V04
+Detalii grafice recuperate în HTML și SVG RO; catalog completat pentru cele două; arhive EN separate create pentru V38/V04. Controalele HTML sunt selectoare native, nu replică exactă a segmentelor din conversație. SVG păstrează starea implicită. Verificarea browser și toate celelalte scheme rămân deschise. Nu se avansează categoria.
