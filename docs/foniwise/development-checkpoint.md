@@ -183,3 +183,6 @@ La cererea utilizatorului: date complete ZZ.LL.AAAA în RO, fără eticheta «Da
 
 ## V28–V31
 Patru concepte noi arhivate în catalog, HTML și SVG ca reprezentări statice simplificate, nu reproduceri exacte ale interacțiunilor din conversație. Total 31 prototipuri catalogate. Validarea vizuală și sincronizarea istorică rămân necesare.
+
+## Revizie finală — Baterie și autonomie
+5/55 lecții revizuite textual RO/EN după standardul final. V01 separă procentul de încărcare de sănătatea bazată pe capacitate; V10 clarifică ritmul variabil; V32 recuperează schema ciclurilor. 32 concepte catalogate. Arhivele rămân de validat grafic; V01 necesită verificarea reprezentării capacității și a scriptului, iar versiunile vizuale EN și Android sunt încă de realizat. Urmează Memorie și stocare.
