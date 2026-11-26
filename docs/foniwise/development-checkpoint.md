@@ -156,3 +156,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Revizie — Securitate și confidențialitate
 26/55 lecții revizuite RO/EN. Blocarea ecranului, Criptare, Autentificare în doi pași, Biometrie, Parolă și PIN: definiții înaintea analogiilor, termeni tehnici explicați, exemple păstrate. Reutilizare V04, V05, V06; fără prototipuri noi. Commit 95201d3bb10d80163a2ea3ef44c0507fcf233211. Urmează Fraude și înșelătorii. Validarea independentă și testarea rămân necesare.
+
+## Revizie — Fraude și înșelătorii
+31/55 lecții revizuite RO/EN. Phishing, Smishing, Vishing, Coduri QR frauduloase, Deepfake: definiții înaintea analogiilor, clarificarea identității, HTTPS, DNS, VoIP, provenienței și erorilor de detectare. Exemple păstrate. Reutilizare V12–V14; fără prototipuri noi. Commit d03fa0d326f1d7dc920172d67fcb4bd9d9f986f6. Urmează Internet și conectivitate. Validarea independentă și testarea rămân necesare.
