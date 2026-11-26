@@ -76,3 +76,6 @@ V39: două verificări, parolă și confirmare pe telefon, selecție individual�
 
 ### V06 — completare grafică RO/EN
 Grafic logaritmic cu 3 bare, evidențiere dinamică și raport față de 4 cifre; SVG include stările 4/6/8 și graficul aferent. Scriptul nou verificat sintactic, nu în browser.
+
+### Stări alternative V38/V04/V39/V40
+SVG RO/EN: V38 patru stări vizuale distincte; V04 șase combinații criptare/selecție; V39 opt combinații bife/selecție; V40 cincisprezece combinații praguri reprezentative 0/70/78/79/100 și selecție. Total 33 cadre per limbă, extrase din geometria HTML existentă. Pragurile intermediare rămân interactive în HTML. Validarea vizuală și funcțională în browser rămâne necesară.
