@@ -153,3 +153,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Revizie — Aplicații și permisiuni
 21/55 lecții revizuite RO/EN. Definiții înaintea analogiilor, clarificarea sandbox, SELinux, AppOps, APK, servicii foreground și aplicații de sistem. Exemple numerice păstrate. Reutilizare propusă V03 și V11; fără scheme noi. Commit 482a975543db3b6c703790246883da50e5d975a5. Urmează Securitate și confidențialitate. Validarea și testarea rămân necesare.
+
+## Revizie — Securitate și confidențialitate
+26/55 lecții revizuite RO/EN. Blocarea ecranului, Criptare, Autentificare în doi pași, Biometrie, Parolă și PIN: definiții înaintea analogiilor, termeni tehnici explicați, exemple păstrate. Reutilizare V04, V05, V06; fără prototipuri noi. Commit 95201d3bb10d80163a2ea3ef44c0507fcf233211. Urmează Fraude și înșelătorii. Validarea independentă și testarea rămân necesare.
