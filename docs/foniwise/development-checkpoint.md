@@ -186,3 +186,6 @@ Patru concepte noi arhivate în catalog, HTML și SVG ca reprezentări statice s
 
 ## Revizie finală — Baterie și autonomie
 5/55 lecții revizuite textual RO/EN după standardul final. V01 separă procentul de încărcare de sănătatea bazată pe capacitate; V10 clarifică ritmul variabil; V32 recuperează schema ciclurilor. 32 concepte catalogate. Arhivele rămân de validat grafic; V01 necesită verificarea reprezentării capacității și a scriptului, iar versiunile vizuale EN și Android sunt încă de realizat. Urmează Memorie și stocare.
+
+## Standard final aprobat — interactivitate educativă
+Utilizatorul aprobă integrarea simulărilor interactive în Android oriunde acestea îmbunătățesc înțelegerea: selectare valori, opțiuni, rezultate recalculate și resetare. Offline, fără permisiuni suplimentare, fără modificarea setărilor reale; accesibilitate și echivalente RO/EN. Păstrăm aspectul și culorile V01 anterioare, fără schimbarea pragurilor propusă ulterior. Exemple: baterie, cicluri, CPU, RAM, lumină cameră, PIN, Wi-Fi, date mobile, text, mărire, animații. Modelele simplificate trebuie explicate; nu reprezintă măsurători ale telefonului. Integrarea Android și testarea sunt încă în așteptare. Revizia finală continuă cu Memorie și stocare.
