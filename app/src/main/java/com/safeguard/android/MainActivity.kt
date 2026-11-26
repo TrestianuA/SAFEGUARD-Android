@@ -1583,6 +1583,11 @@ private val libraryLessons = educationEntries.mapIndexed { index, entry -> Libra
     LibraryLesson(10, listOf("Bootloader", "Bootloaderul este software-ul care pregătește pornirea sistemului.", "Pe dispozitivele compatibile, pornirea verificată controlează integritatea componentelor încărcate.", "La pornire, telefonul verifică și încarcă software-ul necesar sistemului."), listOf("Bootloader", "The bootloader is software that prepares the system to start.", "On compatible devices, verified boot checks the integrity of loaded components.", "At startup, the phone checks and loads software needed by the system."))
 )
 
+private data class DetailedLesson(val ro: List<String>, val en: List<String>)
+private val detailedLessons = mapOf(
+    "Degradarea bateriei" to DetailedLesson(listOf("Degradarea bateriei este procesul natural prin care bateria pierde treptat capacitatea de a stoca energie și de a furniza putere. Nu înseamnă neapărat că telefonul este defect. Chiar și o baterie utilizată normal îmbătrânește în timp.", "În interiorul bateriei au loc reacții chimice la fiecare încărcare și descărcare. O parte dintre aceste reacții modifică lent materialele interne. Temperatura, timpul și ciclurile de încărcare influențează ritmul schimbărilor.\n\nNivelul de încărcare și sănătatea bateriei sunt lucruri diferite. Nivelul arată cât din capacitatea actuală este disponibil, iar sănătatea poate descrie capacitatea actuală comparată cu cea inițială. De aceea, o baterie veche poate afișa 100% fără să mai stocheze la fel de mult ca atunci când era nouă.", "Imaginează-ți un telefon cu o baterie nouă de 5.000 mAh care oferă zece ore de utilizare într-un anumit scenariu. După câțiva ani, presupunem că mai păstrează 4.000 mAh, adică 80% din capacitatea inițială. Ambele baterii pot afișa 100%, dar cea veche are o rezervă mai mică. Dacă toate celelalte condiții rămân identice, autonomia ar putea fi aproximativ opt ore. Este ca diferența dintre două recipiente pline, unul de cinci litri și altul de patru litri. Valorile sunt ipotetice, nu o măsurătoare a telefonului.", "Degradarea litiu-ion reprezintă modificarea progresivă a proprietăților electrochimice, cu reducerea capacității disponibile și adesea creșterea rezistenței interne.", "Ionii de litiu se deplasează între electrozi. Reacțiile secundare pot consuma litiu disponibil. Stratul SEI, o peliculă de la suprafața electrodului negativ, este necesar funcționării, însă creșterea sa poate contribui la pierderea capacității. Îmbătrânirea calendaristică apare odată cu timpul, iar cea ciclică este asociată încărcărilor și descărcărilor. Rezistența internă mai mare poate provoca încălzire și căderi de tensiune sub sarcină.", "Pentru o capacitate inițială de 5.000 mAh și una măsurată de 4.000 mAh, indicatorul sănătății bazat pe capacitate este 4.000 / 5.000 × 100 = 80%. În timpul filmării, curentul solicitat poate fi mai mare decât în repaus. Rezistența internă crescută poate determina o cădere de tensiune mai mare și, în anumite condiții, oprirea telefonului înainte ca indicatorul să ajungă la zero. Capacitatea și puterea disponibilă sunt deci aspecte diferite ale degradării."), listOf("Battery aging is the natural process by which a battery gradually loses its ability to store energy and deliver power. It does not necessarily mean the phone is faulty. Even a normally used battery ages over time.", "Chemical reactions occur inside the battery whenever it charges or discharges. Some reactions slowly alter its internal materials. Temperature, time and charge cycles influence the rate.\n\nCharge level and battery health are different. Charge level describes the fraction of current capacity available, whereas health can describe current capacity relative to original capacity. An older battery can therefore show 100% without storing as much as it did when new.", "Imagine a new 5,000 mAh phone battery providing ten hours of use in a particular scenario. Years later, suppose it retains 4,000 mAh, or 80% of its original capacity. Both batteries can display 100%, but the older one has a smaller reserve. With all other conditions identical, runtime might be about eight hours. It is like two full containers holding five and four litres respectively. These are hypothetical figures, not a measurement of your phone.", "Lithium-ion aging is a progressive change in electrochemical properties, involving reduced available capacity and often increased internal resistance.", "Lithium ions move between electrodes. Side reactions can consume available lithium. The SEI layer, a film on the negative electrode, is necessary for operation, but its growth can contribute to capacity loss. Calendar aging occurs with time; cycle aging is associated with charging and discharging. Increased internal resistance can cause heating and voltage drops under load.", "For an original capacity of 5,000 mAh and a measured capacity of 4,000 mAh, capacity-based health is 4,000 / 5,000 × 100 = 80%. Recording video can demand more current than idle operation. Increased internal resistance can cause a larger voltage drop and, under some conditions, shutdown before the indicator reaches zero. Capacity and available power are therefore distinct aspects of aging."))
+)
+
 @Composable
 private fun EducationalLibrary(english: Boolean, category: Int, topic: Int, onCategory: (Int) -> Unit, onTopic: (Int) -> Unit) {
     var query by rememberSaveable { mutableStateOf("") }
@@ -1632,13 +1637,24 @@ private fun EducationalLibrary(english: Boolean, category: Int, topic: Int, onCa
             Card(colors = CardDefaults.cardColors(containerColor = paleGreen), modifier = Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(if (english) "Definition" else "Definiție", fontWeight = FontWeight.Bold, color = navy)
-                    Text(content[1])
-                    if (advanced) {
+                    val detail = detailedLessons[lesson.ro[0]]
+                    val sections = if (english) detail?.en else detail?.ro
+                    val offset = if (advanced) 3 else 0
+                    if (sections != null) {
+                        Text(sections[offset])
                         Text(if (english) "How it works" else "Cum funcționează?", fontWeight = FontWeight.Bold, color = navy)
-                        Text(content[2])
+                        Text(sections[offset + 1])
+                        Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
+                        Text(sections[offset + 2])
+                    } else {
+                        Text(content[1])
+                        if (advanced) {
+                            Text(if (english) "How it works" else "Cum funcționează?", fontWeight = FontWeight.Bold, color = navy)
+                            Text(content[2])
+                        }
+                        Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
+                        Text(content[3])
                     }
-                    Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
-                    Text(content[3])
                 }
             }
             Text(if (english) "Related topics" else "Subiecte conexe", fontWeight = FontWeight.Bold, color = navy)
