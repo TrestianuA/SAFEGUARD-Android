@@ -165,3 +165,6 @@ Schema RAM, stocare internă și cache salvată în catalog, HTML și SVG. Regul
 
 ## Arhivare V27
 Schema DNS cu agenda de contacte, reconstruită din conceptul aprobat, salvată în catalog, HTML și SVG. 27 prototipuri catalogate. SVG istoric incomplet; schema bateriei cu două jumătăți de sticlă rămâne de arhivat. Fără integrare Android sau verificare grafică.
+
+## Revizie — Notificări
+42/55 lecții revizuite RO/EN. Notificarea, Canale de notificări, Notificări silențioase, Notificări push: definiție înaintea analogiei, clarificarea identificatorilor, importanței canalelor, polling și FCM. Exemple păstrate. Reutilizare V18–V19; fără prototipuri noi. Commit 7b073754447d3fa6f356650e2ba2d80e81bbbfdb. Urmează Sistem și actualizări. Validarea și testarea rămân necesare.
