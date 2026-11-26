@@ -30,6 +30,9 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V20 Actualizări de securitate: două uși identice, încuietoare defectă coral înainte și reparată verde după; selector nivel, nivel aprofundat două telefoane Android 14 cu niveluri de securitate fictive 1 septembrie și 1 octombrie. Nu implică protecție absolută.
 - V21 Google Play Services: trei aplicații de exemplu → serviciu comun → localizare, autentificare, alte funcții; schema nu implică acces automat la toate funcțiile sau partajarea datelor între aplicații.
 
+- V22 Dimensiunea textului: mesaj identic, cursor 100–200% în pași de 25%, textul se reașază, buton reset. Model liniar ilustrativ, nu reproducere a scalării Android.
+- V23 Mărirea ecranului: peisaj vectorial cu indicator PARC 100 metri, cursor 1–3× în pași de 0,5; decupare centrală, suprafață vizibilă 100/z² procente. Imaginea originală rămâne neschimbată.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
