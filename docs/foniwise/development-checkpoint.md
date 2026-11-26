@@ -141,3 +141,6 @@ Baterie și autonomie: 5/55 lecții revizuite RO/EN. Introduceri prin analogii, 
 
 ## Ordine educativă corectată — cerința utilizatorului
 Definiția clară și accesibilă precedă analogia familiară, apoi explicația, reprezentarea vizuală unde este utilă și exemplul practic. Această regulă înlocuiește introducerea prin analogie ca prim element. Cele cinci lecții despre baterie au fost reordonate în RO/EN. Commit 298f5d1c6c0c13010b3a8172f5132e10c07704bb. Aplicarea la toate celelalte lecții, inclusiv DNS, rămâne parte din revizie.
+
+## Revizie — Memorie și stocare
+10/55 lecții revizuite. Cele cinci lecții de memorie păstrează definițiile înaintea analogiilor și exemplele numerice originale; terminologia avansată este explicată în context. Commit 548d9a949931ec0969b471289ef9cbae3565f31c. Urmează Cum funcționează telefonul. Testarea rămâne necesară.
