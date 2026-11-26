@@ -40,6 +40,11 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 
 - V27 DNS: două rânduri comparative, agenda Maria → 07xx xxx xxx și DNS site.example → 192.0.2.10. Exemple fictive, adresă rezervată documentației. DNS poate returna mai multe adrese și nu descarcă pagina sau garantează legitimitatea.
 
+- V28: analogie atelier, comenzi șofer vs instrumente mecanic; setări obișnuite vs diagnosticare.
+- V29: selector încărcare / fișiere / depanare USB; energie vs transfer vs operații ADB autorizate. Funcțiile pot coexista.
+- V30: blocarea ecranului vs blocarea bootloaderului, acces utilizator vs software la pornire.
+- V31: cache vs alte date ale aplicației; copii reutilizabile vs preferințe și sesiuni; ștergerea tuturor datelor poate include cache.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
