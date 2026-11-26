@@ -73,3 +73,6 @@ V05: păstrează ambele desene istorice TLS și E2EE; selector tip, explorare ex
 
 ## V39 / V40 — RO/EN
 V39: două verificări, parolă și confirmare pe telefon, selecție individuală, evidențiere, bife și rezultat, reset. V40: senzor cu amprentă vectorială, model numeric, comparator, scor fix 78/100, prag 0–100 implicit 70, rezultat și reset. HTML și SVG RO/EN arhivate. SVG stare inițială; verificare browser necesară.
+
+### V06 — completare grafică RO/EN
+Grafic logaritmic cu 3 bare, evidențiere dinamică și raport față de 4 cifre; SVG include stările 4/6/8 și graficul aferent. Scriptul nou verificat sintactic, nu în browser.
