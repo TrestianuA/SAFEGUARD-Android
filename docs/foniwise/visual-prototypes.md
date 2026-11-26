@@ -20,6 +20,10 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V13 Identitatea paginii: două machete identice, adrese fictive serviciu.example și imitatie.example, lacăt HTTPS la ambele, câmpuri nefuncționale. Aspectul și criptarea transportului nu dovedesc legitimitatea.
 - V14 Detector deepfake: două grile de câte 100 celule, 5 alarme false (coral) și 90 sintetice detectate (verde) implicit. Două cursoare independente 0–100; nedetectate = 100 minus detectate. Nu este detector real.
 
+- V15 Wi-Fi vs internet: telefon → router → internet; comutator conexiune din amonte, implicit activ; Wi-Fi rămâne activ, legătura internet devine coral și întreruptă când comutatorul este oprit.
+- V16 GPS: patru sateliți, linii punctate către receptor, elipsă de incertitudine; poziție și eroare ceas, fără transmitere către sateliți.
+- V17 Date mobile: cursoare 1–20 Mb/s (implicit 5), 1–60 minute (implicit 10); volum MB = debit × minute × 60 / 8; bară raportată la maximul simulării 9000 MB. Model ideal, nu măsurătoare.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
