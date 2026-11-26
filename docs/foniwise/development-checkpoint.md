@@ -228,3 +228,6 @@ Detalii grafice recuperate în HTML și SVG RO; catalog completat pentru cele do
 
 ## V05/V06 reconciliere
 HTML și SVG RO/EN și catalog actualizate pentru V05/V06. Versiuni istorice RO păstrate pentru a evita pierderi. Controale native HTML, SVG PIN implicit 6, testare browser și Android neefectuată. V39/V40 (doi pași/biometrie) și restul reconcilierii încă deschise.
+
+## V39/V40
+40 concepte, 26/55 textual. V39 și V40 HTML/SVG RO/EN și catalog salvate. Categoria rămâne deschisă: verificare browser, toate stările SVG, comparația PIN, controale și reconcilierea istorică încă necesare. Nicio integrare Android.
