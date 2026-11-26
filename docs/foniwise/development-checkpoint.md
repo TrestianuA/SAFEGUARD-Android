@@ -239,3 +239,6 @@ Arhivare stări alternative: 33 cadre SVG per limbă V38/V04/V39/V40, catalog ac
 V05: șase stări SVG per limbă, controale segmentate HTML RO/EN, catalog actualizat, sintaxă JS verificată. Verificarea browser și uniformizarea celorlalte controale rămân deschise; nu se avansează categoria.
 
 Uniformizare V38/V04/V06/V39/V40: șase selectoare per limbă, butoane segmentate, reset V04, sintaxă JS verificată, SVG inline identic. Urmează validare funcțională și vizuală browser și audit traduceri; categoria rămâne deschisă.
+
+### Audit securitate RO/EN
+Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de execuție JS cu DOM simulat: 12 prototipuri, 42 butoane de selecție, reseturi, comutare criptare, rezultat V39 cu ambele verificări și V40 la prag 79; fără excepții, fără referințe literale e(id) lipsă. Testul nu verifică randarea, CSS, geometria sau toate rezultatele. Trei secțiuni istorice RO marcate explicit, fără eliminare. Browser real, TalkBack și Android rămân nevalidate.
