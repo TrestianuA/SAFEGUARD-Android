@@ -231,3 +231,5 @@ HTML și SVG RO/EN și catalog actualizate pentru V05/V06. Versiuni istorice RO 
 
 ## V39/V40
 40 concepte, 26/55 textual. V39 și V40 HTML/SVG RO/EN și catalog salvate. Categoria rămâne deschisă: verificare browser, toate stările SVG, comparația PIN, controale și reconcilierea istorică încă necesare. Nicio integrare Android.
+
+V06: grafic logaritmic, raport dinamic și toate cele trei stări SVG arhivate RO/EN; sintaxă JS verificată. Browser, celelalte stări și controale rămân deschise; nu se avansează categoria.
