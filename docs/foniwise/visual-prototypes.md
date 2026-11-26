@@ -70,3 +70,6 @@ V35 APK: cutie, conținut dezvăluit la apăsare. V36 fundal: cronologie 60 min,
 
 ## V05/V06 — revizie bilingvă
 V05: păstrează ambele desene istorice TLS și E2EE; selector tip, explorare expeditor/server/destinatar cu evidențiere, explicații și reset. TLS terminat la server intermediar în model; E2EE poate utiliza TLS. V06: lacăt vectorial, 4/6/8 cifre, 10^n combinații, n log2(10) biți, reset la 6. HTML și SVG RO/EN actualizate; versiunile istorice RO păstrate. Testarea browser și reconcilierea tuturor stărilor SVG rămân deschise.
+
+## V39 / V40 — RO/EN
+V39: două verificări, parolă și confirmare pe telefon, selecție individuală, evidențiere, bife și rezultat, reset. V40: senzor cu amprentă vectorială, model numeric, comparator, scor fix 78/100, prag 0–100 implicit 70, rezultat și reset. HTML și SVG RO/EN arhivate. SVG stare inițială; verificare browser necesară.
