@@ -242,3 +242,11 @@ Uniformizare V38/V04/V06/V39/V40: șase selectoare per limbă, butoane segmentat
 
 ### Audit securitate RO/EN
 Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de execuție JS cu DOM simulat: 12 prototipuri, 42 butoane de selecție, reseturi, comutare criptare, rezultat V39 cu ambele verificări și V40 la prag 79; fără excepții, fără referințe literale e(id) lipsă. Testul nu verifică randarea, CSS, geometria sau toate rezultatele. Trei secțiuni istorice RO marcate explicit, fără eliminare. Browser real, TalkBack și Android rămân nevalidate.
+
+## Standard permanent obligatoriu — reluarea lucrului
+- Menținem 55 lecții; aprofundăm înainte de extindere. Definiție → analogie familiară → explicație → reprezentare utilă → exemplu practic. Două niveluri detaliate, limbaj accesibil, termeni tehnici explicați, fără ținte rigide de cuvinte.
+- Păstrăm integral detaliile grafice aprobate, geometria, culorile, pictogramele, legendele, stările și interactivitatea; explorarea componentelor individuale unde este utilă, reset, fără acces real la date sau modificări de setări.
+- Arhivăm HTML interactiv și SVG cu stări relevante în RO și EN, traducem toate etichetele și explicațiile, actualizăm catalogul înainte de categoria următoare. Nu confundăm salvarea cu validarea. Verificăm randarea și funcționalitatea pe ecrane mici, accesibilitatea și ulterior integrarea nativă Android.
+- Date RO ZZ.LL.AAAA; «Exemplu»/«De exemplu»; păstrăm avertismentele necesare. Limba aplicației selectată pe prima pagină.
+- Exclusiv test/foniwise-073-integration; nu modificăm main, prima pagină sau Canva fără acord explicit.
+- Punct de reluare: 55 lecții, 26 revizuite textual final, 40 concepte. Securitate: 6 prototipuri bilingve, test JS cu DOM simulat trecut; browser real, fidelitate grafică, ecrane mici și Android nevalidate. Nu avansăm categoria până la reconcilierea necesară. Revizuim și restanțele grafice istorice, inclusiv cip V02, V07–09, APK V35.
