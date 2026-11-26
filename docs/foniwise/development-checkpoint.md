@@ -213,3 +213,6 @@ Utilizatorul aprobă abordarea V02 și V07–V09: reprezentarea detaliată a com
 
 ## Aplicații și permisiuni — prototipuri vizuale
 V35–V37 noi și V03 revizuit arhivate HTML și SVG; 37 concepte, 21/55 textual. Desene conceptuale, nu implementare Android. Validare browser, traduceri vizuale, fidelitate completă și reconciliere SVG încă deschise.
+
+## Aprobare V35 — explorarea componentelor
+Utilizatorul aprobă deschiderea grafică a cutiei APK, selectarea Cod/Imagini/Configurare/Biblioteci, evidențierea și explicația individuală; implementarea nativă Android trebuie să păstreze aceste funcții. Extindem explorarea componentelor unde este utilă. Legenda V35 exact: «Reprezentare conceptuală a unui APK.» HTML actualizat cu selector, explicații și deschidere grafică; fidelitatea completă, SVG, EN și testarea rămân de realizat. Nu eliminăm avertismentele necesare altor simulări.
