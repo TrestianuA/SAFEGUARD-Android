@@ -210,3 +210,6 @@ Utilizatorul aprobă abordarea V02 și V07–V09: reprezentarea detaliată a com
 
 ## Revizie finală — Aplicații și permisiuni
 21/55 lecții parcurse textual; ajustări punctuale RO/EN la cele cinci lecții. V11 HTML interactiv și SVG static revizuite: microfon/cameră/locație, acord și solicitare separată, reset. V03 și restul reviziei vizuale din categorie, catalogul V11, reconcilierea SVG, EN, browser și Android rămân de realizat.
+
+## Aplicații și permisiuni — prototipuri vizuale
+V35–V37 noi și V03 revizuit arhivate HTML și SVG; 37 concepte, 21/55 textual. Desene conceptuale, nu implementare Android. Validare browser, traduceri vizuale, fidelitate completă și reconciliere SVG încă deschise.
