@@ -38,6 +38,8 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 
 - V26 RAM, stocare internă și cache: masa cu documente în lucru, dulap cu dosare și sertar cu obiecte la îndemână; cache-ul poate exista în RAM, stocare sau procesor. Analogie conceptuală, nu trei memorii fizice obligatoriu separate.
 
+- V27 DNS: două rânduri comparative, agenda Maria → 07xx xxx xxx și DNS site.example → 192.0.2.10. Exemple fictive, adresă rezervată documentației. DNS poate returna mai multe adrese și nu descarcă pagina sau garantează legitimitatea.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
