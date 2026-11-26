@@ -219,3 +219,6 @@ Utilizatorul aprobă deschiderea grafică a cutiei APK, selectarea Cod/Imagini/C
 
 ## Securitate — revizie textuală și primele prototipuri
 26/55 lecții revizuite textual RO/EN. V38 blocare ecran și V04 criptare cu explorarea documentului, cheii și rezultatului, HTML și SVG arhivate în versiuni simplificate. 38 concepte. V05/V06, autentificare în doi pași și biometrie, catalog, fidelitate grafică, EN și teste rămân deschise.
+
+## Condiție obligatorie de închidere a categoriei — aprobare utilizator
+Nu se trece la categoria următoare înainte de reconcilierea grafică integrală a prototipurilor aprobate (geometrie, pictograme, culori, proporții, legende, stări), HTML cu interactivitate și explorare completă, SVG cu stări statice relevante, traduceri vizuale RO/EN pentru toate etichetele, explicațiile și controalele, catalog actualizat și verificare comparativă. Regula este retroactivă, inclusiv V02 cip, V07–V09, V35 APK și toate celelalte prototipuri. Nu se declară fidelitate sau testare fără verificare efectivă. Categoria securitate rămâne deschisă; arhivele existente sunt parțial simplificate și traducerile incomplete. Nu se modifică home, Canva sau main.
