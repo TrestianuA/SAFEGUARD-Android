@@ -135,3 +135,6 @@ Stadiu actual: 42/55 aprofundate; 13 rămase. Notificările și DNS urmează sta
 - Încărcare rapidă
 - Capacitate (mAh)
 - Degradarea bateriei
+
+## Etapa 2 — Revizie educativă
+Baterie și autonomie: 5/55 lecții revizuite RO/EN. Introduceri prin analogii, clarificări terminologice, exemplele numerice păstrate. Commit 01348aae0e8f94b57fc4bc87053e1d51151a4678. Următoarea categorie: Memorie și stocare. Validarea independentă și testarea rămân necesare.
