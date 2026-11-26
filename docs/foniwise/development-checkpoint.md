@@ -198,3 +198,6 @@ Utilizatorul solicită păstrarea aspectului detaliat din conversație, nu doar 
 
 ## Revizie finală — Cum funcționează telefonul
 16/55 lecții parcurse textual RO/EN. V02 revizuit și salvat în HTML interactiv și SVG static, cu selector 1/2/4/8 și reset. SVG vechi V02 rămâne și trebuie reconciliat. V07–V09 inspectate în HTML; îmbunătățirea vizuală și simulările suplimentare rămân de realizat înainte de închiderea categoriei. Fără teste browser sau Android. 34 concepte catalogate.
+
+## V02 — Desenul cipului aprobat explicit
+Păstrăm geometria cipului din conversație, opt nuclee numerotate, pini, culori dinamice, selector 1/2/4/8, reset și rezultate. HTML actualizat cu desenul dinamic și procentul economisit; SVG cu starea implicită de două nuclee. Integrarea Android, EN și verificarea în browser rămân de realizat. Nu este o reprezentare a arhitecturii fizice reale a unui anumit cip.
