@@ -59,3 +59,6 @@ Finalizarea conținutului celor 55 de lecții; selectarea schemelor utile; compo
 
 ## Revizie V07–V09
 V07 straturi conceptuale, selectoare 60/120/240 Hz atingere și 60/90/120 Hz afișaj, intervale 1000/f ms. V08 obiectiv, senzor, peisaj ilustrativ cu lumină și zgomot variabile, 100–400 fotoni, SNR sqrt(N) în model fotonic. V09 undă, membrană, eșantioane, selector 16/44,1/48 kHz, durată 1–10 min, PCM mono 16 biți. Reset pentru fiecare; fără acces hardware.
+
+## V35–V37 și V03 revizuit
+V35 APK: cutie, conținut dezvăluit la apăsare. V36 fundal: cronologie 60 min, 0–12 sincronizări de 5 s, reset. V37 sistem: două zone conceptuale, selector explicații, reset. V03: două telefoane, simulare 80+120 MB eliberați, 300 MB fotografii partajate rămase, reset. V11: selector microfon/cameră/locație, acord și solicitare distincte. Toate offline, fără acces real.
