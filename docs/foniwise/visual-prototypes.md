@@ -85,3 +85,6 @@ SVG RO/EN: V38 patru stări vizuale distincte; V04 șase combinații criptare/se
 
 ### Uniformizare controale securitate
 V38/V04/V06/V39/V40: șase selectoare transformate în butoane segmentate RO/EN, aria-pressed, înălțime minimă 44px, culori lime/pale, reset suplimentar V04. Geometria SVG inline păstrată identic; sintaxa scripturilor modificate verificată. Validare browser și TalkBack neefectuată.
+
+### Audit securitate RO/EN
+Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de execuție JS cu DOM simulat: 12 prototipuri, 42 butoane de selecție, reseturi, comutare criptare, rezultat V39 cu ambele verificări și V40 la prag 79; fără excepții, fără referințe literale e(id) lipsă. Testul nu verifică randarea, CSS, geometria sau toate rezultatele. Trei secțiuni istorice RO marcate explicit, fără eliminare. Browser real, TalkBack și Android rămân nevalidate.
