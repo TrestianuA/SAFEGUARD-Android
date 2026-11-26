@@ -225,3 +225,6 @@ Nu se trece la categoria următoare înainte de reconcilierea grafică integral�
 
 ## Reconciliere V38/V04
 Detalii grafice recuperate în HTML și SVG RO; catalog completat pentru cele două; arhive EN separate create pentru V38/V04. Controalele HTML sunt selectoare native, nu replică exactă a segmentelor din conversație. SVG păstrează starea implicită. Verificarea browser și toate celelalte scheme rămân deschise. Nu se avansează categoria.
+
+## V05/V06 reconciliere
+HTML și SVG RO/EN și catalog actualizate pentru V05/V06. Versiuni istorice RO păstrate pentru a evita pierderi. Controale native HTML, SVG PIN implicit 6, testare browser și Android neefectuată. V39/V40 (doi pași/biometrie) și restul reconcilierii încă deschise.
