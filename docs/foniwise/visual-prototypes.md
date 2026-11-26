@@ -24,6 +24,9 @@ Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3F
 - V16 GPS: patru sateliți, linii punctate către receptor, elipsă de incertitudine; poziție și eroare ceas, fără transmitere către sateliți.
 - V17 Date mobile: cursoare 1–20 Mb/s (implicit 5), 1–60 minute (implicit 10); volum MB = debit × minute × 60 / 8; bară raportată la maximul simulării 9000 MB. Model ideal, nu măsurătoare.
 
+- V18 Canale de notificări: dulap cu trei sertare Mesaje (3), Comenzi (2), Oferte (4), numere fictive; nivel aprofundat: aplicație → două canale Comenzi/cu sunet și Oferte/fără sunet. Selector de nivel. Analogia nu implică existența unor sertare fizice.
+- V19 Push: două diagrame telefon/server, verificări periodice cu săgeți spre server, push cu săgeată spre telefon și plic; conexiunea și traficul de întreținere sunt omise din schema simplificată.
+
 ## Referință de aspect
 Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
 Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
