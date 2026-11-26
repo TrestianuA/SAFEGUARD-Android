@@ -77,3 +77,61 @@ Stadiu actual: 42/55 aprofundate; 13 rămase. Notificările și DNS urmează sta
 
 ## Stadiu actual — Accesibilitate
 50/55 intrări DetailedLesson; 5 rămase. Blob: 4ed6caf84bc7b07502e4fe845adf50b00a6a984c. Commit: 7cc3c5122f0e519aec8328c014d611d3a8283a2c. Lecții: Dimensiunea textului, TalkBack, Mărirea ecranului, Subtitrări. Următoarea categorie: Setări avansate. Revizia editorială și testarea rămân necesare.
+
+## Stadiu actual — prima etapă completă
+55/55 intrări DetailedLesson distincte. Blob: a13cfdc8e467de957aafb112415639f4c1d6619f. Commit: 997ce4c4e8dc2854f5362b71a5c851cd11d2785f. Urmează revizia editorială a tuturor lecțiilor conform modelului DNS, apoi integrarea vizuală și testarea. Lista actuală:
+- Opțiuni pentru dezvoltatori
+- Depanare USB
+- Animații
+- Bootloader
+- Cache
+- Dimensiunea textului
+- TalkBack
+- Mărirea ecranului
+- Subtitrări
+- Actualizările Android
+- Actualizări de securitate
+- Firmware
+- Google Play Services
+- Notificarea
+- Canale de notificări
+- Notificări silențioase
+- Notificări push
+- Wi-Fi
+- Bluetooth
+- NFC
+- GPS
+- Date mobile
+- Hotspot
+- DNS
+- Phishing
+- Smishing
+- Vishing
+- Coduri QR frauduloase
+- Deepfake
+- Blocarea ecranului
+- Criptare
+- Autentificare în doi pași
+- Biometrie
+- Parolă și PIN
+- Permisiunile aplicațiilor
+- APK
+- Procese în fundal
+- Aplicații de sistem
+- Dezinstalare
+- Ecran tactil
+- Camera foto
+- Microfon
+- Android
+- Procesor
+- Senzori
+- Memoria RAM
+- Memorie internă
+- Memorie cache
+- Card microSD
+- Memorie virtuală
+- Bateria
+- Cicluri de încărcare
+- Încărcare rapidă
+- Capacitate (mAh)
+- Degradarea bateriei
