@@ -262,3 +262,10 @@ RO/EN: cinci butoane de selecție cu înălțime minimă 44 px și împachetarea
 
 ### Uniformizare etichete pe ecrane înguste
 V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concordanță cu V05. Audit sursă: toate cele opt grupuri de selecție per limbă au denumiri specifice traduse; SVG inline identic textual înainte/după. Nu constituie test de randare sau TalkBack. Categoria rămâne deschisă.
+
+## Identificatori permanenți și recuperarea accesului — 27.11.2026
+- Depozit: TrestianuA/SAFEGUARD-Android — https://github.com/TrestianuA/SAFEGUARD-Android
+- Ramură exclusivă: test/foniwise-073-integration
+- Standard și punct de reluare: docs/foniwise/development-checkpoint.md
+- Copie de rezervă în sursele proiectului FONIWIZE-DEZVOLTARE: FoniWise_Standard (1).txt (instantaneu, nu înlocuiește versiunea GitHub actualizată).
+- Dacă o căutare după nume nu găsește depozitul, consultă întâi lista depozitelor contului GitHub conectat, apoi citește direct fișierul de pe ramura exclusivă. Nu confunda lipsa rezultatelor de căutare cu lipsa permisiunilor. Dacă accesul direct eșuează, informează utilizatorul; nu modifica alte ramuri.
