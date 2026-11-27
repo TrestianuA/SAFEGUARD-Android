@@ -272,3 +272,6 @@ V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concor
 
 ### Audit structural HTML RO/EN — 27.11.2026
 Am verificat arhivele HTML direct din GitHub: zero identificatori id duplicați în fiecare arhivă; șase secțiuni curente de securitate per limbă (V38/V04/V05/V06/V39/V40), fiecare cu buton de resetare și viewBox identic între limbi. Etichetele controalelor sunt prezente în ambele limbi. Acesta este un audit static, nu test de browser; randarea, funcționalitatea efectivă, accesibilitatea și fidelitatea grafică rămân de verificat. Nu s-au modificat prototipurile, main, Home sau Canva. Categoria rămâne deschisă.
+
+### Testare Chromium prin GitHub Actions — 27.11.2026
+Cu aprobarea utilizatorului, configurare exclusiv pe ramura de test: .github/workflows/foniwise-browser.yml (5292f2bbcb9ac8f627032f993a9b2666c5d99e79), script docs/foniwise/browser-audit.cjs (9a159e0a0ca2576a918bd7841ba4017d8453faa4). Playwright Chromium, RO/EN, 320/360/412 px, selecții, reset, erori JS, overflow, capturi și raport JSON. Configurația este salvată, rezultatele execuției încă neconfirmate; testul nu acoperă toate rezultatele semantice, fidelitatea vizuală sau TalkBack. Categoria rămâne deschisă. Fără modificări ale prototipurilor sau aplicației.
