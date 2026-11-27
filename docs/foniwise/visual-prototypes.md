@@ -143,3 +143,6 @@ V47/V48 aprobate explicit de utilizator; V22 previzualizare corectată confirmat
 
 ## Setări avansate/Dicționar — reconciliere V24–V26
 V24 păstrează cele trei cadre și cele două bare separate, factor 0,5×/1×/2×, 200/400/800 ms, încărcare 600 ms constantă, reset 1×. V25 păstrează patru etape și bootloader în verde închis, adaugă patru selecții cu contur și explicații, reset. V26 păstrează geometria mesei, dulapului și sertarului, trei selecții și reset; cadrul istoric SVG RO păstrat. Completare EN, HTML și 12 cadre SVG per limbă (3+5+4), legende și controale 44 px. Audit/inspecție încă de confirmat; 48 concepte, 55 lecții.
+
+## Validare V24–V26 și început integrare Android — 27.11.2026
+Audit 46057754573: 180/180 HTML și 214/214 SVG PASS, 96 capturi HTML și 24 cadre SVG V24–V26 inspectate, fără suprapuneri majore observate. Etichetele mici necesită evaluare fizică. Prototipurile reconciliate tehnic. Integrare nativă inițială V24/V25/V26: geometria SVG a celor trei scheme extrasă identic în cod Kotlin, randare prin Compose Canvas și subset SVG rect/path/text/g, controale Compose, reset și explicații RO/EN. V26 asociat Cache, Memoria RAM, Memorie internă, Memorie cache. Compilarea, fidelitatea randării native și TalkBack încă neconfirmate; nu reprezintă integrarea tuturor celor 48 de concepte.
