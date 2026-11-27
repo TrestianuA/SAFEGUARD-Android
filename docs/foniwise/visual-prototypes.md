@@ -128,3 +128,6 @@ Audit 46051609451: 138/138 HTML și 156/156 SVG PASS înainte de corecție. Insp
 
 ## Sistem și actualizări — retestare finală V46
 Corecția vizibilității contururilor modem/rețea în HTML și SVG RO/EN a trecut auditul 138/138 HTML și 156/156 SVG (execuția 46052325486). Inspectate 36 capturi HTML V46 la 320/360/412 px și 10 cadre SVG, toate stările RO/EN; evidențierea este exclusivă, resetul elimină contururile, fără suprapuneri majore observate. V20/V21/V45 păstrate. Etapa tehnică pregătită pentru închidere; acordul general anterior nu este aprobare separată a variantei corectate. Integrarea Android, contrastul complet, TalkBack și dispozitivul rămân deschise.
+
+## Sistem și actualizări — aprobare și închidere (27.11.2026)
+Utilizatorul aprobă explicit V46 corectat și solicită închiderea etapei de prototipare. V20/V21/V45/V46 RO/EN: închise la nivel de prototipare, pe baza auditului 138/138 HTML și 156/156 SVG și a inspecțiilor consemnate. Restanțele de lizibilitate, integrare Android, contrast complet, TalkBack și dispozitiv rămân în evidență.
