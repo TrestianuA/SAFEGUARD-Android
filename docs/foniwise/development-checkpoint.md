@@ -308,3 +308,6 @@ Execuția 45985260449: 30/36 PASS, șase eșecuri V05. Auditul sursă arată că
 
 ### Retestare extinsă reușită — 27.11.2026
 Execuția 45985744407: succes, 36/36 PASS confirmate direct în jurnal, inclusiv V05 după corectarea scriptului. Arhiva 15191183053: 139 fișiere raportate la încărcare. Testele de mărire, derulare programatică, tastatură și valori PIN au trecut. Inspecția capturilor finale, fidelitatea integrală și TalkBack rămân nevalidate; categoria deschisă. Nicio modificare a prototipurilor.
+
+### Inspecție vizuală finală a capturilor — 27.11.2026
+Arhiva 15191183053 recuperată și verificată: 138 PNG (23 per limbă/lățime) și report.json fără failures. Inspectate toate cele șase planșe comparative RO/EN la 320/360/412 px, cu toate capturile. V38/V05/V06 prezintă schema completă implicit și detalii mărite la derulare; V05 cele șase stări distincte, V04/V39/V40 stări inițiale și modificate coerente vizual. Nu s-au observat regresii majore de încadrare în planșe; etichetele mici în vederea de ansamblu sunt compensate parțial prin mărire și explicații. Inspecția planșelor nu certifică fiecare pixel sau contrastul, gesturile tactile ori TalkBack. Testarea pe dispozitiv Android și accesibilitatea completă rămân deschise; categoria nu este declarată finalizată. Nicio modificare a prototipurilor.
