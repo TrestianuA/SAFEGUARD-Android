@@ -3,17 +3,18 @@ on:
   push:
     branches: [test/foniwise-073-integration]
     paths:
-      - 'docs/foniwise/**'
+      - 'docs/foniwise/visual-archive*.html'
+      - 'docs/foniwise/browser-audit.cjs'
       - '.github/workflows/foniwise-browser.yml'
 permissions:
   contents: read
 jobs:
   chromium:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: '22'
       - run: npm install --no-save --package-lock=false playwright@1.51.1
@@ -22,7 +23,7 @@ jobs:
         run: |
           mkdir -p browser-results
           node docs/foniwise/browser-audit.cjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: foniwise-browser-results
