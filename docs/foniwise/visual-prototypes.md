@@ -103,3 +103,8 @@ V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concor
 - V42 NFC: telefon cititor, câmp magnetic, etichetă pasivă cu antenă și cip; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Nu reprezintă o tranzacție reală.
 - V43 Hotspot: stație mobilă, telefon cu Wi-Fi, laptop și tabletă; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Capacitatea partajată nu se multiplică.
 Legendă RO «Exemplu informativ», EN «Illustrative example»; controale minimum 44 px, aria-pressed, role=status. Toate offline, fără permisiuni sau modificări reale. 43 concepte catalogate, 55 lecții neschimbate. Randarea și validarea funcțională necesare.
+
+## Notificări — rafinare și V44
+- V18: contur lime pentru sertarul selectat, contrast îmbunătățit față de dulapul verde închis.
+- V19: titluri și texte centrale mai mari, etichete Telefon/Phone și Server pentru ambele fluxuri; geometria săgeților păstrată.
+- V44 Notificare și sunet / Notification and sound: telefon cu memento calendar la 14:30 pentru programarea de la 15:00, trei stări Cu sunet/Fără sunet/Îndepărtată, pictograme sonore, evenimentul rămâne salvat în toate stările, reset la Cu sunet. HTML RO/EN, trei cadre SVG per limbă; legendă Exemplu informativ / Illustrative example. Nu emite sunet real, nu modifică notificările sau calendarul telefonului. 44 concepte, fără lecții noi.
