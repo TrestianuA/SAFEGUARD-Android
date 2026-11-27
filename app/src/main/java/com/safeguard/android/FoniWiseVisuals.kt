@@ -136,7 +136,11 @@ private fun visualFor(title: String, english: Boolean): VisualSpec? = when (titl
 /** Native, offline lesson illustration. No device settings are read or changed. */
 @Composable
 internal fun FoniWiseLessonVisual(title: String, english: Boolean, advanced: Boolean) {
-    val spec = visualFor(title, english) ?: return
+    val spec = visualFor(title, english)
+    if (spec == null) {
+        FoniWiseMoreVisuals(title, english, advanced)
+        return
+    }
     val initial = spec.initialIndex
     var selected by rememberSaveable(title, english, advanced) { mutableIntStateOf(initial) }
     val context = LocalContext.current
@@ -238,9 +242,14 @@ private fun Element.attr(name: String, fallback: String) = if (hasAttribute(name
 private fun Element.num(name: String, fallback: Float = 0f) = getAttribute(name).toFloatOrNull() ?: fallback
 
 /** Native renderer for the fixed, bundled lesson SVG subset. */
-private fun drawSvgElement(canvas: AndroidCanvas, e: Element, inherited: SvgStyle, selected: Int, font: Typeface) {
+internal fun drawFoniWiseStaticSvg(canvas: AndroidCanvas, root: Element, font: Typeface) =
+    drawSvgElement(canvas, root, SvgStyle(), null, font)
+
+private fun drawSvgElement(canvas: AndroidCanvas, e: Element, inherited: SvgStyle, selected: Int?, font: Typeface) {
     val id = e.getAttribute("id")
+    if (e.getAttribute("display") == "none") return
     val visible = when {
+        selected == null -> e.getAttribute("visibility") != "hidden"
         id.matches(Regex("v[0-9]+(?:highlight|state|caption)[0-9]+")) -> id.takeLastWhile { it.isDigit() }.toIntOrNull() == selected
         id == "v44notice" -> selected != 2
         id == "v44empty" -> selected == 2
@@ -266,7 +275,7 @@ private fun drawSvgElement(canvas: AndroidCanvas, e: Element, inherited: SvgStyl
         canvas.clipPath(clip)
     }
     if (id == "accessZoomScene") {
-        val z = 1f + selected.coerceIn(0, 4) * 0.5f
+        val z = 1f + (selected ?: 0).coerceIn(0, 4) * 0.5f
         canvas.scale(z, z, 160f, 105f)
     }
     fun paint(color: String, stroke: Boolean): Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
