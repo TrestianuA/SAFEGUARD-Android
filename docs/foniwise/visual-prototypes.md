@@ -88,3 +88,6 @@ V38/V04/V06/V39/V40: șase selectoare transformate în butoane segmentate RO/EN,
 
 ### Audit securitate RO/EN
 Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de execuție JS cu DOM simulat: 12 prototipuri, 42 butoane de selecție, reseturi, comutare criptare, rezultat V39 cu ambele verificări și V40 la prag 79; fără excepții, fără referințe literale e(id) lipsă. Testul nu verifică randarea, CSS, geometria sau toate rezultatele. Trei secțiuni istorice RO marcate explicit, fără eliminare. Browser real, TalkBack și Android rămân nevalidate.
+
+## Remediere accesibilitate V39/V40 — 27.11.2026
+HTML RO/EN: căsuțele V39 au lățime automată și etichete flex cu înălțime minimă 44 px; V39/V40 au mesaje de stare HTML role=status, actualizate numai când rezultatul se schimbă. SVG inline păstrat identic prin comparație textuală. Commit RO 55f3109465211cdf6069e6eb3819e2bcc27a19af; EN d59fc95bff6e2522041b61609f927f85b5210771. Browser real, TalkBack, fidelitate grafică și Android încă nevalidate. Categoria rămâne deschisă; 26/55 final textual, 40 concepte.
