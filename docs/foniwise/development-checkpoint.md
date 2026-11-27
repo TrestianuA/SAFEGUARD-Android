@@ -323,3 +323,6 @@ HTML RO/EN: V12 patru selecții cu evidențiere noduri și explicații; V13 trei
 
 ### Extindere audit Chromium fraude — 27.11.2026
 Script browser-audit.cjs extins și recitit identic, commit 443d6c92638089a1e0c33556ccd3e2db4f4f52f8. 18 cazuri suplimentare V12–V14 RO/EN la 320/360/412 px: selecții cu tastatura, evidențiere, explicații distincte, reset, grile 100 celule, valori extreme și rezultate, overflow și capturi. Rezultatele execuției încă neconfirmate. SVG, catalog și revizie textuală finală rămân deschise. Fără modificări Android, Home, Canva sau main.
+
+### Rezultat Chromium V12–V14 — 27.11.2026
+Execuția 45994316421, commit 443d6c92638089a1e0c33556ccd3e2db4f4f52f8, job 140489753351: succes; 54/54 PASS confirmate direct în jurnal, dintre care 18/18 pentru V12–V14 și 36/36 pentru securitate, RO/EN la 320/360/412 px. Capturile nu au fost inspectate în această sesiune; SVG, catalog și revizia textuală finală rămân deschise. Nu echivalează cu validarea vizuală integrală, TalkBack sau Android. Fără modificări ale aplicației, Home, Canva ori main.
