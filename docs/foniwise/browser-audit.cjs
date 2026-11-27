@@ -129,6 +129,38 @@ const path = require('node:path');
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
+
+ // Render the actual archived SVG frames, not a reconstruction of their source.
+ for(const lang of ['ro','en']){
+ const page=await browser.newPage({viewport:{width:320,height:800},deviceScaleFactor:1});
+ try{
+ const source=fs.readFileSync('docs/foniwise/visual-schemes'+(lang==='en'?'-en':'')+'.svg','utf8');
+ const frames=await page.evaluate(source=>{
+ const doc=new DOMParser().parseFromString(source,'image/svg+xml');
+ if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"]')].map(g=>{
+ const clone=g.cloneNode(true);clone.removeAttribute('transform');
+ return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
+ });
+ },source);
+ assert.equal(frames.length,16,'fraud SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,16,'unique frame ids');
+ for(const f of frames){
+ try{
+ assert.ok(Number.isFinite(f.height)&&f.height>0);
+ await page.setContent('<!doctype html><meta charset="utf-8"><style>body{margin:0}svg{display:block}</style><svg xmlns="http://www.w3.org/2000/svg" width="320" height="'+f.height+'" viewBox="0 0 320 '+f.height+'">'+f.markup+'</svg>');
+ const frame=page.locator('body > svg');
+ assert.equal(await frame.locator('g[id="'+f.id+'"]').count(),1);
+ if(!f.id.endsWith('-zoom')){
+ const outside=await frame.locator('text').evaluateAll(xs=>xs.filter(x=>{const b=x.getBoundingClientRect();return b.left < -1||b.right > 321||b.top < -1||b.bottom > x.ownerSVGElement.closest('body > svg').getBoundingClientRect().bottom+1;}).map(x=>x.textContent));
+ assert.deepEqual(outside,[],'SVG text outside frame');
+ }
+ await frame.screenshot({path:'browser-results/svg-'+lang+'-'+f.id+'.png'});
+ console.log('SVG PASS',lang,f.id);
+ }catch(e){failures.push([lang,'svg',f.id,e.stack||e.message]);}
+ }
+ }catch(e){failures.push([lang,'svg',e.stack||e.message]);}finally{await page.close();}
+ }
  }finally{await browser.close();fs.writeFileSync('browser-results/report.json',JSON.stringify({failures},null,2));}
  if(failures.length){console.error(failures);process.exitCode=1;}
 })().catch(e=>{console.error(e);process.exitCode=1;});
