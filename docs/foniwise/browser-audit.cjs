@@ -22,6 +22,8 @@ const path = require('node:path');
  const diagrams=section.locator('.security-diagram');
  for(let i=0;i<await diagrams.count();i++){
  const diagram=diagrams.nth(i);
+ if(id==='05') await section.locator('[data-v05-select="v05mode"][data-index="'+i+'"]').click();
+ assert.equal(await diagram.isVisible(),true,'diagram visible before keyboard test');
  const toggle=diagram.locator('xpath=preceding-sibling::button[1]');
  assert.equal(await diagram.evaluate(d=>d.scrollWidth<=d.clientWidth+1),true,'full diagram initially visible');
  await toggle.focus();await toggle.press('Enter');
@@ -66,7 +68,7 @@ const path = require('node:path');
  const overflow=await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1);
  assert.equal(overflow,false,'section overflow');
  console.log('PASS',lang,width,id);
- }catch(e){failures.push([lang,width,id,e.message]);}
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
