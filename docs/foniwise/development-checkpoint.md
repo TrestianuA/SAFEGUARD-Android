@@ -284,3 +284,6 @@ Execuția 45975837730, commit 32831c5214456789be89a34889ba84b75038291a: succes G
 
 ### Inspecție capturi Chromium — 27.11.2026
 Arhiva 15186569066 descărcată efectiv: 72 PNG și report.json fără failures. Inspecție vizuală a celor 24 capturi la 320 px, RO/EN, stări inițiale și finale. V04 eticheta explorării lipită de buton, Document rupt în ambele limbi; V05 Destinatar și V40 Comparare rupte în RO; V05 capturile prezintă aceeași stare TLS/expeditor. Texte SVG foarte mici, necesită evaluare lizibilitate. Capturile 360/412, remedierea layout, acoperirea semantică, fidelitatea și TalkBack rămân deschise. Prototipurile nemodificate.
+
+### Remediere controale și extindere test — 27.11.2026
+V04/V05/V40 HTML RO/EN: butoane flex cu bază auto, împachetare la nivel de cuvânt, lățime maximă 100%, păstrat minim 44 px; etichetă V04 pe rând separat cu spațiu 12 px. SVG inline identic textual înainte/după; fișiere recitite și verificate. Commit RO 5505b099309b56f8ca664303ac0ebb9723a6469a, EN c7d1b3fe6b4e05812453cbe04515fa5fb25e4a0a. Script Chromium extins pentru comutarea V04 și toate cele șase combinații V05, cu capturi distincte. Retestarea și inspecția vizuală rămân necesare; nu declarăm remedierea validată. Categoria rămâne deschisă.
