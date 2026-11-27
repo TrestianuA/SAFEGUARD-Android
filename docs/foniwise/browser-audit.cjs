@@ -254,6 +254,7 @@ const path = require('node:path');
  const check=async i=>{
  assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),i<0?0:1);
  for(let j=0;j<count;j++){assert.equal(await buttons.nth(j).getAttribute('aria-pressed'),String(i===j));assert.equal(await section.locator('#'+prefix+j).getAttribute('visibility'),i===j?'visible':'hidden');}
+ if(id==='46'){for(const name of ['v46modemoutline','v46netoutline']){const effective=await section.locator('#'+name+' rect').evaluateAll(xs=>xs.map(x=>getComputedStyle(x).visibility));assert.deepEqual(effective,[i===3?'visible':'hidden',i===3?'visible':'hidden'],'V46 effective nested SVG visibility');}}
  if(id==='45'){const visible=section.locator('#v45state'+i);assert.match(await visible.textContent(),new RegExp((lang==='ro'?'Sistemul rulează din ':'System runs from ')+(i===2?'B':'A')));if(i>0)assert.match(await visible.textContent(),lang==='ro'?/Versiune nouă/:/New version/);}
  };
  await reset.click();const initial=await detail.textContent();await check(initialIndex);await capture('initial');
@@ -293,6 +294,7 @@ const path = require('node:path');
  const outside=await frame.locator('text').evaluateAll(xs=>xs.filter(x=>{const b=x.getBoundingClientRect();return b.left < -1||b.right > 321||b.top < -1||b.bottom > x.ownerSVGElement.closest('body > svg').getBoundingClientRect().bottom+1;}).map(x=>x.textContent));
  assert.deepEqual(outside,[],'SVG text outside frame');
  }
+ if(f.id.startsWith('system-v46-')){const expected=f.id.endsWith('-3')?'visible':'hidden';for(const name of ['v46modemoutline','v46netoutline']){const effective=await frame.locator('[id="'+f.id+'-'+name+'"] rect').evaluateAll(xs=>xs.map(x=>getComputedStyle(x).visibility));assert.deepEqual(effective,[expected,expected],'V46 archived nested SVG visibility');}}
  await frame.screenshot({path:'browser-results/svg-'+lang+'-'+f.id+'.png'});
  console.log('SVG PASS',lang,f.id);
  }catch(e){failures.push([lang,'svg',f.id,e.stack||e.message]);}
