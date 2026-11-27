@@ -19,6 +19,30 @@ const path = require('node:path');
  await reset.click();
  const snapshot=()=>section.evaluate(s=>JSON.stringify({svg:[...s.querySelectorAll('svg')].map(x=>x.outerHTML),controls:[...s.querySelectorAll('input,select,button')].map(x=>[x.value,x.checked,x.getAttribute('aria-pressed')]),outputs:[...s.querySelectorAll('output')].map(x=>x.textContent)}));
  const initial=await snapshot();
+ const diagrams=section.locator('.security-diagram');
+ for(let i=0;i<await diagrams.count();i++){
+ const diagram=diagrams.nth(i);
+ const toggle=diagram.locator('xpath=preceding-sibling::button[1]');
+ assert.equal(await diagram.evaluate(d=>d.scrollWidth<=d.clientWidth+1),true,'full diagram initially visible');
+ await toggle.focus();await toggle.press('Enter');
+ assert.equal(await toggle.getAttribute('aria-pressed'),'true');
+ assert.equal(await diagram.evaluate(d=>d.scrollWidth>d.clientWidth),true,'enlargement scrollable');
+ await diagram.focus();
+ await diagram.evaluate(d=>d.scrollLeft=d.scrollWidth);
+ assert.equal(await diagram.evaluate(d=>d.scrollLeft>0),true);
+ await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-zoom-'+i+'.png'});
+ await toggle.focus();await toggle.press('Space');
+ assert.equal(await toggle.getAttribute('aria-pressed'),'false');
+ assert.equal(await diagram.evaluate(d=>d.scrollWidth<=d.clientWidth+1),true);
+ }
+ if(id==='06'){
+ for(const n of [4,6,8]){
+ await section.locator('[data-control="v06length"][data-index="'+([4,6,8].indexOf(n))+'"]').click();
+ assert.equal(Number((await page.locator('#v06count').textContent()).replace(/[^0-9]/g,'')),10**n);
+ }
+ }
+ await reset.click();
+ assert.equal(await snapshot(),initial);
  const buttons=section.locator('button[data-control]');
  for(let i=0;i<await buttons.count();i++){
  const b=buttons.nth(i);await b.click();assert.equal(await b.getAttribute('aria-pressed'),'true');
