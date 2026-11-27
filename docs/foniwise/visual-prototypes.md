@@ -131,3 +131,6 @@ Corecția vizibilității contururilor modem/rețea în HTML și SVG RO/EN a tre
 
 ## Sistem și actualizări — aprobare și închidere (27.11.2026)
 Utilizatorul aprobă explicit V46 corectat și solicită închiderea etapei de prototipare. V20/V21/V45/V46 RO/EN: închise la nivel de prototipare, pe baza auditului 138/138 HTML și 156/156 SVG și a inspecțiilor consemnate. Restanțele de lizibilitate, integrare Android, contrast complet, TalkBack și dispozitiv rămân în evidență.
+
+## Accesibilitate — V22/V23 RO/EN
+V22 păstrează mesajul original și scalarea liniară 100–200% în pași de 25%, cu reașezarea textului și reset. SVG: cinci cadre per limbă, cu reașezarea textului aproximată vectorial, nu captură identică HTML. V23 păstrează peisajul, indicatorul PARC 100 metri și decuparea centrală; cinci trepte 1–3×, procent vizibil 100/z², separator zecimal adaptat limbii, reset nou. SVG: cinci cadre per limbă, aceeași geometrie și decupare. Ambele au legende Exemplu informativ / Illustrative example, cursoare minimum 44 px, rezultate de stare, fără modificarea setărilor reale. Auditul și inspecția grafică rămân necesare. 46 concepte, 55 lecții.
