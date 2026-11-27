@@ -117,3 +117,8 @@ Utilizatorul aprobă explicit V44 și trecerea la Sistem și actualizări. V18/V
 
 ## Sistem și actualizări — V20/V21 reconciliate RO/EN
 V20: geometria ușilor și încuietorilor păstrată, două niveluri cu selecții individuale, explicații și reset. Comparația avansată păstrează Android 14 și datele 01.09.2025/01.10.2025, transpusă din carduri HTML în două telefoane vectoriale (propunere grafică). V21: geometria aplicațiilor, serviciului și funcțiilor păstrată; cinci selecții cu evidențiere și explicații distincte, reset. Legendă Exemplu informativ / Illustrative example; controale minimum 44 px, aria-pressed, role=status. 12 cadre SVG per limbă (6 V20, 6 V21), inclusiv toate selecțiile și nivelurile. Validarea prin Chromium și inspecția grafică rămân necesare. 44 concepte, 55 lecții.
+
+## Sistem și actualizări — V45/V46
+- V45 Actualizările Android: model A/B cu trei stări Înainte/Pregătire/După repornire, partiția activă și versiunea veche/nouă distincte, explicații și reset. Se precizează că nu toate telefoanele folosesc A/B, iar repornirea ilustrată este un exemplu reușit.
+- V46 Firmware: Android → driver → modem cu firmware și componentă electronică → rețea mobilă; patru selecții cu evidențiere, explicații și reset. Schemă conceptuală, arhitectura reală diferă între modele.
+Ambele HTML RO/EN, controale de minimum 44 px, aria-pressed, role=status, fără acces real la hardware sau setări. 3 cadre SVG V45 și 5 V46 per limbă; legendă Exemplu informativ / Illustrative example. Propuneri noi, 46 concepte, 55 lecții. Auditul extins și inspecția finală rămân necesare.
