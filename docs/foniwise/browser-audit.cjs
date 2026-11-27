@@ -77,6 +77,22 @@ const path = require('node:path');
  await reset.click();
  const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
  await capture('initial');
+ if(id==='12'){
+ const toggle=section.locator('#v12zoom'), diagram=section.locator('.security-diagram');
+ assert.equal(await diagram.evaluate(d=>d.scrollWidth<=d.clientWidth+1),true,'V12 full diagram');
+ await toggle.focus();await toggle.press('Enter');
+ assert.equal(await toggle.getAttribute('aria-pressed'),'true');
+ assert.equal(await diagram.evaluate(d=>d.scrollWidth>d.clientWidth),true);
+ await diagram.evaluate(d=>d.scrollLeft=d.scrollWidth);
+ assert.equal(await diagram.evaluate(d=>d.scrollLeft>0),true);
+ await capture('zoom');
+ await reset.click();
+ assert.equal(await toggle.getAttribute('aria-pressed'),'false');
+ assert.equal(await diagram.evaluate(d=>d.scrollLeft===0&&d.scrollWidth<=d.clientWidth+1),true);
+ }
+ if(id==='13'){
+ assert.deepEqual(await section.locator('[data-compare="1"] > span:last-child').evaluateAll(xs=>xs.map(x=>x.textContent)),lang==='ro'?['serviciu.example','imitatie.example']:['service.example','imitation.example']);
+ }
  if(id!=='14'){
  const buttons=section.locator('[data-choice]'), detail=section.locator('#v'+id+'detail'), initial=await detail.textContent(), seen=new Set();
  assert.equal(await buttons.count(),id==='12'?4:3);
@@ -94,6 +110,7 @@ const path = require('node:path');
  else assert.equal(await section.locator('[data-compare]').evaluateAll(xs=>xs.every(x=>!x.style.outline)),true);
  }else{
  const fp=section.locator('#fp'),tp=section.locator('#tp');
+ for(const slider of [fp,tp])assert.equal(await slider.evaluate(x=>x.getBoundingClientRect().height>=44),true,'range height >=44');
  const check=async(f,t)=>{
  assert.equal(await fp.inputValue(),String(f));assert.equal(await tp.inputValue(),String(t));
  for(const [grid,n,color] of [['fpgrid',f,'rgb(201, 104, 70)'],['tpgrid',t,'rgb(8, 124, 38)']]){
