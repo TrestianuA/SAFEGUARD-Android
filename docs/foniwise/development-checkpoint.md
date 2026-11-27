@@ -299,3 +299,6 @@ HTML RO/EN: containere derulabile orizontal, focalizabile prin tastatură, etich
 
 ### Verificare lizibilitate și corecție de ansamblu — 27.11.2026
 Execuția 45984845039: 36 PASS, arhiva 15191221768 conține 108 PNG și raport fără failures. Inspecția planșei RO 320 px a evidențiat că lățimea minimă permanentă ascunde destinatarul V05, cifrele și valorile V06, respectiv componentele V38. Corecție RO/EN: schema completă implicit, buton opțional de mărire cu aria-pressed, derulare doar la mărire; SVG inline identic. Commit RO d3acbb8eb810a609008948c011bf6438497f865c, EN 3f9b76789d699f6b4eb2ccc4ea3a811707ffb6b7. Retestarea noii soluții, inclusiv mărire/derulare și accesibilitate, rămâne obligatorie; categoria deschisă. Nu s-a modificat aplicația Android.
+
+### Extindere validare mărire și PIN — 27.11.2026
+Script browser-audit.cjs commit 13d11894d656ed90ba205657024b7a70bb775fd5, recitit identic: verifică schema integrală implicit, activarea măririi cu Enter, aria-pressed, overflow local, focalizarea containerului, derularea programatică până la capăt, revenirea cu Space, capturi la mărire și valorile 10^4/10^6/10^8 pentru PIN. Nu reprezintă test TalkBack sau gest tactil. Execuția nouă încă neconfirmată; categoria deschisă, fără modificări ale prototipurilor în această etapă.
