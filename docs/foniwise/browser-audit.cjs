@@ -341,7 +341,7 @@ const path = require('node:path');
  const fmt=n=>n.toLocaleString(lang==='ro'?'ro-RO':'en-US',{maximumFractionDigits:3});
  assert.equal(await loc('.legacy-legend').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
  assert.equal(await loc('button,input[type=range],select').evaluateAll(xs=>xs.filter(x=>x.getBoundingClientRect().height>0).every(x=>x.getBoundingClientRect().height>=44)),true,'legacy control size');
- const snap=()=>section.evaluate(s=>JSON.stringify({html:[...s.querySelectorAll('svg')].map(x=>x.outerHTML),inputs:[...s.querySelectorAll('input,select')].map(x=>[x.value,x.checked]),buttons:[...s.querySelectorAll('button')].map(x=>[x.textContent,x.getAttribute('aria-pressed')]),outputs:[...s.querySelectorAll('p,output')].map(x=>x.textContent),fills:[...s.querySelectorAll('[id]')].map(x=>x.getAttribute('style'))}));
+ const snap=()=>section.evaluate(s=>JSON.stringify({html:[...s.querySelectorAll('svg')].map(x=>x.outerHTML),inputs:[...s.querySelectorAll('input,select')].map(x=>[x.value,x.checked]),buttons:[...s.querySelectorAll('button')].map(x=>[x.textContent,x.getAttribute('aria-pressed')]),outputs:[...s.querySelectorAll('p,output')].map(x=>x.textContent),fills:[...s.querySelectorAll('[id]')].map(x=>[x.id,x.hasAttribute('style')?x.style.cssText:null])}));
  if(await reset.count())await reset.click();
  const initial=await snap();await capture('initial');
  if(id===1){for(const n of [40,60,80,100]){await loc('#health').fill(String(n));assert.equal(await get('#pct'),n+'%');assert.equal(number(await get('#remain')),50*n);assert.equal(number(await get('#lost')),5000-50*n);assert.equal(await loc('#fill').evaluate(x=>parseFloat(x.style.height)),92*n/100);await capture('health-'+n);}}
