@@ -281,3 +281,6 @@ Execuția 45975112772 a eșuat înainte de testare: Ubuntu 26.04 (ubuntu-latest)
 
 ### Rezultat CI Chromium — 27.11.2026
 Execuția 45975837730, commit 32831c5214456789be89a34889ba84b75038291a: succes GitHub Actions; 36 rezultate PASS identificate în jurnal. Test automat conform scriptului existent, nu validare integrală a fidelității grafice, semanticii sau TalkBack. Categoria rămâne deschisă pentru inspecția capturilor și verificări restante.
+
+### Inspecție capturi Chromium — 27.11.2026
+Arhiva 15186569066 descărcată efectiv: 72 PNG și report.json fără failures. Inspecție vizuală a celor 24 capturi la 320 px, RO/EN, stări inițiale și finale. V04 eticheta explorării lipită de buton, Document rupt în ambele limbi; V05 Destinatar și V40 Comparare rupte în RO; V05 capturile prezintă aceeași stare TLS/expeditor. Texte SVG foarte mici, necesită evaluare lizibilitate. Capturile 360/412, remedierea layout, acoperirea semantică, fidelitatea și TalkBack rămân deschise. Prototipurile nemodificate.
