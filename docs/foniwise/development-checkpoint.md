@@ -256,3 +256,6 @@ Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de
 
 ## Remediere accesibilitate V39/V40 — 27.11.2026
 HTML RO/EN: căsuțele V39 au lățime automată și etichete flex cu înălțime minimă 44 px; V39/V40 au mesaje de stare HTML role=status, actualizate numai când rezultatul se schimbă. SVG inline păstrat identic prin comparație textuală. Commit RO 55f3109465211cdf6069e6eb3819e2bcc27a19af; EN d59fc95bff6e2522041b61609f927f85b5210771. Browser real, TalkBack, fidelitate grafică și Android încă nevalidate. Categoria rămâne deschisă; 26/55 final textual, 40 concepte.
+
+### V05 — uniformizare accesibilitate
+RO/EN: cinci butoane de selecție cu înălțime minimă 44 px și împachetarea cuvintelor la nevoie; două grupuri cu nume accesibile specifice. Toate SVG inline comparate textual și păstrate identic. Browser Chromium disponibil local, dar descărcarea directă GitHub în mediul local a eșuat; randarea reală nu este confirmată. Categoria rămâne deschisă.
