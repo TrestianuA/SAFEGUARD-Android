@@ -196,6 +196,23 @@ const path = require('node:path');
  await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ try{
+ const id='44',section=page.locator('#notify-v44'),reset=section.locator('#v44reset'),buttons=section.locator('[data-choice]'),detail=section.locator('#v44detail');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V44-'+state+'.png'});};
+ await reset.click();const initial=await detail.textContent(),event=await section.locator('#v44event').textContent();const seen=new Set();
+ assert.equal(await buttons.count(),3);assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const check=async i=>{
+ assert.equal(await buttons.nth(i).getAttribute('aria-pressed'),'true');
+ assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),1);
+ for(const [name,on] of [['notice',i!==2],['empty',i===2],['bell',i===0],['mute',i===1]])assert.equal(await section.locator('#v44'+name).getAttribute('visibility'),on?'visible':'hidden');
+ assert.equal(await section.locator('#v44event').textContent(),event);assert.equal(await section.locator('#v44event').isVisible(),true);
+ };
+ await check(0);await capture('initial');
+ for(let i=0;i<3;i++){await buttons.nth(i).focus();await buttons.nth(i).press('Enter');await check(i);const t=await detail.textContent();assert.equal(seen.has(t),false);seen.add(t);await capture('choice-'+i);}
+ await reset.click();await check(0);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,'44',e.stack||e.message]);}
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -208,15 +225,15 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
  },source);
  assert.equal(frames.filter(f=>f.id.startsWith('fraud-')).length,16,'fraud SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
- assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,10,'notification SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,55,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,58,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
