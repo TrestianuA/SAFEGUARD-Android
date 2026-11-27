@@ -127,7 +127,7 @@ const path = require('node:path');
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
 
- for(const id of ['15','16','17','27']){
+ for(const id of ['15','16','17','27','41','42','43']){
  try{
  const section=page.locator('#connect-v'+id), reset=section.locator('#v'+id+'reset');
  const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
@@ -157,6 +157,10 @@ const path = require('node:path');
  const buttons=section.locator('[data-choice]'),detail=section.locator('#v'+id+'detail'),initial=await detail.textContent(),seen=new Set();
  const count=id==='16'?4:3;
  assert.equal(await buttons.count(),count);
+ if(['41','42','43'].includes(id)){
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ }
  for(let i=0;i<count;i++){
  const b=buttons.nth(i);await b.focus();await b.press('Enter');assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await section.locator('[aria-pressed="true"]').count(),1);
  for(let j=0;j<count;j++)assert.equal(await section.locator('#v'+id+'highlight'+j).getAttribute('visibility'),i===j?'visible':'hidden');
@@ -181,14 +185,14 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27))-(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43))-(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
  },source);
  assert.equal(frames.filter(f=>f.id.startsWith('fraud-')).length,16,'fraud SVG frame count');
- assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,17,'connectivity SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,33,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,45,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
