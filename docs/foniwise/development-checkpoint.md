@@ -275,3 +275,6 @@ Am verificat arhivele HTML direct din GitHub: zero identificatori id duplicați 
 
 ### Testare Chromium prin GitHub Actions — 27.11.2026
 Cu aprobarea utilizatorului, configurare exclusiv pe ramura de test: .github/workflows/foniwise-browser.yml (5292f2bbcb9ac8f627032f993a9b2666c5d99e79), script docs/foniwise/browser-audit.cjs (9a159e0a0ca2576a918bd7841ba4017d8453faa4). Playwright Chromium, RO/EN, 320/360/412 px, selecții, reset, erori JS, overflow, capturi și raport JSON. Configurația este salvată, rezultatele execuției încă neconfirmate; testul nu acoperă toate rezultatele semantice, fidelitatea vizuală sau TalkBack. Categoria rămâne deschisă. Fără modificări ale prototipurilor sau aplicației.
+
+### Remediere CI Chromium — 27.11.2026
+Execuția 45975112772 a eșuat înainte de testare: Ubuntu 26.04 (ubuntu-latest) incompatibil cu Playwright 1.51.1. Configurația fixată la Ubuntu 24.04, acțiuni v5, declanșare limitată la arhive HTML, script și workflow. Rezultatele noii execuții neconfirmate. Nicio modificare a prototipurilor sau aplicației; categoria rămâne deschisă.
