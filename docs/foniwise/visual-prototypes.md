@@ -137,3 +137,6 @@ V22 păstrează mesajul original și scalarea liniară 100–200% în pași de 2
 
 ## Accesibilitate — V47/V48
 V47 TalkBack: ecran de mesaj cu focalizare separată pe text, Trimite și Înapoi; contururi și anunțuri ilustrative, mesaj netrimis/ecran neschimbat, reset. Nu produce sunet și nu activează TalkBack real. V48 Subtitrări: peisaj cu tren, vorbirea ilustrativă «Trenul pleacă la ora opt», trei stări fără subtitrare, pregătită corectă și automată cu eroare ilustrativă opt/șapte; reset. Nu redă audio sau recunoaștere reală. HTML RO/EN, 4 cadre V47 și 3 cadre V48 per limbă, legendă aprobată, controale minimum 44 px și role=status. 48 concepte, 55 lecții. Propuneri noi, audit și inspecție în așteptare.
+
+## Închidere prototipare Accesibilitate — 27.11.2026
+V47/V48 aprobate explicit de utilizator; V22 previzualizare corectată confirmată. Execuția 46055873637: 162/162 HTML și 190/190 SVG PASS, capturi inspectate V22/V23/V47/V48 (132 HTML, 34 SVG, RO/EN, 320/360/412 px). Fără suprapuneri majore observate; textul V22 vizibil și reașezat, decupare V23 corectă, focalizare V47 exclusivă, stări V48 distincte. Etichetele din desene mici la 320 px; accesibilitatea nativă, contrastul complet și testarea fizică rămân de verificat. Categoria închisă la nivel de prototipare.
