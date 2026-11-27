@@ -331,6 +331,36 @@ const path = require('node:path');
  await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of [1,2,3,7,8,9,10,11,28,29,30,31,32,33,34,35,36,37]){
+ try{
+ const section=page.locator('#legacy-v'+id),loc=x=>section.locator(x),get=x=>loc(x).textContent(),attr=(x,k)=>loc(x).getAttribute(k);
+ const reset=loc('#v'+String(id).padStart(2,'0')+'reset');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'legacy section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+String(id).padStart(2,'0')+'-legacy-'+state+'.png'});};
+ const number=s=>Number(s.trim().replace(/\s/g,'').replace(lang==='ro'?/\./g:/,/g,'').replace(',','.'));
+ const fmt=n=>n.toLocaleString(lang==='ro'?'ro-RO':'en-US',{maximumFractionDigits:3});
+ assert.equal(await loc('.legacy-legend').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ assert.equal(await loc('button,input[type=range],select').evaluateAll(xs=>xs.filter(x=>x.getBoundingClientRect().height>0).every(x=>x.getBoundingClientRect().height>=44)),true,'legacy control size');
+ const snap=()=>section.evaluate(s=>JSON.stringify({html:[...s.querySelectorAll('svg')].map(x=>x.outerHTML),inputs:[...s.querySelectorAll('input,select')].map(x=>[x.value,x.checked]),buttons:[...s.querySelectorAll('button')].map(x=>[x.textContent,x.getAttribute('aria-pressed')]),outputs:[...s.querySelectorAll('p,output')].map(x=>x.textContent),fills:[...s.querySelectorAll('[id]')].map(x=>x.getAttribute('style'))}));
+ if(await reset.count())await reset.click();
+ const initial=await snap();await capture('initial');
+ if(id===1){for(const n of [40,60,80,100]){await loc('#health').fill(String(n));assert.equal(await get('#pct'),n+'%');assert.equal(number(await get('#remain')),50*n);assert.equal(number(await get('#lost')),5000-50*n);assert.equal(await loc('#fill').evaluate(x=>parseFloat(x.style.height)),92*n/100);await capture('health-'+n);}}
+ if(id===2){for(const n of [1,2,4,8]){await loc('#v02cores').selectOption(String(n));assert.equal(number(await get('#v02total')),4+6/n);assert.equal(number(await get('#v02saved')),(6-6/n)*10);assert.equal(await loc('.v02core[fill="#087C26"]').count(),n);await capture('cores-'+n);}}
+ if(id===3){await loc('#v03go').click();assert.equal(await attr('#v03removed','opacity'),'0.12');assert.match(await get('#v03out'),/200 MB.*300 MB/);await capture('removed');}
+ if(id===7){for(const a of [60,120,240])for(const b of [60,90,120]){await loc('#v07t').selectOption(String(a));await loc('#v07d').selectOption(String(b));assert.equal(await loc('#v07bars > div').nth(0).locator('span').count(),a/10);assert.equal(await loc('#v07bars > div').nth(1).locator('span').count(),b/10);assert.ok((await get('#v07result')).includes((1000/a).toFixed(1)+' ms'));await capture('hz-'+a+'-'+b);}}
+ if(id===8){for(const n of [100,250,400]){await loc('#v08light').fill(String(n));assert.ok(Math.abs(Number(await attr('#v08shade','opacity'))-(.05+.45*(400-n)/300))<1e-6);assert.ok((await get('#v08result')).endsWith(Math.sqrt(n).toFixed(1)));await capture('photons-'+n);}}
+ if(id===9){for(const a of [16000,44100,48000])for(const b of [1,5,10]){await loc('#v09rate').selectOption(String(a));await loc('#v09minutes').fill(String(b));assert.equal(await get('#v09result'),b+' min · '+fmt(a*2*b*60/1e6)+' MB');await capture('pcm-'+a+'-'+b);}}
+ if(id===11){for(const p of ['mic','cam','loc'])for(const a of [false,true]){await loc('#v11select').selectOption(p);await loc('#v11allow').setChecked(a);for(const q of [false,true]){if(q)await loc('#v11request').click();assert.equal(await attr('#v11'+p,'display'),'inline');assert.equal(await attr('#v11link','stroke'),a&&q?'#087C26':'#A4B5A0');assert.equal(await attr('#v11shield','fill'),a?'#087C26':'#A66A35');await capture('permission-'+p+'-'+Number(a)+'-'+Number(q));}await reset.click();}}
+ if(id===29){for(let i=0;i<3;i++){await loc('[data-choice]').nth(i).press('Enter');assert.equal(await loc('[data-choice][aria-pressed="true"]').count(),1);assert.equal(await loc('svg rect').nth(i+1).getAttribute('fill'),'#B5F52C');assert.notEqual(await get('#v29detail'),'');await capture('usb-'+i);}}
+ if(id===33){for(const n of [0,4,12,24]){await loc('#v33').fill(String(n));assert.equal(await get('#v33center'),(24-n)+' GB');assert.equal(await get('#v33legendv'),n+' GB');assert.equal(await get('#v33legendf'),(24-n)+' GB');assert.equal(await get('#v33f'),String(24-n));await capture('storage-'+n);}}
+ if(id===34){for(const n of [0,50,80,100]){await loc('#v34').fill(String(n));const avg=n/100*10+(1-n/100)*200;assert.equal(await loc('.v34cell[fill="#087C26"]').count(),n);assert.ok(Math.abs(number(await get('#v34time'))-avg)<1e-6);assert.ok(Math.abs(number(await get('#v34saved'))-(200-avg))<1e-6);await capture('cache-'+n);}}
+ if(id===35){await loc('#v35open').click();assert.equal(await attr('#v35contents','visibility'),'visible');for(let i=0;i<4;i++){await loc('#v35select').selectOption({index:i});assert.equal(await loc('#v35contents rect').nth(i).getAttribute('fill'),'#B5F52C');assert.notEqual(await get('#v35detail'),'');await capture('apk-'+i);}}
+ if(id===36){for(const n of [0,6,12]){await loc('#v36count').fill(String(n));assert.equal(await loc('#v36ticks rect').count(),n);assert.ok((await get('#v36out')).includes(String(n*5)));await capture('sync-'+n);}}
+ if(id===37){const before=await get('#v37info');await loc('#v37choice').selectOption('d');assert.notEqual(await get('#v37info'),before);await capture('data');}
+ if(await reset.count()){await reset.click();assert.equal(await snap(),initial,'legacy reset differs');await capture('reset');}
+ console.log('PASS',lang,width,'legacy-v'+id);
+ }catch(e){failures.push([lang,width,'legacy-v'+id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -343,7 +373,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"],g[id^="access-v47-"],g[id^="access-v48-"],g[id^="advanced-v24-"],g[id^="advanced-v25-"],g[id^="advanced-v26-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23|47|48)|advanced-v(?:24|25|26))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"],g[id^="access-v47-"],g[id^="access-v48-"],g[id^="advanced-v24-"],g[id^="advanced-v25-"],g[id^="advanced-v26-"],g[id^="legacy-v"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23|47|48)|advanced-v(?:24|25|26)|legacy-v(?:1|2|3|7|8|9|10|11|28|29|30|31|32|33|34|35|36|37))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -354,7 +384,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,20,'system SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('access-')).length,17,'accessibility SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('advanced-')).length,12,'advanced SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,107,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('legacy-')).length,70,'legacy SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,177,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
