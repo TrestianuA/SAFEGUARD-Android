@@ -4,6 +4,7 @@ on:
     branches: [test/foniwise-073-integration]
     paths:
       - 'docs/foniwise/visual-archive*.html'
+      - 'docs/foniwise/visual-schemes*.svg'
       - 'docs/foniwise/browser-audit.cjs'
       - '.github/workflows/foniwise-browser.yml'
 permissions:
