@@ -293,3 +293,6 @@ Execuția 45977017222, commit 478474437fd761981aed8201ea97da38bade86e3, job 1404
 
 ### Inspecție retestare la 320 px — 27.11.2026
 Arhiva 15188205553 recuperată: 108 PNG și report.json fără failures. Inspectate 36 capturi la 320 px RO/EN: V04 etichetă separată și Document intact; V05 Destinatar intact și toate șase stări distincte vizual, explicații concordante cu selecția; V40 Comparare intact pe rând separat. V06 grafic și V38/V05 etichete SVG încă mici; lizibilitatea necesită remediere fără pierderea geometriei. Planșele 360/412 pregătite, dar neinspectate. Nicio modificare a prototipurilor în această etapă; categoria rămâne deschisă.
+
+### Lizibilitate scheme V38/V05/V06 — 27.11.2026
+HTML RO/EN: containere derulabile orizontal, focalizabile prin tastatură, etichetate în limba selectată, SVG afișat la minimum 420 px, instrucțiune vizibilă și contur de focus. Toate SVG inline păstrate identic textual; arhive statice nemodificate. Commit RO af2fae19265ad48d0265a47b027213ce0f6a2942, EN 337a14194d56b5a04f3200b347e3cc56d0fd9f5e. Soluție de lizibilitate propusă, nu validată; necesită verificarea derulării, a vizibilității ansamblului și capturi noi. Inspecția 360/412 și verificările semantice, fidelitatea și TalkBack rămân deschise. Categoria nu este închisă.
