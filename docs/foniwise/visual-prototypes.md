@@ -114,3 +114,6 @@ Execuția Chromium 46041221934, job 140649146218, commit 017c6517c191165770f21b2
 
 ## Notificări — aprobare și închidere prototipare (27.11.2026)
 Utilizatorul aprobă explicit V44 și trecerea la Sistem și actualizări. V18/V19/V44: etapa de prototipare închisă pe baza auditului 114/114 HTML, 116/116 SVG și inspecțiilor consemnate. Păstrăm toate stările și variantele RO/EN. Integrarea nativă, contrastul complet, TalkBack și testarea fizică rămân deschise.
+
+## Sistem și actualizări — V20/V21 reconciliate RO/EN
+V20: geometria ușilor și încuietorilor păstrată, două niveluri cu selecții individuale, explicații și reset. Comparația avansată păstrează Android 14 și datele 01.09.2025/01.10.2025, transpusă din carduri HTML în două telefoane vectoriale (propunere grafică). V21: geometria aplicațiilor, serviciului și funcțiilor păstrată; cinci selecții cu evidențiere și explicații distincte, reset. Legendă Exemplu informativ / Illustrative example; controale minimum 44 px, aria-pressed, role=status. 12 cadre SVG per limbă (6 V20, 6 V21), inclusiv toate selecțiile și nivelurile. Validarea prin Chromium și inspecția grafică rămân necesare. 44 concepte, 55 lecții.
