@@ -140,3 +140,6 @@ V47 TalkBack: ecran de mesaj cu focalizare separată pe text, Trimite și Înapo
 
 ## Închidere prototipare Accesibilitate — 27.11.2026
 V47/V48 aprobate explicit de utilizator; V22 previzualizare corectată confirmată. Execuția 46055873637: 162/162 HTML și 190/190 SVG PASS, capturi inspectate V22/V23/V47/V48 (132 HTML, 34 SVG, RO/EN, 320/360/412 px). Fără suprapuneri majore observate; textul V22 vizibil și reașezat, decupare V23 corectă, focalizare V47 exclusivă, stări V48 distincte. Etichetele din desene mici la 320 px; accesibilitatea nativă, contrastul complet și testarea fizică rămân de verificat. Categoria închisă la nivel de prototipare.
+
+## Setări avansate/Dicționar — reconciliere V24–V26
+V24 păstrează cele trei cadre și cele două bare separate, factor 0,5×/1×/2×, 200/400/800 ms, încărcare 600 ms constantă, reset 1×. V25 păstrează patru etape și bootloader în verde închis, adaugă patru selecții cu contur și explicații, reset. V26 păstrează geometria mesei, dulapului și sertarului, trei selecții și reset; cadrul istoric SVG RO păstrat. Completare EN, HTML și 12 cadre SVG per limbă (3+5+4), legende și controale 44 px. Audit/inspecție încă de confirmat; 48 concepte, 55 lecții.
