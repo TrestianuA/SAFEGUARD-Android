@@ -126,6 +126,48 @@ const path = require('node:path');
  await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['15','16','17','27']){
+ try{
+ const section=page.locator('#connect-v'+id), reset=section.locator('#v'+id+'reset');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ await reset.click();await capture('initial');
+ if(id==='15'){
+ const wan=section.locator('#wan'),status=section.locator('#wanstatus'),link=section.locator('#uplink'),broken=section.locator('#broken');
+ const initial=await status.textContent();
+ assert.equal(await wan.isChecked(),true);assert.equal(await link.getAttribute('stroke'),'#087C26');assert.equal(await broken.getAttribute('visibility'),'hidden');
+ await wan.focus();await wan.press('Space');assert.equal(await wan.isChecked(),false);assert.equal(await link.getAttribute('stroke'),'#C96846');assert.equal(await broken.getAttribute('visibility'),'visible');assert.notEqual(await status.textContent(),initial);
+ assert.match(await status.textContent(),lang==='ro'?/Wi-Fi activ; internet indisponibil/:/Wi-Fi active; internet unavailable/);
+ await capture('offline');await reset.click();assert.equal(await wan.isChecked(),true);assert.equal(await status.textContent(),initial);assert.equal(await broken.getAttribute('visibility'),'hidden');
+ }else if(id==='17'){
+ const rate=section.locator('#rate'),duration=section.locator('#duration');
+ const check=async(r,t)=>{
+ assert.equal(await rate.inputValue(),String(r));assert.equal(await duration.inputValue(),String(t));
+ assert.equal(await section.locator('#ratevalue').textContent(),String(r));assert.equal(await section.locator('#durationvalue').textContent(),String(t));
+ const v=r*t*60/8;
+ assert.equal(await section.locator('#volume').textContent(),v.toLocaleString(lang==='ro'?'ro-RO':'en-US'));
+ assert.ok(Math.abs(await section.locator('#volbar').evaluate(x=>parseFloat(x.style.width))-v/90)<0.001);
+ };
+ for(const slider of [rate,duration])assert.ok(await slider.evaluate(x=>x.getBoundingClientRect().height>=44));
+ await check(5,10);
+ for(const [r,t] of [[1,1],[20,1],[1,60],[20,60],[5,11]]){await rate.fill(String(r));await duration.fill(String(t));await check(r,t);await capture(r+'-'+t);}
+ await reset.click();await check(5,10);
+ }else{
+ const buttons=section.locator('[data-choice]'),detail=section.locator('#v'+id+'detail'),initial=await detail.textContent(),seen=new Set();
+ const count=id==='16'?4:3;
+ assert.equal(await buttons.count(),count);
+ for(let i=0;i<count;i++){
+ const b=buttons.nth(i);await b.focus();await b.press('Enter');assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await section.locator('[aria-pressed="true"]').count(),1);
+ for(let j=0;j<count;j++)assert.equal(await section.locator('#v'+id+'highlight'+j).getAttribute('visibility'),i===j?'visible':'hidden');
+ const value=await detail.textContent();assert.notEqual(value,initial);assert.equal(seen.has(value),false);seen.add(value);
+ await capture('choice-'+i);
+ }
+ await reset.click();assert.equal(await detail.textContent(),initial);assert.equal(await section.locator('[aria-pressed="true"]').count(),0);
+ for(let j=0;j<count;j++)assert.equal(await section.locator('#v'+id+'highlight'+j).getAttribute('visibility'),'hidden');
+ }
+ await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
