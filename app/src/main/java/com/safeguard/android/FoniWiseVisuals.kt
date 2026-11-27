@@ -236,7 +236,7 @@ private fun VisualDurationBar(fraction: Float, color: Color) {
 
 private data class SvgStyle(val fill: String = "#000000", val stroke: String = "none", val strokeWidth: Float = 1f,
     val fontSize: Float = 16f, val bold: Boolean = false, val anchor: String = "start",
-    val dash: String = "", val cap: String = "butt", val join: String = "miter", val opacity: Float = 1f)
+    val dash: String = "", val cap: String = "butt", val join: String = "miter", val opacity: Float = 1f, val fillOpacity: Float = 1f, val dashOffset: Float = 0f)
 
 private fun Element.attr(name: String, fallback: String) = if (hasAttribute(name)) getAttribute(name) else fallback
 private fun Element.num(name: String, fallback: Float = 0f) = getAttribute(name).toFloatOrNull() ?: fallback
@@ -262,7 +262,7 @@ private fun drawSvgElement(canvas: AndroidCanvas, e: Element, inherited: SvgStyl
         e.num("stroke-width", inherited.strokeWidth), e.num("font-size", inherited.fontSize),
         e.attr("font-weight", if (inherited.bold) "bold" else "normal") == "bold",
         e.attr("text-anchor", inherited.anchor), e.attr("stroke-dasharray", inherited.dash),
-        e.attr("stroke-linecap", inherited.cap), e.attr("stroke-linejoin", inherited.join), inherited.opacity * e.num("opacity", 1f))
+        e.attr("stroke-linecap", inherited.cap), e.attr("stroke-linejoin", inherited.join), inherited.opacity * e.num("opacity", 1f), e.num("fill-opacity", inherited.fillOpacity), e.num("stroke-dashoffset", inherited.dashOffset))
     val save = canvas.save()
     val transform = e.getAttribute("transform")
     if (transform.startsWith("rotate(") || transform.startsWith("translate(")) {
@@ -280,14 +280,18 @@ private fun drawSvgElement(canvas: AndroidCanvas, e: Element, inherited: SvgStyl
     }
     fun paint(color: String, stroke: Boolean): Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         this.color = AndroidColor.parseColor(color)
-        alpha = (alpha * style.opacity).roundToInt().coerceIn(0, 255)
+        alpha = (alpha * style.opacity * (if (stroke) 1f else style.fillOpacity)).roundToInt().coerceIn(0, 255)
         this.style = if (stroke) Paint.Style.STROKE else Paint.Style.FILL
         strokeWidth = style.strokeWidth
         strokeCap = if (style.cap == "round") Paint.Cap.ROUND else Paint.Cap.BUTT
         strokeJoin = if (style.join == "round") Paint.Join.ROUND else if (style.join == "bevel") Paint.Join.BEVEL else Paint.Join.MITER
         if (stroke && style.dash.isNotBlank()) {
             val intervals = style.dash.split(Regex("[ ,]+")).mapNotNull { it.toFloatOrNull() }.toFloatArray()
-            if (intervals.size >= 2 && intervals.size % 2 == 0) pathEffect = DashPathEffect(intervals, 0f)
+            if (intervals.size >= 2 && intervals.size % 2 == 0 && intervals.all { it >= 0f } && intervals.sum() > 0f) {
+                val period = intervals.sum()
+                val phase = ((style.dashOffset % period) + period) % period
+                pathEffect = DashPathEffect(intervals, phase)
+            }
         }
     }
     fun shape(draw: (Paint) -> Unit) {
