@@ -305,3 +305,6 @@ Script browser-audit.cjs commit 13d11894d656ed90ba205657024b7a70bb775fd5, reciti
 
 ### Remediere test V05 — 27.11.2026
 Execuția 45985260449: 30/36 PASS, șase eșecuri V05. Auditul sursă arată că scriptul încerca focalizarea schemei E2EE ascunse implicit, fără selectarea modului. Script corectat pentru selectarea fiecărui mod înainte de testul tastaturii, verificarea vizibilității și jurnal cu stack. Retestare necesară; fără modificări ale prototipurilor. Categoria deschisă.
+
+### Retestare extinsă reușită — 27.11.2026
+Execuția 45985744407: succes, 36/36 PASS confirmate direct în jurnal, inclusiv V05 după corectarea scriptului. Arhiva 15191183053: 139 fișiere raportate la încărcare. Testele de mărire, derulare programatică, tastatură și valori PIN au trecut. Inspecția capturilor finale, fidelitatea integrală și TalkBack rămân nevalidate; categoria deschisă. Nicio modificare a prototipurilor.
