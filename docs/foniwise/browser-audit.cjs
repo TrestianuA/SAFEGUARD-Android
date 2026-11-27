@@ -292,6 +292,27 @@ const path = require('node:path');
  await reset.click();await check(values[0]);await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['47','48']){
+ try{
+ const section=page.locator('#access-v'+id),buttons=section.locator('[data-choice]'),reset=section.locator('#v'+id+'reset'),detail=section.locator('#v'+id+'detail');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ assert.equal(await buttons.count(),3);assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const prefix=id==='47'?'v47highlight':'v48caption',initialIndex=id==='47'?-1:0;
+ const stable=await section.locator(id==='47'?'svg':'#v48speech').textContent();
+ const check=async i=>{
+ assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),i<0?0:1);
+ for(let j=0;j<3;j++){assert.equal(await buttons.nth(j).getAttribute('aria-pressed'),String(i===j));assert.equal(await section.locator('#'+prefix+j).getAttribute('visibility'),i===j?'visible':'hidden');}
+ assert.equal(await section.locator(id==='47'?'svg':'#v48speech').textContent(),stable);
+ if(id==='47'){const ann=lang==='ro'?['Ne întâlnim în parc. Text.','Trimite, buton.','Înapoi, buton.']:["Let's meet in the park. Text.",'Send, button.','Back, button.'];assert.equal(await section.locator('#v47announce').textContent(),i<0?(lang==='ro'?'Niciun element focalizat':'No element focused'):ann[i]);}
+ else{const correct=lang==='ro'?'Trenul pleacă la ora opt.':'The train leaves at eight.';const wrong=lang==='ro'?'Trenul pleacă la ora șapte.':'The train leaves at seven.';assert.equal(await section.locator('#v48speech').textContent(),correct);assert.equal(await section.locator('#v48caption1 text').textContent(),correct);assert.equal(await section.locator('#v48caption2 text').textContent(),wrong);}
+ };
+ await reset.click();const initial=await detail.textContent();await check(initialIndex);await capture('initial');
+ const seen=new Set();for(let i=0;i<3;i++){await buttons.nth(i).focus();await buttons.nth(i).press('Enter');await check(i);const t=await detail.textContent();assert.equal(seen.has(t),false);seen.add(t);if(i!==initialIndex)assert.notEqual(t,initial);await capture('choice-'+i);}
+ await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -304,7 +325,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"],g[id^="access-v47-"],g[id^="access-v48-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23|47|48))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -313,8 +334,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,20,'system SVG frame count');
- assert.equal(frames.filter(f=>f.id.startsWith('access-')).length,10,'accessibility SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,88,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('access-')).length,17,'accessibility SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,95,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
@@ -327,6 +348,7 @@ const path = require('node:path');
  }
  if(f.id.startsWith('system-v46-')){const expected=f.id.endsWith('-3')?'visible':'hidden';for(const name of ['v46modemoutline','v46netoutline']){const effective=await frame.locator('[id="'+f.id+'-'+name+'"] rect').evaluateAll(xs=>xs.map(x=>getComputedStyle(x).visibility));assert.deepEqual(effective,[expected,expected],'V46 archived nested SVG visibility');}}
  if(f.id.startsWith('access-v23-')){const i=f.id.endsWith('-initial')?0:Number(f.id.split('-').pop());const z=1+i*0.5;assert.equal(await frame.locator('[id="'+f.id+'-accessZoomScene"]').getAttribute('transform'),'translate(160 105) scale('+z+') translate(-160 -105)');assert.equal(await frame.locator('g[clip-path]').getAttribute('clip-path'),'url(#'+f.id+'-accessZoomClip)');}
+ if(f.id.startsWith('access-v47-')||f.id.startsWith('access-v48-')){const is47=f.id.startsWith('access-v47-'),i=f.id.endsWith('-initial')?(is47?-1:0):Number(f.id.split('-').pop());for(let j=0;j<3;j++)assert.equal(await frame.locator('[id="'+f.id+'-'+(is47?'v47highlight':'v48caption')+j+'"]').getAttribute('visibility'),i===j?'visible':'hidden');}
  await frame.screenshot({path:'browser-results/svg-'+lang+'-'+f.id+'.png'});
  console.log('SVG PASS',lang,f.id);
  }catch(e){failures.push([lang,'svg',f.id,e.stack||e.message]);}
