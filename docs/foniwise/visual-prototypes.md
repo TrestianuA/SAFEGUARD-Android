@@ -97,3 +97,9 @@ RO/EN: cinci butoane de selecție cu înălțime minimă 44 px și împachetarea
 
 ### Uniformizare etichete pe ecrane înguste
 V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concordanță cu V05. Audit sursă: toate cele opt grupuri de selecție per limbă au denumiri specifice traduse; SVG inline identic textual înainte/după. Nu constituie test de randare sau TalkBack. Categoria rămâne deschisă.
+
+## Internet și conectivitate — V41–V43 RO/EN
+- V41 Bluetooth: telefon cu melodie locală, legătură radio, căști; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă.
+- V42 NFC: telefon cititor, câmp magnetic, etichetă pasivă cu antenă și cip; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Nu reprezintă o tranzacție reală.
+- V43 Hotspot: stație mobilă, telefon cu Wi-Fi, laptop și tabletă; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Capacitatea partajată nu se multiplică.
+Legendă RO «Exemplu informativ», EN «Illustrative example»; controale minimum 44 px, aria-pressed, role=status. Toate offline, fără permisiuni sau modificări reale. 43 concepte catalogate, 55 lecții neschimbate. Randarea și validarea funcțională necesare.
