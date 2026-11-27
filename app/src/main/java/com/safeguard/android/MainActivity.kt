@@ -1698,6 +1698,7 @@ private fun EducationalLibrary(english: Boolean, category: Int, topic: Int, onCa
                         Text(sections[offset])
                         Text(if (english) "How it works" else "Cum funcționează?", fontWeight = FontWeight.Bold, color = navy)
                         Text(sections[offset + 1])
+                        FoniWiseLessonVisual(lesson.ro[0], english, advanced)
                         Text(if (english) "Practical example" else "Exemplu practic", fontWeight = FontWeight.Bold, color = navy)
                         Text(sections[offset + 2])
                     } else {
