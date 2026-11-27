@@ -262,6 +262,36 @@ const path = require('node:path');
  await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['22','23']){
+ try{
+ const section=page.locator('#access-v'+id),range=section.locator(id==='22'?'#fontdemo':'#accesszoom'),reset=section.locator(id==='22'?'#fontreset':'#zoomreset');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ assert.ok(await range.evaluate(x=>x.getBoundingClientRect().height>=44));
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const fmt=n=>n.toFixed(1).replace(/\.0$/,'').replace('.',lang==='ro'?',':'.');
+ const values=id==='22'?[100,125,150,175,200]:[1,1.5,2,2.5,3];
+ const original=await section.locator(id==='22'?'#fontsample':'#accessZoomScene').textContent();
+ const check=async v=>{
+ assert.equal(Number(await range.inputValue()),v);
+ if(id==='22'){
+ assert.equal(await section.locator('#fontpercent').textContent(),v+'%');
+ assert.equal(await section.locator('#fontsample').evaluate(x=>parseFloat(getComputedStyle(x).fontSize)),16*v/100);
+ assert.equal(await section.locator('#fontsample').textContent(),original);
+ assert.ok(await section.locator('#fontsample').evaluate(x=>x.scrollWidth<=x.clientWidth+1));
+ }else{
+ assert.equal(await section.locator('#zoomfactor').textContent(),fmt(v)+'×');
+ assert.equal(await section.locator('#zoomarea').textContent(),fmt(100/(v*v))+'%');
+ assert.equal(await section.locator('#accessZoomScene').getAttribute('transform'),'translate(160 105) scale('+v+') translate(-160 -105)');
+ assert.equal(await section.locator('#accessZoomScene').textContent(),original);
+ assert.equal(await section.locator('g[clip-path]').getAttribute('clip-path'),'url(#accessZoomClip)');
+ }
+ };
+ await reset.click();await check(values[0]);await capture('initial');
+ for(let i=1;i<values.length;i++){await range.fill(String(values[i]));await check(values[i]);await capture('choice-'+i);}
+ await reset.click();await check(values[0]);await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -274,7 +304,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -283,7 +313,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,20,'system SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,78,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('access-')).length,10,'accessibility SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,88,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
@@ -291,10 +322,11 @@ const path = require('node:path');
  const frame=page.locator('body > svg');
  assert.equal(await frame.locator('g[id="'+f.id+'"]').count(),1);
  if(!f.id.endsWith('-zoom')){
- const outside=await frame.locator('text').evaluateAll(xs=>xs.filter(x=>{const b=x.getBoundingClientRect();return b.left < -1||b.right > 321||b.top < -1||b.bottom > x.ownerSVGElement.closest('body > svg').getBoundingClientRect().bottom+1;}).map(x=>x.textContent));
+ const outside=await frame.locator('text').evaluateAll(xs=>xs.filter(x=>{if(x.closest('g[clip-path]'))return false;const b=x.getBoundingClientRect();return b.left < -1||b.right > 321||b.top < -1||b.bottom > x.ownerSVGElement.closest('body > svg').getBoundingClientRect().bottom+1;}).map(x=>x.textContent));
  assert.deepEqual(outside,[],'SVG text outside frame');
  }
  if(f.id.startsWith('system-v46-')){const expected=f.id.endsWith('-3')?'visible':'hidden';for(const name of ['v46modemoutline','v46netoutline']){const effective=await frame.locator('[id="'+f.id+'-'+name+'"] rect').evaluateAll(xs=>xs.map(x=>getComputedStyle(x).visibility));assert.deepEqual(effective,[expected,expected],'V46 archived nested SVG visibility');}}
+ if(f.id.startsWith('access-v23-')){const i=f.id.endsWith('-initial')?0:Number(f.id.split('-').pop());const z=1+i*0.5;assert.equal(await frame.locator('[id="'+f.id+'-accessZoomScene"]').getAttribute('transform'),'translate(160 105) scale('+z+') translate(-160 -105)');assert.equal(await frame.locator('g[clip-path]').getAttribute('clip-path'),'url(#'+f.id+'-accessZoomClip)');}
  await frame.screenshot({path:'browser-results/svg-'+lang+'-'+f.id+'.png'});
  console.log('SVG PASS',lang,f.id);
  }catch(e){failures.push([lang,'svg',f.id,e.stack||e.message]);}
