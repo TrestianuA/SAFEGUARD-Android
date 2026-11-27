@@ -94,3 +94,6 @@ HTML RO/EN: căsuțele V39 au lățime automată și etichete flex cu înălțim
 
 ### V05 — uniformizare accesibilitate
 RO/EN: cinci butoane de selecție cu înălțime minimă 44 px și împachetarea cuvintelor la nevoie; două grupuri cu nume accesibile specifice. Toate SVG inline comparate textual și păstrate identic. Browser Chromium disponibil local, dar descărcarea directă GitHub în mediul local a eșuat; randarea reală nu este confirmată. Categoria rămâne deschisă.
+
+### Uniformizare etichete pe ecrane înguste
+V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concordanță cu V05. Audit sursă: toate cele opt grupuri de selecție per limbă au denumiri specifice traduse; SVG inline identic textual înainte/după. Nu constituie test de randare sau TalkBack. Categoria rămâne deschisă.
