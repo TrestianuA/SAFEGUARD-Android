@@ -313,6 +313,24 @@ const path = require('node:path');
  await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['24','25','26']){
+ try{
+ const section=page.locator('#advanced-v'+id),buttons=section.locator('[data-choice]'),reset=section.locator('#v'+id+'reset'),detail=section.locator('#v'+id+'detail');
+ const count=id==='25'?4:3,initialIndex=id==='24'?1:-1;
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ assert.equal(await buttons.count(),count);assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const check=async i=>{
+ assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),i<0?0:1);
+ for(let j=0;j<count;j++){assert.equal(await buttons.nth(j).getAttribute('aria-pressed'),String(i===j));if(id!=='24')assert.equal(await section.locator('#v'+id+'highlight'+j).getAttribute('visibility'),i===j?'visible':'hidden');}
+ if(id==='24'){const ms=[200,400,800][i];assert.equal(await section.locator('#animduration').textContent(),ms+' ms');assert.equal(await section.locator('#animbar').evaluate(x=>x.style.width),ms/8+'%');assert.equal(await section.locator('#v24loadbar').evaluate(x=>x.style.width),'75%');assert.match(await section.locator('#v24load').textContent(),/600 ms/);}
+ };
+ await reset.click();const initial=await detail.textContent();await check(initialIndex);await capture('initial');
+ const seen=new Set();for(let i=0;i<count;i++){await buttons.nth(i).focus();await buttons.nth(i).press('Enter');await check(i);const t=await detail.textContent();assert.equal(seen.has(t),false);seen.add(t);if(i!==initialIndex)assert.notEqual(t,initial);await capture('choice-'+i);}
+ await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -325,7 +343,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"],g[id^="access-v47-"],g[id^="access-v48-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23|47|48))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"],g[id^="access-v22-"],g[id^="access-v23-"],g[id^="access-v47-"],g[id^="access-v48-"],g[id^="advanced-v24-"],g[id^="advanced-v25-"],g[id^="advanced-v26-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46)|access-v(?:22|23|47|48)|advanced-v(?:24|25|26))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -335,7 +353,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,20,'system SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('access-')).length,17,'accessibility SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,95,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('advanced-')).length,12,'advanced SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,107,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
@@ -349,6 +368,8 @@ const path = require('node:path');
  if(f.id.startsWith('system-v46-')){const expected=f.id.endsWith('-3')?'visible':'hidden';for(const name of ['v46modemoutline','v46netoutline']){const effective=await frame.locator('[id="'+f.id+'-'+name+'"] rect').evaluateAll(xs=>xs.map(x=>getComputedStyle(x).visibility));assert.deepEqual(effective,[expected,expected],'V46 archived nested SVG visibility');}}
  if(f.id.startsWith('access-v23-')){const i=f.id.endsWith('-initial')?0:Number(f.id.split('-').pop());const z=1+i*0.5;assert.equal(await frame.locator('[id="'+f.id+'-accessZoomScene"]').getAttribute('transform'),'translate(160 105) scale('+z+') translate(-160 -105)');assert.equal(await frame.locator('g[clip-path]').getAttribute('clip-path'),'url(#'+f.id+'-accessZoomClip)');}
  if(f.id.startsWith('access-v47-')||f.id.startsWith('access-v48-')){const is47=f.id.startsWith('access-v47-'),i=f.id.endsWith('-initial')?(is47?-1:0):Number(f.id.split('-').pop());for(let j=0;j<3;j++)assert.equal(await frame.locator('[id="'+f.id+'-'+(is47?'v47highlight':'v48caption')+j+'"]').getAttribute('visibility'),i===j?'visible':'hidden');}
+ if(f.id.startsWith('advanced-v24-')){const i=f.id.endsWith('-initial')?1:Number(f.id.split('-').pop());assert.equal(Number(await frame.locator('[id="'+f.id+'-animbar"]').getAttribute('width')),300*[200,400,800][i]/800);assert.equal(await frame.locator('[id="'+f.id+'-loadbar"]').getAttribute('width'),'225');}
+ if(f.id.startsWith('advanced-v25-')||f.id.startsWith('advanced-v26-')){const is25=f.id.startsWith('advanced-v25-'),i=f.id.endsWith('-initial')?-1:Number(f.id.split('-').pop());for(let j=0;j<(is25?4:3);j++)assert.equal(await frame.locator('[id="'+f.id+'-v'+(is25?'25':'26')+'highlight'+j+'"]').getAttribute('visibility'),i===j?'visible':'hidden');}
  await frame.screenshot({path:'browser-results/svg-'+lang+'-'+f.id+'.png'});
  console.log('SVG PASS',lang,f.id);
  }catch(e){failures.push([lang,'svg',f.id,e.stack||e.message]);}
