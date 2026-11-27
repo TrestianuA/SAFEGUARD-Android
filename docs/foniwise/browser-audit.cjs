@@ -70,6 +70,45 @@ const path = require('node:path');
  console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['12','13','14']){
+ try{
+ const reset=page.locator('#v'+id+'reset'), section=reset.locator('xpath=ancestor::section[1]');
+ await reset.click();
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ await capture('initial');
+ if(id!=='14'){
+ const buttons=section.locator('[data-choice]'), detail=section.locator('#v'+id+'detail'), initial=await detail.textContent(), seen=new Set();
+ assert.equal(await buttons.count(),id==='12'?4:3);
+ for(let i=0;i<await buttons.count();i++){
+ const b=buttons.nth(i);await b.focus();await b.press('Enter');
+ assert.equal(await b.getAttribute('aria-pressed'),'true');
+ assert.equal(await section.locator('[aria-pressed="true"]').count(),1);
+ const result=await detail.textContent();assert.notEqual(result,initial);assert.equal(seen.has(result),false);seen.add(result);
+ if(id==='12')assert.equal(await section.locator('svg rect').nth(i+1).getAttribute('stroke-width'),'3');
+ else assert.equal(await section.locator('[data-compare="'+i+'"]').evaluateAll(xs=>xs.length===2&&xs.every(x=>x.style.outlineStyle==='solid')),true);
+ await capture('choice-'+i);
+ }
+ await reset.click();assert.equal(await detail.textContent(),initial);assert.equal(await section.locator('[aria-pressed="true"]').count(),0);
+ if(id==='12')assert.equal(await section.locator('svg rect[stroke-width="3"]').count(),0);
+ else assert.equal(await section.locator('[data-compare]').evaluateAll(xs=>xs.every(x=>!x.style.outline)),true);
+ }else{
+ const fp=section.locator('#fp'),tp=section.locator('#tp');
+ const check=async(f,t)=>{
+ assert.equal(await fp.inputValue(),String(f));assert.equal(await tp.inputValue(),String(t));
+ for(const [grid,n,color] of [['fpgrid',f,'rgb(201, 104, 70)'],['tpgrid',t,'rgb(8, 124, 38)']]){
+ const cells=section.locator('#'+grid+' span');assert.equal(await cells.count(),100);
+ assert.equal(await cells.evaluateAll((xs,c)=>xs.filter(x=>x.style.background===c).length,color),n);
+ }
+ assert.deepEqual((await section.locator('#deepresult').textContent()).match(/\d+/g).map(Number),[f,t,100-t]);
+ };
+ await check(5,90);
+ for(const [f,t] of [[0,90],[100,90],[100,0],[100,100],[0,100]]){await fp.fill(String(f));await tp.fill(String(t));await check(f,t);await capture(f+'-'+t);}
+ await reset.click();await check(5,90);
+ }
+ await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
