@@ -23,6 +23,17 @@ const path = require('node:path');
  for(let i=0;i<await buttons.count();i++){
  const b=buttons.nth(i);await b.click();assert.equal(await b.getAttribute('aria-pressed'),'true');
  }
+ if(id==='04'){await page.locator('#v04toggle').click();assert.equal(await page.locator('#v04paper').getAttribute('fill'),'#064D2B');}
+ if(id==='05'){
+ for(let mode=0;mode<2;mode++) for(let part=0;part<3;part++){
+ await section.locator('[data-v05-select="v05mode"][data-index="'+mode+'"]').click();
+ await section.locator('[data-v05-select="v05part"][data-index="'+part+'"]').click();
+ assert.equal(await page.locator('#v05e2ee').isVisible(),mode===1);
+ assert.equal(await page.locator('#v05tls').isVisible(),mode===0);
+ assert.equal(await section.locator('[data-v05-select="v05part"][data-index="'+part+'"]').getAttribute('aria-pressed'),'true');
+ await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V05-'+mode+'-'+part+'.png'});
+ }
+ }
  if(id==='39'){await page.locator('#v39a').check();await page.locator('#v39b').check();}
  if(id==='40'){await page.locator('#v40threshold').fill('79');assert.match(await page.locator('#v40status').textContent(),/respins|rejected/i);}
  await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-changed.png'});
