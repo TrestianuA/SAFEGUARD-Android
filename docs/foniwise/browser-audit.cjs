@@ -213,6 +213,36 @@ const path = require('node:path');
  for(let i=0;i<3;i++){await buttons.nth(i).focus();await buttons.nth(i).press('Enter');await check(i);const t=await detail.textContent();assert.equal(seen.has(t),false);seen.add(t);await capture('choice-'+i);}
  await reset.click();await check(0);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,'44',e.stack||e.message]);}
+
+ for(const id of ['20','21']){
+ try{
+ const section=page.locator('#system-v'+id),reset=section.locator('#v'+id+'reset'),detail=section.locator('#v'+id+'detail');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ await reset.click();const initial=await detail.textContent();await capture('initial');
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const check=async(panel,count,prefix,name)=>{
+ const buttons=panel.locator('[data-choice]'),start=await detail.textContent(),seen=new Set();
+ assert.equal(await buttons.count(),count);assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ for(let i=0;i<count;i++){const b=buttons.nth(i);await b.focus();await b.press('Enter');assert.equal(await b.getAttribute('aria-pressed'),'true');assert.equal(await panel.locator('[data-choice][aria-pressed="true"]').count(),1);
+ for(let j=0;j<count;j++)assert.equal(await panel.locator('#'+prefix+j).getAttribute('visibility'),i===j?'visible':'hidden');
+ const value=await detail.textContent();assert.notEqual(value,start);assert.equal(seen.has(value),false);seen.add(value);await capture(name+'-'+i);}
+ };
+ if(id==='20'){
+ const simple=section.locator('#v20panel0'),advanced=section.locator('#v20panel1'),m=section.locator('[data-mode]');
+ assert.equal(await simple.isVisible(),true);assert.equal(await advanced.isVisible(),false);assert.equal(await m.nth(0).getAttribute('aria-pressed'),'true');
+ assert.ok(await m.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ await check(simple,2,'v20simple','simple');await m.nth(1).focus();await m.nth(1).press('Enter');
+ assert.equal(await simple.isVisible(),false);assert.equal(await advanced.isVisible(),true);assert.equal(await m.nth(1).getAttribute('aria-pressed'),'true');
+ assert.equal(await advanced.locator('svg text').filter({hasText:'Android 14'}).count(),2);
+ const dates=lang==='ro'?['01.09.2025','01.10.2025']:['Sep 1, 2025','Oct 1, 2025'];for(const date of dates)assert.equal(await advanced.locator('svg text').filter({hasText:date}).count(),1);
+ await capture('advanced');await check(advanced,2,'v20advanced','advanced');await reset.click();
+ assert.equal(await simple.isVisible(),true);assert.equal(await advanced.isVisible(),false);assert.equal(await m.nth(0).getAttribute('aria-pressed'),'true');
+ }else{await check(section,5,'v21highlight','choice');await reset.click();}
+ assert.equal(await detail.textContent(),initial);assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),0);
+ assert.equal(await section.locator('g[id^="v'+id+'"][visibility="visible"]').count(),0);
+ await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -225,7 +255,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -233,7 +263,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('fraud-')).length,16,'fraud SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,58,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,12,'system SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,70,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
