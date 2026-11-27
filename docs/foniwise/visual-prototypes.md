@@ -125,3 +125,6 @@ Ambele HTML RO/EN, controale de minimum 44 px, aria-pressed, role=status, fără
 
 ## Sistem și actualizări — audit vizual și corecție V46
 Audit 46051609451: 138/138 HTML și 156/156 SVG PASS înainte de corecție. Inspecția planșelor reale a identificat contururile modemului și rețelei afișate neintenționat în toate stările V46: grupurile interne aveau visibility="visible", suprascriind ascunderea grupului părinte. Eliminat atributul intern în HTML și SVG RO/EN, fără modificarea geometriei. Testele au fost extinse pentru vizibilitatea efectivă CSS a dreptunghiurilor, inclusiv în cadrele SVG. Retestare și inspecție V46 corectat necesare. V20/V21 au etichete mici la 320 px; explicațiile și controalele externe rămân lizibile. 46 concepte, 55 lecții.
+
+## Sistem și actualizări — retestare finală V46
+Corecția vizibilității contururilor modem/rețea în HTML și SVG RO/EN a trecut auditul 138/138 HTML și 156/156 SVG (execuția 46052325486). Inspectate 36 capturi HTML V46 la 320/360/412 px și 10 cadre SVG, toate stările RO/EN; evidențierea este exclusivă, resetul elimină contururile, fără suprapuneri majore observate. V20/V21/V45 păstrate. Etapa tehnică pregătită pentru închidere; acordul general anterior nu este aprobare separată a variantei corectate. Integrarea Android, contrastul complet, TalkBack și dispozitivul rămân deschise.
