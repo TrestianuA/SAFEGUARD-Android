@@ -243,6 +243,24 @@ const path = require('node:path');
  await capture('reset');console.log('PASS',lang,width,id);
  }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
  }
+
+ for(const id of ['45','46']){
+ try{
+ const section=page.locator('#system-v'+id),reset=section.locator('#v'+id+'reset'),detail=section.locator('#v'+id+'detail'),buttons=section.locator('[data-choice]');
+ const capture=async state=>{assert.equal(await section.evaluate(s=>s.scrollWidth>s.clientWidth+1||s.getBoundingClientRect().right>innerWidth+1),false,'section overflow');await section.screenshot({path:'browser-results/'+lang+'-'+width+'-V'+id+'-'+state+'.png'});};
+ const count=id==='45'?3:4,prefix=id==='45'?'v45state':'v46highlight',initialIndex=id==='45'?0:-1;
+ assert.equal(await buttons.count(),count);assert.ok(await buttons.evaluateAll(xs=>xs.every(x=>x.getBoundingClientRect().height>=44)));
+ assert.equal(await section.locator('small').textContent(),lang==='ro'?'Exemplu informativ':'Illustrative example');
+ const check=async i=>{
+ assert.equal(await section.locator('[data-choice][aria-pressed="true"]').count(),i<0?0:1);
+ for(let j=0;j<count;j++){assert.equal(await buttons.nth(j).getAttribute('aria-pressed'),String(i===j));assert.equal(await section.locator('#'+prefix+j).getAttribute('visibility'),i===j?'visible':'hidden');}
+ if(id==='45'){const visible=section.locator('#v45state'+i);assert.match(await visible.textContent(),new RegExp((lang==='ro'?'Sistemul rulează din ':'System runs from ')+(i===2?'B':'A')));if(i>0)assert.match(await visible.textContent(),lang==='ro'?/Versiune nouă/:/New version/);}
+ };
+ await reset.click();const initial=await detail.textContent();await check(initialIndex);await capture('initial');
+ const seen=new Set();for(let i=0;i<count;i++){await buttons.nth(i).focus();await buttons.nth(i).press('Enter');await check(i);const t=await detail.textContent();assert.equal(seen.has(t),false);seen.add(t);if(i!==initialIndex)assert.notEqual(t,initial);await capture('choice-'+i);}
+ await reset.click();await check(initialIndex);assert.equal(await detail.textContent(),initial);await capture('reset');console.log('PASS',lang,width,id);
+ }catch(e){failures.push([lang,width,id,e.stack||e.message]);}
+ }
  if(errors.length)failures.push([lang,width,'pageerror',errors]);
  }catch(e){failures.push([lang,width,e.message]);}finally{await page.close();}
  }
@@ -255,7 +273,7 @@ const path = require('node:path');
  const frames=await page.evaluate(source=>{
  const doc=new DOMParser().parseFromString(source,'image/svg+xml');
  if(doc.querySelector('parsererror'))throw Error(doc.querySelector('parsererror').textContent);
- return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
+ return [...doc.querySelectorAll('g[id^="fraud-v12-"],g[id^="fraud-v13-"],g[id^="fraud-v14-"],g[id^="connect-v15-"],g[id^="connect-v16-"],g[id^="connect-v17-"],g[id^="connect-v27-"],g[id^="connect-v41-"],g[id^="connect-v42-"],g[id^="connect-v43-"],g[id^="notify-v18-"],g[id^="notify-v19-"],g[id^="notify-v44-"],g[id^="system-v20-"],g[id^="system-v21-"],g[id^="system-v45-"],g[id^="system-v46-"]')].filter(g=>/^(?:fraud-v(?:12|13|14)|connect-v(?:15|16|17|27|41|42|43)|notify-v(?:18|19|44)|system-v(?:20|21|45|46))-(?:adv-)?(?:initial|offline|zoom|\d+)$/.test(g.id)).map(g=>{
  const clone=g.cloneNode(true);clone.removeAttribute('transform');
  return {id:g.id,height:Number(g.querySelector('rect').getAttribute('height')),markup:new XMLSerializer().serializeToString(clone)};
  });
@@ -263,8 +281,8 @@ const path = require('node:path');
  assert.equal(frames.filter(f=>f.id.startsWith('fraud-')).length,16,'fraud SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('connect-')).length,29,'connectivity SVG frame count');
  assert.equal(frames.filter(f=>f.id.startsWith('notify-')).length,13,'notification SVG frame count');
- assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,12,'system SVG frame count');
- assert.equal(new Set(frames.map(f=>f.id)).size,70,'unique frame ids');
+ assert.equal(frames.filter(f=>f.id.startsWith('system-')).length,20,'system SVG frame count');
+ assert.equal(new Set(frames.map(f=>f.id)).size,78,'unique frame ids');
  for(const f of frames){
  try{
  assert.ok(Number.isFinite(f.height)&&f.height>0);
