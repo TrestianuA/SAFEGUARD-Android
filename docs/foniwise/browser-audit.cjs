@@ -144,6 +144,7 @@ const path = require('node:path');
  const check=async(r,t)=>{
  assert.equal(await rate.inputValue(),String(r));assert.equal(await duration.inputValue(),String(t));
  assert.equal(await section.locator('#ratevalue').textContent(),String(r));assert.equal(await section.locator('#durationvalue').textContent(),String(t));
+ assert.equal(await section.locator('#durationunit').textContent(),lang==='ro'?(t===1?'minut':t>=20?'de minute':'minute'):(t===1?'minute':'minutes'));
  const v=r*t*60/8;
  assert.equal(await section.locator('#volume').textContent(),v.toLocaleString(lang==='ro'?'ro-RO':'en-US'));
  assert.ok(Math.abs(await section.locator('#volbar').evaluate(x=>parseFloat(x.style.width))-v/90)<0.001);
