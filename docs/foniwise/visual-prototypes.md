@@ -1,0 +1,175 @@
+# FoniWise — Catalog de prototipuri vizuale
+
+Status: referință pentru etapa vizuală; nu este cod Android implementat.
+Identitate: verde închis #064D2B, verde #087C26, verde pal #E7F8DB, fundal #F3FBF2, accent #B5F52C, verde grafic #72B94C; Nunito Sans. Texte RO/EN, offline, fără permisiuni suplimentare, TalkBack, adaptare la Galaxy A13. Integrare în paginile lecțiilor, la nivelul potrivit, fără schimbarea primei pagini.
+
+## Prototipuri păstrate
+- V01 Baterie: două baterii verticale, nouă și degradată, ambele încărcate la 100%; sănătatea afișată separat; capacitate inițială 5000 mAh, cursor 40–100%, implicit 80%; capacitate rămasă = 5000 × procent / 100; pierdută = 5000 minus rămasă. Verde la >=80%, ocru #D6A32F la >=60%, coral #C96846 sub 60%. Simulare, nu măsurătoare.
+- V02 Procesor: selector 1/2/4/8 nuclee, implicit 2, reset; durată 4 + 6/n secunde; comparație statică păstrată.  bare orizontale 10, 7, 5,5 secunde pentru 1, 2, 4 nuclee; segment secvențial 4 s verde închis, segment paralel 6/n verde grafic. Model ideal, nu benchmark.
+- V03 Dezinstalare: două coloane înainte/după, 80 MB cod (#72B94C), 120 MB date private (#087C26), 300 MB fotografii partajate (#D1E6C5); după, primii 200 MB reprezentați prin contur punctat, fotografiile rămân. Exemplu ipotetic.
+- V04 Criptare: document cu linii, săgeată, lacăt verde-lime pe fond verde închis, săgeată, text cifrat ilustrativ A9 F2 8C / 7D 3B E1 / C4 0A 6F / 2E 9B 5D. Etichete date originale / criptare / date criptate.
+- V05 Comunicații: două diagrame cu telefoane la capete și server central. TLS: două legături criptate distincte, serverul poate citi mesajul. E2EE: conținut protejat între capete, serverul retransmite text cifrat. Nu sugera că toate metadatele sunt ascunse.
+- V06 PIN: selector 4/6/8 cifre, implicit 6; căsuțe cu puncte, combinații 10^n, entropie ideală n × log2(10), două zecimale. Nu colectează PIN real, nu estimează timpul de compromitere.
+- V07 Ecran tactil: straturi afișaj/digitizor, două contacte; 120 Hz tactil (8,3 ms) vs 60 Hz afișaj (16,7 ms), intervale distincte, nu latență totală fixă.
+- V08 Cameră: obiectiv/senzor/ISP; comparație lumină suficientă vs redusă, zgomot și mișcare; exemplele fotografice din conversație sunt referințe conceptuale, nu active salvate.
+- V09 Microfon: membrană MEMS, conversie în eșantioane; PCM mono 48 kHz × 16 biți = 96.000 octeți/s, 5,76 MB/minut.
+- V10 Degradare: grafic conceptual descendent 100% spre 80%, fără a pretinde o curbă universală.
+- V11 Permisiuni: aplicație → Android → componentă; diferențiază autorizare, utilizare efectivă și transfer de date.
+
+- V12 Inginerie socială: antet verde închis, nod Phishing verde, ramuri spre Smishing/SMS, Vishing/apel vocal, Quishing/cod QR, fundal verde pal. HTML RO/EN: patru selecții exclusive, evidențiere a nodului, explicație și reset. SVG RO/EN: cinci cadre statice per limbă (inițial și patru selecții). Mărire opțională la 420 px, derulare locală și reset inclusiv mărirea; al șaselea cadru SVG per limbă reprezintă vederea mărită derulată la dreapta.
+- V13 Identitatea paginii: două machete identice, adrese fictive serviciu.example și imitatie.example, lacăt HTTPS la ambele, câmpuri nefuncționale. Aspectul și criptarea transportului nu dovedesc legitimitatea. HTML RO/EN: trei selecții Aspect/Domeniu/HTTPS, evidențiere simultană a ambelor machete, explicații și reset. SVG RO/EN: patru cadre per limbă, machete vectoriale reconstruite, nu capturi pixel-perfect. Domeniile afișate consecvent pe două rânduri (nume și .example), inclusiv în cele patru cadre SVG.
+- V14 Detector deepfake: două grile de câte 100 celule, 5 alarme false (coral) și 90 sintetice detectate (verde) implicit. Două cursoare independente 0–100; nedetectate = 100 minus detectate. Nu este detector real. HTML RO/EN: grile 10×10, rezultat textual și reset 5/90. SVG RO/EN: șase cadre per limbă, perechi alarme false/detectate (5,90), (0,90), (100,90), (100,0), (100,100), (0,100); câte 100 celule în fiecare grilă, culori și avertisment de simulare păstrate. Cursoare HTML cu înălțime CSS 44 px; verificarea tactilă fizică rămâne deschisă.
+
+- V15 Wi-Fi vs internet: telefon → router → internet; comutator conexiune din amonte, implicit activ; Wi-Fi rămâne activ, legătura internet devine coral și întreruptă când comutatorul este oprit. HTML RO/EN: reset la conexiune activă, avertisment simulare; SVG: două stări per limbă (internet disponibil/indisponibil). Revizie vizuală aprobată: router cu simbol Wi-Fi și indicatori, etichete și stare evidențiate, legenda «Exemplu informativ»/«Illustrative example».
+- V16 GPS: patru sateliți, linii punctate către receptor, elipsă de incertitudine; poziție și eroare ceas, fără transmitere către sateliți. HTML RO/EN: explorare sateliți, semnale, receptor, incertitudine, evidențieri și reset. SVG: cinci cadre per limbă. Revizie vizuală aprobată: eticheta semnalelor pe fundal opac, deasupra liniilor inclusiv în starea evidențiată.
+- V17 Date mobile: cursoare 1–20 Mb/s (implicit 5), 1–60 minute (implicit 10); volum MB = debit × minute × 60 / 8; bară raportată la maximul simulării 9000 MB. Model ideal, nu măsurătoare. HTML RO/EN: cursoare de 44 px și reset 5 Mb/s, 10 minute. SVG: șase cadre per limbă, perechi viteză/durată (5,10), (1,1), (20,1), (1,60), (20,60), (5,11), cu rezultate și bară. Revizie vizuală aprobată: rezultat evidențiat, spațiere, durată cu singular/plural și «Exemplu informativ»/«Illustrative example»; calculul ideal neschimbat.
+
+- V18 Canale de notificări: dulap cu trei sertare Mesaje (3), Comenzi (2), Oferte (4), numere fictive; nivel aprofundat: aplicație → două canale Comenzi/cu sunet și Oferte/fără sunet. Selector de nivel. Analogia nu implică existența unor sertare fizice. HTML RO/EN: butoane de nivel, trei sertare și două canale explorabile, evidențieri, explicații, reset la nivel simplu; SVG: șapte cadre per limbă.
+- V19 Push: două diagrame telefon/server, verificări periodice cu săgeți spre server, push cu săgeată spre telefon și plic; conexiunea și traficul de întreținere sunt omise din schema simplificată. HTML RO/EN: două metode explorabile, evidențieri, explicații, reset; SVG: trei cadre per limbă. Legendă Exemplu informativ / Illustrative example.
+
+- V20 Actualizări de securitate: două uși identice, încuietoare defectă coral înainte și reparată verde după; selector nivel, nivel aprofundat două telefoane Android 14 cu niveluri de securitate exemplificate prin 01.09.2025 și 01.10.2025, fără etichete de tip «Dată ilustrativă». Nu implică protecție absolută.
+- V21 Google Play Services: trei aplicații de exemplu → serviciu comun → localizare, autentificare, alte funcții; schema nu implică acces automat la toate funcțiile sau partajarea datelor între aplicații.
+
+- V22 Dimensiunea textului: mesaj identic, cursor 100–200% în pași de 25%, textul se reașază, buton reset. Model liniar ilustrativ, nu reproducere a scalării Android.
+- V23 Mărirea ecranului: peisaj vectorial cu indicator PARC 100 metri, cursor 1–3× în pași de 0,5; decupare centrală, suprafață vizibilă 100/z² procente. Imaginea originală rămâne neschimbată.
+
+- V24 Animații: selector 0,5×/1×/2×, durată de bază 400 ms, încărcare ipotetică constantă 600 ms, bare separate; trei cadre de tranziție, nu benchmark și nu sumă obligatorie a duratelor.
+- V25 Bootloader: patru etape conceptuale Buton de pornire → Componente de pornire → Bootloader → Android; evidențiere bootloader, ordine simplificată, fără instrucțiuni de deblocare.
+
+- V26 RAM, stocare internă și cache: masa cu documente în lucru, dulap cu dosare și sertar cu obiecte la îndemână; cache-ul poate exista în RAM, stocare sau procesor. Analogie conceptuală, nu trei memorii fizice obligatoriu separate.
+
+- V27 DNS: două rânduri comparative, agenda Maria → 07xx xxx xxx și DNS site.example → 192.0.2.10. Exemple fictive, adresă rezervată documentației. DNS poate returna mai multe adrese și nu descarcă pagina sau garantează legitimitatea. HTML RO/EN: explorare agendă, nume de domeniu și adresă IP, evidențieri și reset. SVG: patru cadre per limbă. Revizie vizuală aprobată: titluri delimitate, săgeți accentuate și legendă «Exemplu informativ»/«Illustrative example».
+
+- V28: analogie atelier, comenzi șofer vs instrumente mecanic; setări obișnuite vs diagnosticare.
+- V29: selector încărcare / fișiere / depanare USB; energie vs transfer vs operații ADB autorizate. Funcțiile pot coexista.
+- V30: blocarea ecranului vs blocarea bootloaderului, acces utilizator vs software la pornire.
+- V31: cache vs alte date ale aplicației; copii reutilizabile vs preferințe și sesiuni; ștergerea tuturor datelor poate include cache.
+
+- V32 Cicluri de încărcare: două jumătăți de sticlă consumate după reumplere, 50% + 50% = aproximativ un ciclu echivalent. Nu reprezintă numărul conectărilor la priză.
+
+## Referință de aspect
+Pagina lecției: antet verde închis, săgeată înapoi, titlu; două selectoare de nivel, activ verde, inactiv verde pal; explicație, schemă pe fond pal cu colțuri rotunjite, legendă, explicație și exemplu. Nu este o aprobare pentru modificarea navigației existente.
+Implementare propusă: Compose Canvas, VectorDrawable, componente Compose, Slider și stare locală; descrieri accesibile și echivalente textuale. Verificare editorială și pe dispozitiv înainte de finalizare.
+
+## Ordine
+Finalizarea conținutului celor 55 de lecții; selectarea schemelor utile; componente reutilizabile; integrare RO/EN; legături între concepte; testare. Catalogul este extensibil. Nu se adaugă lecții noi în această etapă.
+
+- V33: stocare 128 GB, 104 GB ocupați inițial, filmare selectabilă 0–24 GB, liber = 24 − filmare; reset la 4 GB.
+- V34: cache, rată de găsire 0–100%, timp mediu = p × 10 + (1 − p) × 200 ms; reset la 80%. Model cu durate fixe, nu măsurătoare.
+
+## Revizie V07–V09
+V07 straturi conceptuale, selectoare 60/120/240 Hz atingere și 60/90/120 Hz afișaj, intervale 1000/f ms. V08 obiectiv, senzor, peisaj ilustrativ cu lumină și zgomot variabile, 100–400 fotoni, SNR sqrt(N) în model fotonic. V09 undă, membrană, eșantioane, selector 16/44,1/48 kHz, durată 1–10 min, PCM mono 16 biți. Reset pentru fiecare; fără acces hardware.
+
+## V35–V37 și V03 revizuit
+V35 APK: cutie, conținut dezvăluit la apăsare. V36 fundal: cronologie 60 min, 0–12 sincronizări de 5 s, reset. V37 sistem: două zone conceptuale, selector explicații, reset. V03: două telefoane, simulare 80+120 MB eliberați, 300 MB fotografii partajate rămase, reset. V11: selector microfon/cameră/locație, acord și solicitare distincte. Toate offline, fără acces real.
+
+## V38 și V04 — reconciliere
+- V38 Blocarea ecranului / Screen lock: telefon cu lacăt, notificare și șase pictograme, trei funcții posibile, selector blocat/deblocat și trei opțiuni notificări, explicație dinamică și reset.
+- V04 Criptare / Encryption: trei panouri, document cu colț pliat, cheie și lacăt, rezultat cu patru rânduri demonstrative, selecție și explicații, comutare criptare/decriptare.
+- HTML RO și SVG RO: detalii recuperate din conversație; validare vizuală și funcțională încă necesară. Traduceri EN pregătite pentru aceste două scheme; restul catalogului necesită reconciliere.
+
+## V05/V06 — revizie bilingvă
+V05: păstrează ambele desene istorice TLS și E2EE; selector tip, explorare expeditor/server/destinatar cu evidențiere, explicații și reset. TLS terminat la server intermediar în model; E2EE poate utiliza TLS. V06: lacăt vectorial, 4/6/8 cifre, 10^n combinații, n log2(10) biți, reset la 6. HTML și SVG RO/EN actualizate; versiunile istorice RO păstrate. Testarea browser și reconcilierea tuturor stărilor SVG rămân deschise.
+
+## V39 / V40 — RO/EN
+V39: două verificări, parolă și confirmare pe telefon, selecție individuală, evidențiere, bife și rezultat, reset. V40: senzor cu amprentă vectorială, model numeric, comparator, scor fix 78/100, prag 0–100 implicit 70, rezultat și reset. HTML și SVG RO/EN arhivate. SVG stare inițială; verificare browser necesară.
+
+### V06 — completare grafică RO/EN
+Grafic logaritmic cu 3 bare, evidențiere dinamică și raport față de 4 cifre; SVG include stările 4/6/8 și graficul aferent. Scriptul nou verificat sintactic, nu în browser.
+
+### Stări alternative V38/V04/V39/V40
+SVG RO/EN: V38 patru stări vizuale distincte; V04 șase combinații criptare/selecție; V39 opt combinații bife/selecție; V40 cincisprezece combinații praguri reprezentative 0/70/78/79/100 și selecție. Total 33 cadre per limbă, extrase din geometria HTML existentă. Pragurile intermediare rămân interactive în HTML. Validarea vizuală și funcțională în browser rămâne necesară.
+
+### V05 — stări și controale RO/EN
+Șase cadre SVG per limbă (TLS/E2EE × expeditor/server/destinatar), extrase fără redesenare. HTML: butoane segmentate cu selecție lime și aria-pressed, reset și explicații existente. Sintaxă JS verificată; browser nevalidat.
+
+### Uniformizare controale securitate
+V38/V04/V06/V39/V40: șase selectoare transformate în butoane segmentate RO/EN, aria-pressed, înălțime minimă 44px, culori lime/pale, reset suplimentar V04. Geometria SVG inline păstrată identic; sintaxa scripturilor modificate verificată. Validare browser și TalkBack neefectuată.
+
+### Audit securitate RO/EN
+Etichetele vizibile ale celor șase prototipuri curente comparate RO/EN. Test de execuție JS cu DOM simulat: 12 prototipuri, 42 butoane de selecție, reseturi, comutare criptare, rezultat V39 cu ambele verificări și V40 la prag 79; fără excepții, fără referințe literale e(id) lipsă. Testul nu verifică randarea, CSS, geometria sau toate rezultatele. Trei secțiuni istorice RO marcate explicit, fără eliminare. Browser real, TalkBack și Android rămân nevalidate.
+
+## Remediere accesibilitate V39/V40 — 27.11.2026
+HTML RO/EN: căsuțele V39 au lățime automată și etichete flex cu înălțime minimă 44 px; V39/V40 au mesaje de stare HTML role=status, actualizate numai când rezultatul se schimbă. SVG inline păstrat identic prin comparație textuală. Commit RO 55f3109465211cdf6069e6eb3819e2bcc27a19af; EN d59fc95bff6e2522041b61609f927f85b5210771. Browser real, TalkBack, fidelitate grafică și Android încă nevalidate. Categoria rămâne deschisă; 26/55 final textual, 40 concepte.
+
+### V05 — uniformizare accesibilitate
+RO/EN: cinci butoane de selecție cu înălțime minimă 44 px și împachetarea cuvintelor la nevoie; două grupuri cu nume accesibile specifice. Toate SVG inline comparate textual și păstrate identic. Browser Chromium disponibil local, dar descărcarea directă GitHub în mediul local a eșuat; randarea reală nu este confirmată. Categoria rămâne deschisă.
+
+### Uniformizare etichete pe ecrane înguste
+V38/V04/V06/V39/V40: 16 butoane per limbă cu overflow-wrap:anywhere, în concordanță cu V05. Audit sursă: toate cele opt grupuri de selecție per limbă au denumiri specifice traduse; SVG inline identic textual înainte/după. Nu constituie test de randare sau TalkBack. Categoria rămâne deschisă.
+
+## Internet și conectivitate — V41–V43 RO/EN
+- V41 Bluetooth: telefon cu melodie locală, legătură radio, căști; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă.
+- V42 NFC: telefon cititor, câmp magnetic, etichetă pasivă cu antenă și cip; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Nu reprezintă o tranzacție reală.
+- V43 Hotspot: stație mobilă, telefon cu Wi-Fi, laptop și tabletă; trei componente explorabile, evidențiere, explicație și reset; patru cadre SVG per limbă. Capacitatea partajată nu se multiplică.
+Legendă RO «Exemplu informativ», EN «Illustrative example»; controale minimum 44 px, aria-pressed, role=status. Toate offline, fără permisiuni sau modificări reale. 43 concepte catalogate, 55 lecții neschimbate. Randarea și validarea funcțională necesare.
+
+## Notificări — rafinare și V44
+- V18: contur lime pentru sertarul selectat, contrast îmbunătățit față de dulapul verde închis.
+- V19: titluri și texte centrale mai mari, etichete Telefon/Phone și Server pentru ambele fluxuri; geometria săgeților păstrată.
+- V44 Notificare și sunet / Notification and sound: telefon cu memento calendar la 14:30 pentru programarea de la 15:00, trei stări Cu sunet/Fără sunet/Îndepărtată, pictograme sonore, evenimentul rămâne salvat în toate stările, reset la Cu sunet. HTML RO/EN, trei cadre SVG per limbă; legendă Exemplu informativ / Illustrative example. Nu emite sunet real, nu modifică notificările sau calendarul telefonului. 44 concepte, fără lecții noi.
+
+## Notificări — validare tehnică V18/V19/V44 (27.11.2026)
+Execuția Chromium 46041221934, job 140649146218, commit 017c6517c191165770f21b2792289c17b1e039ae: 114/114 PASS HTML și 116/116 PASS SVG, confirmate în jurnal. Arhiva 15220052208 deschisă efectiv: 686 PNG și report.json fără failures. Inspectate șase planșe cu 102 capturi HTML (17 per limbă/lățime, 320/360/412 px, incluzând reset) și două planșe cu 26 cadre SVG (13 per limbă). V18: contur lime distinct pentru sertare, ambele niveluri și selecțiile păstrate; V19: etichete și direcții concordante, textul interior încă relativ mic la 320 px, explicațiile externe rămân lizibile; V44: cele trei stări, pictogramele și calendarul persistent concordante. Fără suprapuneri majore observate. Nu reprezintă certificare pixel-perfect, contrast integral, TalkBack sau test tactil. V44 rămâne propunere vizuală nouă, fără aprobare explicită separată consemnată. Pregătit pentru închiderea etapei de prototipare după confirmarea vizuală; nu se declară validare Android nativă. 44 concepte, 55 lecții.
+
+## Notificări — aprobare și închidere prototipare (27.11.2026)
+Utilizatorul aprobă explicit V44 și trecerea la Sistem și actualizări. V18/V19/V44: etapa de prototipare închisă pe baza auditului 114/114 HTML, 116/116 SVG și inspecțiilor consemnate. Păstrăm toate stările și variantele RO/EN. Integrarea nativă, contrastul complet, TalkBack și testarea fizică rămân deschise.
+
+## Sistem și actualizări — V20/V21 reconciliate RO/EN
+V20: geometria ușilor și încuietorilor păstrată, două niveluri cu selecții individuale, explicații și reset. Comparația avansată păstrează Android 14 și datele 01.09.2025/01.10.2025, transpusă din carduri HTML în două telefoane vectoriale (propunere grafică). V21: geometria aplicațiilor, serviciului și funcțiilor păstrată; cinci selecții cu evidențiere și explicații distincte, reset. Legendă Exemplu informativ / Illustrative example; controale minimum 44 px, aria-pressed, role=status. 12 cadre SVG per limbă (6 V20, 6 V21), inclusiv toate selecțiile și nivelurile. Validarea prin Chromium și inspecția grafică rămân necesare. 44 concepte, 55 lecții.
+
+## Sistem și actualizări — V45/V46
+- V45 Actualizările Android: model A/B cu trei stări Înainte/Pregătire/După repornire, partiția activă și versiunea veche/nouă distincte, explicații și reset. Se precizează că nu toate telefoanele folosesc A/B, iar repornirea ilustrată este un exemplu reușit.
+- V46 Firmware: Android → driver → modem cu firmware și componentă electronică → rețea mobilă; patru selecții cu evidențiere, explicații și reset. Schemă conceptuală, arhitectura reală diferă între modele.
+Ambele HTML RO/EN, controale de minimum 44 px, aria-pressed, role=status, fără acces real la hardware sau setări. 3 cadre SVG V45 și 5 V46 per limbă; legendă Exemplu informativ / Illustrative example. Propuneri noi, 46 concepte, 55 lecții. Auditul extins și inspecția finală rămân necesare.
+
+## Sistem și actualizări — audit vizual și corecție V46
+Audit 46051609451: 138/138 HTML și 156/156 SVG PASS înainte de corecție. Inspecția planșelor reale a identificat contururile modemului și rețelei afișate neintenționat în toate stările V46: grupurile interne aveau visibility="visible", suprascriind ascunderea grupului părinte. Eliminat atributul intern în HTML și SVG RO/EN, fără modificarea geometriei. Testele au fost extinse pentru vizibilitatea efectivă CSS a dreptunghiurilor, inclusiv în cadrele SVG. Retestare și inspecție V46 corectat necesare. V20/V21 au etichete mici la 320 px; explicațiile și controalele externe rămân lizibile. 46 concepte, 55 lecții.
+
+## Sistem și actualizări — retestare finală V46
+Corecția vizibilității contururilor modem/rețea în HTML și SVG RO/EN a trecut auditul 138/138 HTML și 156/156 SVG (execuția 46052325486). Inspectate 36 capturi HTML V46 la 320/360/412 px și 10 cadre SVG, toate stările RO/EN; evidențierea este exclusivă, resetul elimină contururile, fără suprapuneri majore observate. V20/V21/V45 păstrate. Etapa tehnică pregătită pentru închidere; acordul general anterior nu este aprobare separată a variantei corectate. Integrarea Android, contrastul complet, TalkBack și dispozitivul rămân deschise.
+
+## Sistem și actualizări — aprobare și închidere (27.11.2026)
+Utilizatorul aprobă explicit V46 corectat și solicită închiderea etapei de prototipare. V20/V21/V45/V46 RO/EN: închise la nivel de prototipare, pe baza auditului 138/138 HTML și 156/156 SVG și a inspecțiilor consemnate. Restanțele de lizibilitate, integrare Android, contrast complet, TalkBack și dispozitiv rămân în evidență.
+
+## Accesibilitate — V22/V23 RO/EN
+V22 păstrează mesajul original și scalarea liniară 100–200% în pași de 25%, cu reașezarea textului și reset. SVG: cinci cadre per limbă, cu reașezarea textului aproximată vectorial, nu captură identică HTML. V23 păstrează peisajul, indicatorul PARC 100 metri și decuparea centrală; cinci trepte 1–3×, procent vizibil 100/z², separator zecimal adaptat limbii, reset nou. SVG: cinci cadre per limbă, aceeași geometrie și decupare. Ambele au legende Exemplu informativ / Illustrative example, cursoare minimum 44 px, rezultate de stare, fără modificarea setărilor reale. Auditul și inspecția grafică rămân necesare. 46 concepte, 55 lecții.
+
+## Accesibilitate — V47/V48
+V47 TalkBack: ecran de mesaj cu focalizare separată pe text, Trimite și Înapoi; contururi și anunțuri ilustrative, mesaj netrimis/ecran neschimbat, reset. Nu produce sunet și nu activează TalkBack real. V48 Subtitrări: peisaj cu tren, vorbirea ilustrativă «Trenul pleacă la ora opt», trei stări fără subtitrare, pregătită corectă și automată cu eroare ilustrativă opt/șapte; reset. Nu redă audio sau recunoaștere reală. HTML RO/EN, 4 cadre V47 și 3 cadre V48 per limbă, legendă aprobată, controale minimum 44 px și role=status. 48 concepte, 55 lecții. Propuneri noi, audit și inspecție în așteptare.
+
+## Închidere prototipare Accesibilitate — 27.11.2026
+V47/V48 aprobate explicit de utilizator; V22 previzualizare corectată confirmată. Execuția 46055873637: 162/162 HTML și 190/190 SVG PASS, capturi inspectate V22/V23/V47/V48 (132 HTML, 34 SVG, RO/EN, 320/360/412 px). Fără suprapuneri majore observate; textul V22 vizibil și reașezat, decupare V23 corectă, focalizare V47 exclusivă, stări V48 distincte. Etichetele din desene mici la 320 px; accesibilitatea nativă, contrastul complet și testarea fizică rămân de verificat. Categoria închisă la nivel de prototipare.
+
+## Setări avansate/Dicționar — reconciliere V24–V26
+V24 păstrează cele trei cadre și cele două bare separate, factor 0,5×/1×/2×, 200/400/800 ms, încărcare 600 ms constantă, reset 1×. V25 păstrează patru etape și bootloader în verde închis, adaugă patru selecții cu contur și explicații, reset. V26 păstrează geometria mesei, dulapului și sertarului, trei selecții și reset; cadrul istoric SVG RO păstrat. Completare EN, HTML și 12 cadre SVG per limbă (3+5+4), legende și controale 44 px. Audit/inspecție încă de confirmat; 48 concepte, 55 lecții.
+
+## Validare V24–V26 și început integrare Android — 27.11.2026
+Audit 46057754573: 180/180 HTML și 214/214 SVG PASS, 96 capturi HTML și 24 cadre SVG V24–V26 inspectate, fără suprapuneri majore observate. Etichetele mici necesită evaluare fizică. Prototipurile reconciliate tehnic. Integrare nativă inițială V24/V25/V26: geometria SVG a celor trei scheme extrasă identic în cod Kotlin, randare prin Compose Canvas și subset SVG rect/path/text/g, controale Compose, reset și explicații RO/EN. V26 asociat Cache, Memoria RAM, Memorie internă, Memorie cache. Compilarea, fidelitatea randării native și TalkBack încă neconfirmate; nu reprezintă integrarea tuturor celor 48 de concepte.
+
+## Integrare nativă — extindere la 17 concepte
+V24–V26: buildurile FoniWise și SAFEGUARD la 05e3c5755642b241fd4cc47b94f0bfbc95ed0ed6 confirmate success. Adăugate în cod V16/V19/V21/V22/V23/V27/V41–V48: SVG original RO/EN și explicații/controale extrase din HTML; V22 text Compose cu cinci trepte 16–32 sp (scalarea de sistem se poate aplica suplimentar), V23 decupare și mărire în cinci trepte, V44/V45/V48 stări și reset, V47 anunț ilustrativ, restul selecții și contururi. Renderer extins cu circle/ellipse, translate, opacitate, stroke-linejoin, clip central V23. 17/48 concepte, 21 lecții asociate. Build nou și testare nativă neconfirmate.
+
+## Integrare nativă — 30/48 concepte
+Buildurile lotului de 17 concepte (c58f0ecee4cebbff265dcbe5a98d3351d3287c3e): FoniWise 46069139037 și SAFEGUARD 46069146412 success. Adăugate V12/V13/V14/V15/V17/V18/V20 și V04/V05/V06/V38/V39/V40, RO/EN, native Canvas/Compose, stări multiple, reset și mărire cu derulare pentru schemele prevăzute. V13 preia geometria cadrelor SVG arhivate, separă tspan în două rânduri text și decupează antetul/explicațiile redundante; V14 grile native 10×10, V17 bară și valori native. V18/V20 au nivel inițial conform nivelului lecției și reset la modelul simplu. 30/48 concepte, 35 lecții asociate. Build și randare nouă neconfirmate. Restul 18: V01/V02/V03/V07–V11/V28–V37, arhive bilingve incomplete.
+
+## Integrare nativă — 48/48 concepte
+Buildurile lotului de 30 concepte la 44dd41b792c46c6901544dbb737e4fb600b81b18 confirmate success (FoniWise 46071724869, SAFEGUARD 46071730308). Ultimele 18 V01/V02/V03/V07–V11/V28–V37 implementate în FoniWiseLegacyVisuals.kt: geometria SVG RO din HTML, etichete și explicații EN traduse, controale native, simulări și reset; V01 baterii native, V29 selector completat conform catalogului, V28/V30/V31/V10/V32 statice conform arhivei. Toate 48 ID unice conectate la 50/55 lecții; celelalte cinci nu au scheme dedicate în catalogul existent. Arhivele EN HTML/SVG pentru ultimele 18 rămân de completat. Buildul final, fidelitatea nativă, accesibilitatea și testarea fizică rămân de verificat.
+
+## Reconciliere finală arhive istorice și APK de test — 28.11.2026
+48/48 concepte au implementare nativă RO/EN; buildul complet 4da163afba212f9b5a0eb42ace9aa9f40f70082c confirmat success. Completate V01/V02/V03/V07–V11/V28–V37 în HTML RO/EN, inclusiv selector USB, reset V01/V35, etichete și explicații EN, legendă și controale minime 44 px pentru butoane/selectoare/cursoare. SVG RO/EN: 70 cadre adăugate per limbă; stări discrete și valori reprezentative ale cursoarelor, geometrie sursă păstrată, rezultate și legende. Remediată evidențierea tuturor celor patru componente V35 în SVG. Audit extins la 288 HTML și 354 SVG așteptate; noua execuție încă neconfirmată. APK disponibil pentru verificare fizică; fidelitatea randării native, accesibilitatea și inspecția ultimelor capturi rămân de confirmat.
+
+## Audit reset V02/V33 — 28.11.2026
+Execuția 46078691402: 276/288 HTML și 354/354 SVG PASS; 12 diferențe la reset V02/V33, RO/EN la toate cele trei lățimi, asociate serializării CSS brute. Scriptul de audit corectat la 71ee5e5498a9aca5bf6c70eb0fb8ed3f3107e0c2 (CSSOM cssText și ID, celelalte aserțiuni păstrate), recitit identic. Trei teste locale pe stilurile din jurnal confirmă echivalența și detectarea valorilor greșite. HTML/SVG și implementarea Android nemodificate. Audit 46079486892 în desfășurare la verificare; rezultatul și inspecția capturilor rămân de confirmat. 48 concepte, 55 lecții.
+
+### Inspecție vizuală V02/V33 — 28.11.2026
+Arhiva auditului anterior 15235849625 descărcată și deschisă: 1842 PNG și report.json cu 12 diferențe de reset V02/V33. Inspectate efectiv opt planșe cu 60 capturi V02/V33 RO/EN la 320/360/412 px, stările inițiale și valorile testate. Nuclee 1/2/4/8 și rezultate 10/7/5,5/4,75 s, stocare 128 GB și spațiu liber 24/20/12/0 GB concordante; fără suprapuneri majore observate. Etichetele mici V02 și selectorul îngust rămân de evaluat fizic. Comparație RGB pixel cu pixel a 12 perechi stare inițială versus selectarea valorii implicite (V02 2 nuclee; V33 4 GB): toate identice. Acesta nu este testul capturii după reset, care lipsește din arhiva precedentă. Audit corectat 46079486892 încă în desfășurare la verificare. Inspecția capturilor finale și a restului prototipurilor istorice rămâne necesară; fără modificări grafice, Android, Home, Canva ori main. 55 lecții, 48 concepte.
+
+### Audit final confirmat și reset V02/V33 — 28.11.2026
+Execuția 46079486892, job 140774885650, commit 71ee5e5498a9aca5bf6c70eb0fb8ed3f3107e0c2: success confirmat prin API și jurnal, 288/288 HTML și 354/354 SVG PASS, inclusiv 12/12 retestări V02/V33. Nicio eroare în jurnal; avertisment Node.js 20 depreciat pentru actions/upload-artifact@v5, executat pe Node.js 24, fără impact asupra rezultatului. Artefact 15236576190 descărcat și deschis efectiv: 1854 PNG, report.json failures=[] și CRC fără erori. Comparate pixel cu pixel toate cele 12 perechi captură inițială/captură după reset V02/V33, RO/EN la 320/360/412 px: 12/12 identice. Inspectate patru planșe cu 96 capturi HTML finale la 320 px (RO/EN), incluzând V01/V02/V03/V07 și V11/V28–V33; fără suprapuneri majore observate în planșe, etichete și selectoare mici rămân de evaluat fizic. Restul capturilor istorice finale nu au fost inspectate în această intervenție. 55/55 lecții final textual, 48/48 concepte în cod și arhive, 50/55 lecții asociate. Urmează completarea inspecției vizuale și testare fizică Galaxy A13, inclusiv TalkBack, contrast, gesturi, fidelitate nativă și verificarea semnăturii înainte de actualizare. Fără modificări la reprezentări, Android, Home, Canva ori main.
+
+### Inspecție istorică și remediere suprapunere V35 — 28.11.2026
+Inspecție suplimentară efectivă a patru planșe cu 88 capturi HTML la 320 px (RO/EN), V07–V11 și V34–V37, și șase planșe cu toate cele 140 cadre SVG istorice (70 per limbă). Împreună cu cele 96 capturi HTML din intervenția anterioară, 184/184 capturi istorice la 320 px inspectate la nivel de planșe. Capturile complete la 360/412 px nu sunt toate inspectate individual. Comparație suplimentară înainte/după reset pentru toate cele 78 perechi istorice disponibile: 43 identice pixel cu pixel, 35 cu diferențe de maximum 1,10% pixeli; în exemplele V34 și V09 diferențele sunt localizate la cursor, în V11 există diferențe minore și în alte zone; nu se declară toate perechile identice. Auditul funcțional anterior 642/642 rămâne confirmat pentru versiunea testată. V34: verificarea sursei confirmă grila 20×5, 100 celule identică în HTML/SVG și sursa Android; suspiciunea inițială din planșe nu se confirmă. V35: clapele cutiei acoperă parțial etichetele Imagini/Configurare (și EN), confirmat la mărime integrală și în sursa Android. Remediere punctuală la commit 86aaa84e95c780d27fd3e3e9fdd8d9ae50c034d0: desenul cutiei translatat vertical +32 unități în grup, viewBox 320×242, păstrate toate coordonatele interne, formele, paleta, etichetele, selecțiile și resetul; spațiu geometric 8 unități între componente și clape. Aplicat în HTML RO/EN, în toate 5 cadre SVG per limbă (cu înălțimi, subtitluri și pozițiile cadrelor următoare deplasate corespunzător), în ambele variante Kotlin; audit completat cu aserțiuni de separare de minimum 2 px în HTML și SVG. Cele șase fișiere recitite și verificate. Toate modificările într-un singur commit exclusiv pe ramura autorizată. Audit nou 46081011954, build FoniWise 46081011920 și SAFEGUARD 46081017152 în desfășurare la verificare. Rezultatele și aspectul nou nu sunt încă validate. APK anterior este disponibil dar nu include această remediere; pentru testarea fizică preferăm APK-ul nou după confirmarea buildului și a auditului. Restanțe: inspectarea noilor capturi V35, lizibilitate și fidelitate pe Galaxy A13, accesibilitate, testare fizică și verificare semnătură. 55 lecții, 48 concepte, 50 lecții asociate. Home, Canva și main nemodificate.
+
+### Validare V35 și APK actualizat pentru test fizic — 28.11.2026
+Commit 86aaa84e95c780d27fd3e3e9fdd8d9ae50c034d0: audit Chromium 46081011954, job 140779730490, success confirmat prin API și jurnal, 288/288 HTML și 354/354 SVG, inclusiv 16/16 cazuri V35 (6 HTML, 10 SVG) cu aserțiunile noi de separare a clapelor. Artefact 15236978345 descărcat și deschis, CRC fără erori, 1854 PNG și report.json failures=[]. Inspectate efectiv patru planșe cu toate cele 46 capturi V35 (36 HTML RO/EN la 320/360/412 px, 10 SVG); clapele nu acoperă etichetele, toate patru selecțiile și explicațiile vizibile, starea închisă și resetul coerente. Șase perechi inițial/reset diferă la 0,0092–0,0387% pixeli; nu sunt identice pixel cu pixel, dar auditul funcțional de reset trece. Etichetele mici necesită evaluare fizică. Build FoniWise 46081011920, job 140779730181, și SAFEGUARD 46081017152, job 140779746642, success; testele unitare și assembleDebug confirmate. Artefact FoniWise 15237412001 descărcat, ZIP CRC fără erori, app-debug.apk 20834585 octeți, SHA-256 31780e7c09549574ee95c7bd06a8d01a6c8326c41412c09fe595bc01cff3af70 identic cu jurnalul CI. Verificare criptografică locală independentă a semnăturii APK v2 RSA PKCS#1 SHA-256 (algoritm 0x103), cheii publice și digestului conținutului reușită; apksigner nu este disponibil local. Certificat Android Debug SHA-256 d5b7811843ea0495cbc679f3b8689eb46cd5b2adf2ed6faffc4fd75e024effd0, diferit de certificatul APK FoniWise anterior db75f4ddd5e5343d45f3c360dbb4b7ab0f5a0828d18b4c17f173a2f7df2e659f. SAFEGUARD a trecut apksigner în CI, dar este un alt binar (SHA-256 c58d2aeff4539837ac8dfc4be544f22fe008e6835017f60b92f06c764525860f), nu dovedește compatibilitatea semnăturii APK FoniWise. Nu dezinstala aplicația existentă și nu șterge datele; verifică semnătura versiunii instalate înainte de actualizare. Dacă diferă, este necesară o soluție autorizată de semnare compatibilă sau instalare separată aprobată. 55/55 lecții final textual, 48/48 concepte în cod și arhive, 50/55 lecții asociate. Urmează testarea fizică Galaxy A13, după rezolvarea compatibilității semnăturii; fidelitate nativă, accesibilitate, contrast și gesturi neconfirmate. Capturile istorice anterioare la 360/412 px nu sunt toate inspectate individual. Fără modificări la cod, reprezentări, Home, Canva ori main în această intervenție.
